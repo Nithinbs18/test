@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               viewport-fit=cover">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Japan 2026">
+
+    <meta name="theme-color" content="#111827">
+
+    <title>Japan Trip 2026</title>
+
+    <style>
+        :root {
+            --bg: #f4f5f7;
+            --card: #ffffff;
+            --text: #17181c;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --dark: #111827;
+            --red: #e11d48;
+            --blue: #2563eb;
+            --green: #059669;
+            --gold: #d97706;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "SF Pro Display",
+                "SF Pro Text",
+                "Segoe UI",
+                sans-serif;
+
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* =========================
+   APP
+========================= */
+
+        .app {
+            max-width: 1100px;
+            margin: auto;
+            padding-bottom: 50px;
+        }
+
+        /* =========================
+   HERO
+========================= */
+
+        .hero {
+            color: white;
+
+            padding:
+                calc(28px + env(safe-area-inset-top)) 20px 28px;
+
+            background:
+                linear-gradient(135deg,
+                    #111827 0%,
+                    #1f2937 50%,
+                    #374151 100%);
+
+            border-radius:
+                0 0 28px 28px;
+        }
+
+        .hero-small {
+            color: #d1d5db;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .hero h1 {
+            font-size: clamp(30px, 8vw, 48px);
+            line-height: 1;
+            letter-spacing: -1.5px;
+            margin: 0 0 10px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #d1d5db;
+            line-height: 1.5;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 9px;
+            margin-top: 22px;
+        }
+
+        .stat {
+            padding: 12px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, .08);
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 19px;
+        }
+
+        .stat span {
+            display: block;
+            margin-top: 3px;
+            color: #d1d5db;
+            font-size: 11px;
+        }
+
+        /* =========================
+   NAVIGATION
+========================= */
+
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            padding: 10px 12px;
+
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid var(--line);
+
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .nav button {
+            border: none;
+            background: #f0f1f3;
+
+            padding: 9px 14px;
+            margin-right: 5px;
+
+            border-radius: 999px;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            color: #4b5563;
+        }
+
+        .nav button.active {
+            background: var(--dark);
+            color: white;
+        }
+
+        /* =========================
+   MAIN
+========================= */
+
+        main {
+            padding: 18px 12px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            letter-spacing: -.5px;
+            margin: 6px 4px 13px;
+        }
+
+        /* =========================
+   DAY CARDS
+========================= */
+
+        .day {
+            background: var(--card);
+            border: 1px solid var(--line);
+
+            border-radius: 19px;
+
+            overflow: hidden;
+
+            margin-bottom: 10px;
+
+            box-shadow:
+                0 2px 10px rgba(17, 24, 39, .05);
+        }
+
+        .day summary {
+            list-style: none;
+            cursor: pointer;
+
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 16px;
+        }
+
+        .day summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .day summary::after {
+            content: "+";
+
+            margin-left: auto;
+
+            color: var(--muted);
+
+            font-size: 23px;
+            font-weight: 300;
+        }
+
+        .day[open] summary::after {
+            content: "−";
+        }
+
+        .date-box {
+            min-width: 75px;
+
+            padding: 9px 7px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            background: #f1f3f5;
+        }
+
+        .date-box strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .date-box span {
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        .day-heading {
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .day-subtitle {
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+        .day-content {
+            border-top: 1px solid var(--line);
+        }
+
+        /* =========================
+   ITINERARY ROW
+========================= */
+
+        .stop {
+            padding: 15px 16px;
+
+            border-bottom: 1px solid var(--line);
+        }
+
+        .stop:last-child {
+            border-bottom: none;
+        }
+
+        .stop-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+
+            margin-bottom: 7px;
+        }
+
+        .pill {
+            display: inline-block;
+
+            padding: 5px 8px;
+
+            border-radius: 999px;
+
+            background: #f1f3f5;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            color: #4b5563;
+        }
+
+        .pill.time {
+            background: #fff0f3;
+            color: #be123c;
+        }
+
+        .pill.duration {
+            background: #ecfdf5;
+            color: var(--green);
+        }
+
+        .stop h3 {
+            margin: 0 0 5px;
+
+            font-size: 16px;
+            line-height: 1.25;
+        }
+
+        .stop p {
+            margin: 0;
+
+            color: #596170;
+
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .map-button {
+            display: inline-flex;
+            align-items: center;
+
+            margin-top: 9px;
+
+            padding: 7px 10px;
+
+            border-radius: 9px;
+
+            background: #eff6ff;
+
+            color: var(--blue);
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* =========================
+   SPECIAL CARDS
+========================= */
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 10px;
+        }
+
+        .card {
+            background: white;
+
+            border: 1px solid var(--line);
+
+            border-radius: 17px;
+
+            padding: 15px;
+        }
+
+        .card-icon {
+            font-size: 23px;
+            margin-bottom: 7px;
+        }
+
+        .card h3 {
+            margin: 0 0 5px;
+
+            font-size: 15px;
+        }
+
+        .card p {
+            margin: 0;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+        /* =========================
+   SHOPPING
+========================= */
+
+        .shopping-card {
+            background: white;
+
+            border: 1px solid var(--line);
+
+            border-radius: 18px;
+
+            margin-bottom: 10px;
+
+            overflow: hidden;
+        }
+
+        .shopping-card summary {
+            list-style: none;
+
+            cursor: pointer;
+
+            padding: 15px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            font-weight: 800;
+        }
+
+        .shopping-card summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .shopping-card summary::after {
+            content: "+";
+            margin-left: auto;
+            color: var(--muted);
+        }
+
+        .shopping-card[open] summary::after {
+            content: "−";
+        }
+
+        .shopping-content {
+            border-top: 1px solid var(--line);
+
+            padding: 14px 15px;
+        }
+
+        .shopping-content p {
+            margin: 0 0 10px;
+
+            font-size: 13px;
+
+            color: #596170;
+
+            line-height: 1.5;
+        }
+
+        .store {
+            padding: 11px 0;
+
+            border-top: 1px solid #f0f1f3;
+        }
+
+        .store:first-child {
+            border-top: none;
+        }
+
+        .store strong {
+            font-size: 13px;
+        }
+
+        .store span {
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 11px;
+
+            color: var(--muted);
+        }
+
+        .store a {
+            display: inline-block;
+
+            margin-top: 6px;
+
+            color: var(--blue);
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* =========================
+   USJ
+========================= */
+
+        .usj {
+            background:
+                linear-gradient(135deg,
+                    #fff1f2,
+                    #fff7ed);
+
+            border: 1px solid #fecdd3;
+
+            border-radius: 19px;
+
+            padding: 17px;
+
+            margin-bottom: 12px;
+        }
+
+        .usj h3 {
+            margin: 0 0 7px;
+
+            font-size: 19px;
+        }
+
+        .usj p {
+            margin: 0;
+
+            font-size: 13px;
+
+            line-height: 1.55;
+
+            color: #5f2935;
+        }
+
+        .priority {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 10px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+        }
+
+        .priority span {
+            padding: 5px 8px;
+
+            background: var(--red);
+
+            color: white;
+
+            border-radius: 999px;
+        }
+
+        /* =========================
+   NOTE
+========================= */
+
+        .note {
+            padding: 14px;
+
+            border-radius: 16px;
+
+            background: #fffbeb;
+
+            border: 1px solid #fde68a;
+
+            color: #713f12;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            margin-bottom: 12px;
+        }
+
+        .note strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* =========================
+   FOOTER
+========================= */
+
+        .footer {
+            text-align: center;
+
+            padding: 20px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
+        /* =========================
+   MOBILE
+========================= */
+
+        @media(max-width:650px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            main {
+                padding: 14px 10px;
+            }
+
+            .hero {
+                border-radius: 0 0 23px 23px;
+            }
+        }
+
+        /* =========================
+   DESKTOP
+========================= */
+
+        @media(min-width:900px) {
+
+            main {
+                padding: 28px;
+            }
+
+            .day-content {
+                display: grid;
+
+                grid-template-columns:
+                    1fr 1fr;
+            }
+
+            .stop {
+                border-right: 1px solid var(--line);
+            }
+
+            .stop:nth-child(even) {
+                border-right: none;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <div class="app">
+
+        <!-- =========================
+     HERO
+========================= -->
+
+        <header class="hero">
+
+            <div class="hero-small">
+                🇯🇵 Japan · 27 Oct – 10 Nov 2026
+            </div>
+
+            <h1>Japan Trip Planner</h1>
+
+            <p>
+                Osaka → Kyoto → Tokyo
+                <br>
+                Your complete day-by-day travel & shopping plan.
+            </p>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <strong>15</strong>
+                    <span>Days</span>
+                </div>
+
+                <div class="stat">
+                    <strong>3</strong>
+                    <span>Cities</span>
+                </div>
+
+                <div class="stat">
+                    <strong>2</strong>
+                    <span>Travellers</span>
+                </div>
+
+                <div class="stat">
+                    <strong>31 Oct</strong>
+                    <span>USJ</span>
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+     NAV
+========================= -->
+
+        <nav class="nav">
+
+            <button class="active" onclick="showSection('itinerary', this)">
+                🗓 Itinerary
+            </button>
+
+            <button onclick="showSection('shopping', this)">
+                🛍 Shopping
+            </button>
+
+            <button onclick="showSection('usj', this)">
+                🎢 USJ
+            </button>
+
+            <button onclick="showSection('tips', this)">
+                💡 Tips
+            </button>
+
+        </nav>
+
+
+        <main>
+
+
+            <!-- =========================
+     ITINERARY
+========================= -->
+
+            <section id="itinerary" class="section">
+
+                <h2 class="section-title">
+                    Day-by-day itinerary
+                </h2>
+
+                <div id="days"></div>
+
+            </section>
+
+
+            <!-- =========================
+     SHOPPING
+========================= -->
+
+            <section id="shopping" class="section">
+
+                <h2 class="section-title">
+                    🛍 Shopping plan
+                </h2>
+
+                <div class="note">
+
+                    <strong>Your shopping priorities</strong>
+
+                    Watches · affordable luxury · anime · manga · gaming ·
+                    electronics · figures · toys · winter jacket · shoes ·
+                    Onitsuka Tiger.
+
+                </div>
+
+
+                <details class="shopping-card" open>
+
+                    <summary>
+                        ⌚ Watches
+                    </summary>
+
+                    <div class="shopping-content">
+
+                        <p>
+                            For watches, Tokyo is the strongest part of your trip.
+                            Check both new and pre-owned stores and compare condition,
+                            box/papers, warranty and tax-free eligibility.
+                        </p>
+
+                        <div class="store">
+
+                            <strong>Ginza</strong>
+
+                            <span>
+                                Luxury watch boutiques and department stores.
+                                Best for Rolex, Omega, Grand Seiko and other luxury brands.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=watch+shops+Ginza+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Akihabara</strong>
+
+                            <span>
+                                Good area for pre-owned watches and electronics-related shopping.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=used+watch+shops+Akihabara+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Ueno / Ameyoko</strong>
+
+                            <span>
+                                Excellent area to compare second-hand watches and bargain-oriented stores.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=watch+shops+Ueno+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+
+                <details class="shopping-card">
+
+                    <summary>
+                        💎 Affordable luxury
+                    </summary>
+
+                    <div class="shopping-content">
+
+                        <p>
+                            For luxury at lower prices, concentrate on Japanese
+                            pre-owned stores rather than only flagship boutiques.
+                        </p>
+
+                        <div class="store">
+
+                            <strong>Ginza</strong>
+
+                            <span>
+                                Best for luxury boutiques, department stores and premium Japanese brands.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=luxury+shopping+Ginza+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Shinjuku</strong>
+
+                            <span>
+                                Large department stores and pre-owned luxury retailers.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=second+hand+luxury+Shinjuku+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Shibuya</strong>
+
+                            <span>
+                                Good combination of fashion, Japanese brands and contemporary luxury.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=luxury+shopping+Shibuya+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+
+                <details class="shopping-card">
+
+                    <summary>
+                        🎌 Anime / Manga / Figures
+                    </summary>
+
+                    <div class="shopping-content">
+
+                        <p>
+                            Your two major anime shopping zones are
+                            <strong>Den Den Town in Osaka</strong> and
+                            <strong>Akihabara in Tokyo</strong>.
+                        </p>
+
+                        <div class="store">
+
+                            <strong>Den Den Town</strong>
+
+                            <span>
+                                Anime, manga, figures, Pokémon, Nintendo, retro games and arcades.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=Den+Den+Town+Osaka">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Akihabara</strong>
+
+                            <span>
+                                Tokyo's strongest area for anime, manga, figures, games and electronics.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=Akihabara+Tokyo+anime">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Mandarake</strong>
+
+                            <span>
+                                Excellent for pre-owned manga, collectibles, figures and older merchandise.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=Mandarake+Akihabara">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Animate</strong>
+
+                            <span>
+                                Large anime and manga retailer with character goods and merchandise.
+                            </span>
+
+                            <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=Animate+Akihabara">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+
+                <details class="shopping-card">
+
+                    <summary>
+                        🎮 Games / Tech / Electronics
+                    </summary>
+
+                    <div class="shopping-content">
+
+                        <p>
+                            Spend most of your dedicated tech-shopping time in Akihabara.
+                        </p>
+
+                        <div class="store">
+
+                            <strong>Akihabara Electric Town</strong>
+
+                            <span>
+                                Huge concentration of electronics, gaming, computers, accessories and arcades.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=Akihabara+Electric+Town">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Yodobashi Akiba</strong>
+
+                            <span>
+                                Massive electronics store covering cameras, gaming, computers,
+                                phones, appliances and hobby products.
+                            </span>
+
+                            <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=Yodobashi+Akiba">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+
+                <details class="shopping-card">
+
+                    <summary>
+                        👟 Shoes / Onitsuka Tiger
+                    </summary>
+
+                    <div class="shopping-content">
+
+                        <p>
+                            Japan is an excellent place to look at Japanese footwear,
+                            especially Onitsuka Tiger.
+                        </p>
+
+                        <div class="store">
+
+                            <strong>Onitsuka Tiger — Shibuya</strong>
+
+                            <span>
+                                Make this part of your 6 Nov Shibuya / Harajuku day.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=Onitsuka+Tiger+Shibuya">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>Harajuku</strong>
+
+                            <span>
+                                Excellent area for sneakers, Japanese fashion and streetwear.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=shoe+shops+Harajuku+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+
+                <details class="shopping-card">
+
+                    <summary>
+                        🧥 Winter jacket
+                    </summary>
+
+                    <div class="shopping-content">
+
+                        <p>
+                            Tokyo gives you the widest selection. Look around Shibuya,
+                            Shinjuku and Ginza depending on your budget.
+                        </p>
+
+                        <div class="store">
+
+                            <strong>Uniqlo</strong>
+
+                            <span>
+                                Good option for affordable Japanese winter basics,
+                                down jackets and Heattech.
+                            </span>
+
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query=Uniqlo+Shibuya+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                        <div class="store">
+
+                            <strong>GU</strong>
+
+                            <span>
+                                More budget-friendly Japanese fashion.
+                            </span>
+
+                            <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=GU+Shibuya+Tokyo">
+                                Open Google Maps →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </details>
+
+            </section>
+
+
+            <!-- =========================
+     USJ
+========================= -->
+
+            <section id="usj" class="section">
+
+                <h2 class="section-title">
+                    🎢 31 Oct — Universal Studios Japan
+                </h2>
+
+
+                <div class="usj">
+
+                    <h3>
+                        Your #1 priority: Nintendo
+                    </h3>
+
+                    <p>
+                        You specifically want Super Nintendo World,
+                        Mario Kart and Donkey Kong. Therefore this should
+                        drive your USJ strategy rather than treating Nintendo
+                        World as a casual stop.
+                    </p>
+
+                    <div class="priority">
+                        <span>TOP PRIORITY</span>
+                        Super Nintendo World
+                    </div>
+
+                </div>
+
+
+                <div class="grid">
+
+                    <div class="card">
+
+                        <div class="card-icon">🍄</div>
+
+                        <h3>Super Nintendo World</h3>
+
+                        <p>
+                            Explore Mario's world, Bowser's Castle,
+                            interactive areas, merchandise and food.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🏎️</div>
+
+                        <h3>Mario Kart</h3>
+
+                        <p>
+                            Mario Kart: Koopa's Challenge inside
+                            Bowser's Castle.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🦍</div>
+
+                        <h3>Donkey Kong Country</h3>
+
+                        <p>
+                            New Nintendo area featuring Mine-Cart Madness
+                            and Donkey Kong theming.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🎃</div>
+
+                        <h3>Halloween Horror Nights</h3>
+
+                        <p>
+                            Stay into the evening for USJ's Halloween
+                            atmosphere and nighttime entertainment.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="note" style="margin-top:12px">
+
+                    <strong>USJ strategy</strong>
+
+                    Arrive early. Nintendo World access can be controlled
+                    through timed/guaranteed entry arrangements depending
+                    on the ticket and current park rules. Don't leave Nintendo
+                    World until your main Nintendo priorities are completed.
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+     TIPS
+========================= -->
+
+            <section id="tips" class="section">
+
+                <h2 class="section-title">
+                    💡 Important trip notes
+                </h2>
+
+
+                <div class="grid">
+
+                    <div class="card">
+
+                        <div class="card-icon">🚆</div>
+
+                        <h3>Osaka → Kyoto</h3>
+
+                        <p>
+                            1 Nov: check out of Smile Hotel Shinosaka,
+                            then transfer to Wander Kyoto Nanajo Hotel.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🚄</div>
+
+                        <h3>Kyoto → Tokyo</h3>
+
+                        <p>
+                            5 Nov: take the Shinkansen. Reserve seats in advance,
+                            especially if you want Fuji-side views.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🌅</div>
+
+                        <h3>Shibuya Sky</h3>
+
+                        <p>
+                            6 Nov: sunset is the ideal time.
+                            Book a timed ticket in advance.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🌿</div>
+
+                        <h3>Arashiyama</h3>
+
+                        <p>
+                            3 Nov: keep your 06:30–07:00 target.
+                            The bamboo grove becomes much busier later.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🎟️</div>
+
+                        <h3>Ghibli Museum</h3>
+
+                        <p>
+                            8 Nov is a fixed booking. Advance admission is required.
+                            Build the rest of the day around the museum.
+                        </p>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div class="card-icon">🛍️</div>
+
+                        <h3>Shopping timing</h3>
+
+                        <p>
+                            Your strongest dedicated shopping day is
+                            7 Nov in Akihabara, with additional luxury/fashion
+                            shopping on 6 and 9 Nov.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </main>
+
+
+        <div class="footer">
+            Japan Trip 2026 · Osaka · Kyoto · Tokyo
+            <br>
+            27 October – 10 November 2026
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =====================================================
+           ITINERARY DATA
+        ===================================================== */
+
+        const itinerary = [
+
+            {
+                date: "28 Oct",
+                title: "Osaka — Arrival",
+                stops: [
+
+                    {
+                        time: "Evening",
+                        place: "Dotonbori",
+                        desc: "Osaka's famous neon entertainment district along the canal. Giant signs, restaurants, street food and the famous Glico Running Man sign. Great atmosphere after dark.",
+                        duration: "2–3 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "29 Oct",
+                title: "Osaka — Anime, Food & Namba",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Den Den Town",
+                        desc: "Osaka's anime, manga, gaming and electronics district. Lots of anime shops, figures, Pokémon/Nintendo merchandise, retro games and arcades.",
+                        duration: "3–4 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Kuromon Market",
+                        desc: "Large covered food market known for Japanese street food, fresh produce and seafood. Good place for lunch and snacks.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Namba",
+                        desc: "Major Osaka shopping and entertainment area. Connects naturally with Den Den Town and Dotonbori.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Dotonbori",
+                        desc: "Best experienced after sunset. Walk along the canal and explore the surrounding restaurant streets.",
+                        duration: "2–3 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "30 Oct",
+                title: "Osaka — Castle, Umeda & Shopping",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Osaka Castle",
+                        desc: "One of Osaka's most famous landmarks. Castle museum inside and a large surrounding park. Good combination of history and photography.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Umeda",
+                        desc: "Osaka's major modern business and shopping district. Huge department stores, malls and restaurants.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Umeda Sky Building",
+                        desc: "Distinctive skyscraper with an outdoor observatory offering panoramic Osaka views.",
+                        duration: "1–1.5 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Shinsaibashi",
+                        desc: "Large shopping district with the famous covered Shinsaibashi-suji shopping arcade.",
+                        duration: "2 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "31 Oct",
+                title: "Universal Studios Japan 🎢",
+                stops: [
+
+                    {
+                        time: "All day",
+                        place: "Universal Studios Japan",
+                        desc: "Major theme park with Nintendo, Harry Potter, Minions, Hollywood-style attractions and roller coasters.",
+                        duration: "Full day"
+                    },
+
+                    {
+                        time: "Morning",
+                        place: "Super Nintendo World",
+                        desc: "Immersive Mario/Nintendo area with Bowser's Castle, Mario Kart, Yoshi and Donkey Kong. Your top priority.",
+                        duration: "3–4 hrs"
+                    },
+
+                    {
+                        time: "Morning",
+                        place: "Mario Kart: Koopa's Challenge",
+                        desc: "AR/physical ride inside Bowser's Castle where you race using Mario Kart-style technology.",
+                        duration: "~1 hr including queue"
+                    },
+
+                    {
+                        time: "Morning",
+                        place: "Donkey Kong Country",
+                        desc: "New Nintendo area featuring the Mine-Cart Madness roller coaster and Donkey Kong theming.",
+                        duration: "1.5–2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Halloween Horror Nights",
+                        desc: "USJ's Halloween event with horror attractions, performers and nighttime entertainment.",
+                        duration: "Evening"
+                    }
+
+                ]
+            },
+
+            {
+                date: "1 Nov",
+                title: "Kyoto — Transfer & Gion",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Nishiki Market",
+                        desc: "Historic covered market street in central Kyoto with food stalls, Japanese snacks and local products.",
+                        duration: "1.5–2 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Gion",
+                        desc: "Kyoto's famous traditional district, known for wooden machiya houses, tea houses and geisha/maiko culture.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Pontocho",
+                        desc: "Narrow atmospheric restaurant and alley district beside the Kamo River. Excellent for dinner and an evening walk.",
+                        duration: "2 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "2 Nov",
+                title: "Kyoto + Nara",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Kiyomizu-dera",
+                        desc: "One of Kyoto's most famous temples, dramatically built on a hillside with a large wooden terrace and city views.",
+                        duration: "1.5–2 hrs"
+                    },
+
+                    {
+                        time: "Morning",
+                        place: "Sannenzaka & Ninenzaka",
+                        desc: "Beautiful traditional pedestrian streets below Kiyomizu-dera, full of old-style buildings, cafés and souvenir shops.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Nara Park",
+                        desc: "Large park famous for its freely roaming deer.",
+                        duration: "1.5–2 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Todai-ji",
+                        desc: "Massive Buddhist temple containing one of Japan's largest bronze Buddha statues. One of Nara's highlights.",
+                        duration: "1–1.5 hrs"
+                    },
+
+                    {
+                        time: "Optional",
+                        place: "Kasuga Taisha",
+                        desc: "Beautiful Shinto shrine famous for its lanterns and forest setting.",
+                        duration: "1 hr"
+                    }
+
+                ]
+            },
+
+            {
+                date: "3 Nov",
+                title: "Arashiyama + Fushimi Inari",
+                stops: [
+
+                    {
+                        time: "06:30–07:00",
+                        place: "Arashiyama Bamboo Grove",
+                        desc: "Kyoto's iconic bamboo forest. Very photogenic but extremely crowded later in the day. Go early.",
+                        duration: "1 hr"
+                    },
+
+                    {
+                        time: "Morning",
+                        place: "Tenryu-ji",
+                        desc: "Important Zen temple beside the bamboo grove, with a beautiful traditional garden.",
+                        duration: "1–1.5 hrs"
+                    },
+
+                    {
+                        time: "Morning",
+                        place: "Togetsukyo Bridge",
+                        desc: "Famous bridge across the Katsura River with mountain scenery.",
+                        duration: "30–45 min"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Fushimi Inari",
+                        desc: "Famous Shinto shrine with thousands of bright orange torii gates winding up Mount Inari.",
+                        duration: "2–3 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "4 Nov",
+                title: "Kyoto — Manga & Higashiyama",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Kyoto International Manga Museum",
+                        desc: "Large manga collection where you can browse thousands of manga. Particularly good for your anime and manga interests.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Hanamikoji Street",
+                        desc: "Traditional Gion street with beautifully preserved buildings and restaurants.",
+                        duration: "1 hr"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Higashiyama",
+                        desc: "Historic Kyoto neighbourhood with temples, narrow streets and traditional architecture.",
+                        duration: "2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Kamo River / Pontocho",
+                        desc: "Relaxed evening walk and dinner.",
+                        duration: "1–2 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "5 Nov",
+                title: "Kyoto → Tokyo",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Shinkansen Kyoto → Tokyo",
+                        desc: "High-speed bullet train. Scenic and convenient way to travel between Kyoto and Tokyo.",
+                        duration: "~2–2.5 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Tokyo Tower",
+                        desc: "Tokyo's iconic red-orange communications tower with observation decks and city views.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Azabudai Hills",
+                        desc: "Modern Tokyo development with restaurants, shops and views toward Tokyo Tower.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Roppongi",
+                        desc: "Modern nightlife and dining district with skyscrapers and evening atmosphere.",
+                        duration: "2 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "6 Nov",
+                title: "Harajuku + Shibuya",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Meiji Shrine",
+                        desc: "Major Shinto shrine surrounded by a large forest in central Tokyo. Peaceful contrast to the busy city.",
+                        duration: "1.5 hrs"
+                    },
+
+                    {
+                        time: "Late morning",
+                        place: "Harajuku / Takeshita Street",
+                        desc: "Youth fashion, quirky shops, cafés and Japanese pop culture.",
+                        duration: "1.5–2 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Omotesando",
+                        desc: "Upscale shopping boulevard with architecture, fashion stores and cafés.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Shibuya",
+                        desc: "Famous for Shibuya Crossing, shopping, restaurants and Tokyo nightlife.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Sunset",
+                        place: "Shibuya Sky",
+                        desc: "Rooftop observation deck with spectacular 360° views over Tokyo. Book sunset.",
+                        duration: "1–1.5 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "7 Nov",
+                title: "Akihabara — Anime, Tech & Toys",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Akihabara",
+                        desc: "Tokyo's centre for anime, manga, gaming, figures, electronics, arcades and themed cafés.",
+                        duration: "3–5 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Ueno",
+                        desc: "Large park area with museums, temples and shopping.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Ameyoko",
+                        desc: "Busy market and shopping street near Ueno with food, clothes, snacks and shops.",
+                        duration: "1–2 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "8 Nov",
+                title: "Ghibli + Shinjuku",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Ghibli Museum",
+                        desc: "Studio Ghibli museum in Mitaka with exhibits about animation, Ghibli artwork and filmmaking. Advance ticket required.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Shinjuku",
+                        desc: "Huge Tokyo district famous for skyscrapers, shopping, restaurants and nightlife.",
+                        duration: "3–4 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Kabukicho",
+                        desc: "Famous entertainment and nightlife district of Shinjuku.",
+                        duration: "1–2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Omoide Yokocho",
+                        desc: "Tiny atmospheric lanes packed with traditional-style food stalls and small restaurants.",
+                        duration: "1 hr"
+                    }
+
+                ]
+            },
+
+            {
+                date: "9 Nov",
+                title: "Asakusa + Skytree + Ginza",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Asakusa",
+                        desc: "Traditional Tokyo district centred around Senso-ji. Great for old Tokyo atmosphere and souvenirs.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Morning",
+                        place: "Senso-ji",
+                        desc: "Tokyo's oldest and one of its most famous Buddhist temples.",
+                        duration: "1–1.5 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Tokyo Skytree",
+                        desc: "One of the world's tallest towers with observation decks and huge Tokyo views.",
+                        duration: "2 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Ginza",
+                        desc: "Upscale shopping, department stores, restaurants and luxury brands.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Evening",
+                        place: "Tokyo Station",
+                        desc: "Historic station building and surrounding Marunouchi district. Good final-night walk and dinner.",
+                        duration: "1–2 hrs"
+                    }
+
+                ]
+            },
+
+            {
+                date: "10 Nov",
+                title: "Tokyo → Frankfurt",
+                stops: [
+
+                    {
+                        time: "Morning",
+                        place: "Free time",
+                        desc: "Breakfast, final shopping and relaxing before your flight.",
+                        duration: "2–3 hrs"
+                    },
+
+                    {
+                        time: "Afternoon",
+                        place: "Narita Airport",
+                        desc: "Leave Tokyo with plenty of time for your international flight departing at 16:55.",
+                        duration: "—"
+                    }
+
+                ]
+            }
+
+        ];
+
+
+        /* =====================================================
+           RENDER ITINERARY
+        ===================================================== */
+
+        function escapeHTML(value) {
+
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+
+        }
+
+
+        function mapURL(place) {
+
+            return "https://www.google.com/maps/search/?api=1&query="
+                + encodeURIComponent(place + " Japan");
+
+        }
+
+
+        function renderItinerary() {
+
+            const container =
+                document.getElementById("days");
+
+            itinerary.forEach((day, index) => {
+
+                const details =
+                    document.createElement("details");
+
+                details.className = "day";
+
+                /* Open first two days initially */
+                if (index < 2) {
+                    details.open = true;
+                }
+
+                const stopsHTML =
+                    day.stops.map(stop => {
+
+                        return `
+
+                <div class="stop">
+
+                    <div class="stop-meta">
+
+                        <span class="pill time">
+                            ${escapeHTML(stop.time)}
+                        </span>
+
+                        <span class="pill duration">
+                            ${escapeHTML(stop.duration)}
+                        </span>
+
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(stop.place)}
+                    </h3>
+
+                    <p>
+                        ${escapeHTML(stop.desc)}
+                    </p>
+
+                    <a
+                        class="map-button"
+                        target="_blank"
+                        rel="noopener"
+                        href="${mapURL(stop.place)}">
+
+                        📍 Open in Google Maps
+
+                    </a>
+
+                </div>
+
+                `;
+
+                    }).join("");
+
+
+                details.innerHTML = `
+
+            <summary>
+
+                <div class="date-box">
+
+                    <strong>
+                        ${escapeHTML(day.date)}
+                    </strong>
+
+                    <span>
+                        ${day.stops.length}
+                        ${day.stops.length === 1
+                        ? "stop"
+                        : "stops"}
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <div class="day-heading">
+                        ${escapeHTML(day.title)}
+                    </div>
+
+                    <div class="day-subtitle">
+                        Tap to expand
+                    </div>
+
+                </div>
+
+            </summary>
+
+            <div class="day-content">
+
+                ${stopsHTML}
+
+            </div>
+        `;
+
+                container.appendChild(details);
+
+            });
+
+        }
+
+
+        /* =====================================================
+           SECTION NAVIGATION
+        ===================================================== */
+
+        function showSection(id, button) {
+
+            document
+                .querySelectorAll(".section")
+                .forEach(section => {
+
+                    section.style.display =
+                        section.id === id
+                            ? "block"
+                            : "none";
+
+                });
+
+
+            document
+                .querySelectorAll(".nav button")
+                .forEach(btn => {
+
+                    btn.classList.remove("active");
+
+                });
+
+
+            button.classList.add("active");
+
+
+            window.scrollTo({
+                top:
+                    document
+                        .querySelector(".nav")
+                        .offsetTop,
+
+                behavior: "smooth"
+            });
+
+        }
+
+
+        /* =====================================================
+           INITIALIZE
+        ===================================================== */
+
+        renderItinerary();
+
+
+        /*
+           Start with itinerary visible.
+           Other sections are hidden until selected.
+        */
+
+        document.getElementById("shopping").style.display = "none";
+        document.getElementById("usj").style.display = "none";
+        document.getElementById("tips").style.display = "none";
+
+    </script>
+
+</body>
+
+</html>
