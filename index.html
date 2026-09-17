@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Japan 2026 — Nithin & Sindhu</title>
+
+<style>
+:root {
+  --bg:#f4f6f8;
+  --card:#ffffff;
+  --text:#172033;
+  --muted:#667085;
+  --accent:#e11d48;
+  --accent2:#7c3aed;
+  --green:#16a34a;
+  --yellow:#d97706;
+  --blue:#2563eb;
+  --border:#e5e7eb;
+  --shadow:0 3px 15px rgba(0,0,0,.07);
+}
+
+* { box-sizing:border-box; }
+
+body {
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+}
+
+header {
+  background:linear-gradient(135deg,#111827,#312e81);
+  color:white;
+  padding:28px 18px 22px;
+  padding-top:max(28px, env(safe-area-inset-top));
+}
+
+header h1 {
+  margin:0;
+  font-size:28px;
+}
+
+header p {
+  margin:5px 0 0;
+  opacity:.85;
+}
+
+.container {
+  max-width:900px;
+  margin:auto;
+  padding:16px;
+}
+
+.toolbar {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+button {
+  border:0;
+  border-radius:10px;
+  padding:10px 14px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.btn {
+  background:#111827;
+  color:white;
+}
+
+.btn-light {
+  background:white;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.tabs {
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  margin-bottom:16px;
+  padding-bottom:4px;
+}
+
+.tab {
+  white-space:nowrap;
+  background:white;
+  border:1px solid var(--border);
+}
+
+.tab.active {
+  background:#111827;
+  color:white;
+}
+
+.day {
+  background:var(--card);
+  border-radius:16px;
+  margin-bottom:12px;
+  box-shadow:var(--shadow);
+  overflow:hidden;
+}
+
+.day-header {
+  padding:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+.day-title {
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.date {
+  background:#111827;
+  color:white;
+  border-radius:10px;
+  padding:8px 10px;
+  min-width:58px;
+  text-align:center;
+  font-size:13px;
+  font-weight:700;
+}
+
+.day h2 {
+  margin:0;
+  font-size:17px;
+}
+
+.day-sub {
+  color:var(--muted);
+  font-size:13px;
+}
+
+.chevron {
+  font-size:20px;
+  transition:.2s;
+}
+
+.day.open .chevron {
+  transform:rotate(180deg);
+}
+
+.day-content {
+  display:none;
+  padding:0 16px 18px;
+  border-top:1px solid var(--border);
+}
+
+.day.open .day-content {
+  display:block;
+}
+
+.timeline {
+  border-left:3px solid #e5e7eb;
+  margin:16px 0 0 8px;
+  padding-left:16px;
+}
+
+.event {
+  margin-bottom:18px;
+  position:relative;
+}
+
+.event:before {
+  content:"";
+  width:10px;
+  height:10px;
+  background:var(--accent);
+  border-radius:50%;
+  position:absolute;
+  left:-22px;
+  top:7px;
+}
+
+.time {
+  font-weight:800;
+  color:var(--accent);
+  font-size:13px;
+}
+
+.event-title {
+  font-weight:700;
+  margin:2px 0;
+}
+
+.event p {
+  margin:3px 0;
+  color:#4b5563;
+  font-size:14px;
+}
+
+.tags {
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:7px;
+}
+
+.tag {
+  font-size:11px;
+  background:#f3f4f6;
+  padding:4px 7px;
+  border-radius:7px;
+}
+
+.shop {
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  margin:10px 0;
+  background:#fafafa;
+}
+
+.shop strong {
+  display:block;
+}
+
+.shop-meta {
+  color:var(--muted);
+  font-size:13px;
+}
+
+a.map {
+  display:inline-block;
+  margin-top:7px;
+  color:var(--blue);
+  text-decoration:none;
+  font-weight:600;
+  font-size:13px;
+}
+
+.alert {
+  border-left:4px solid var(--yellow);
+  background:#fff7ed;
+  padding:12px;
+  border-radius:8px;
+  margin:12px 0;
+  font-size:14px;
+}
+
+.success {
+  border-left-color:var(--green);
+  background:#f0fdf4;
+}
+
+.info {
+  border-left-color:var(--blue);
+  background:#eff6ff;
+}
+
+.danger {
+  border-left-color:var(--accent);
+  background:#fff1f2;
+}
+
+.booking {
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:13px;
+  margin-bottom:10px;
+  background:white;
+}
+
+.booking-row {
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.booking input[type="checkbox"] {
+  width:20px;
+  height:20px;
+  margin-top:2px;
+}
+
+.booking-title {
+  font-weight:700;
+}
+
+.booking-status {
+  font-size:12px;
+  color:var(--muted);
+}
+
+.section-title {
+  margin:22px 0 10px;
+  font-size:20px;
+}
+
+.kpi {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.kpi-card {
+  background:white;
+  border-radius:12px;
+  padding:13px;
+  box-shadow:var(--shadow);
+}
+
+.kpi-number {
+  font-size:22px;
+  font-weight:800;
+}
+
+.kpi-label {
+  color:var(--muted);
+  font-size:12px;
+}
+
+.small {
+  font-size:12px;
+  color:var(--muted);
+}
+
+.footer {
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:30px 10px;
+}
+
+@media(min-width:700px) {
+  .kpi {
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🇯🇵 Japan 2026</h1>
+  <p>Nithin & Sindhu • Osaka → Kyoto → Tokyo</p>
+  <p>28 Oct – 10 Nov 2026</p>
+</header>
+
+<div class="container">
+
+  <div class="kpi">
+    <div class="kpi-card">
+      <div class="kpi-number">14</div>
+      <div class="kpi-label">Days in Japan</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">3</div>
+      <div class="kpi-label">Cities</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">30 Oct</div>
+      <div class="kpi-label">USJ</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-number">9 Nov</div>
+      <div class="kpi-label">Fuji / Hakone</div>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="toolbar">
+    <button class="btn" onclick="openAll()">Open All</button>
+    <button class="btn-light" onclick="closeAll()">Collapse All</button>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('itinerary',this)">📅 Itinerary</button>
+    <button class="tab" onclick="showTab('checklist',this)">✅ Checklist</button>
+    <button class="tab" onclick="showTab('bookings',this)">🎟️ Bookings</button>
+    <button class="tab" onclick="showTab('info',this)">ℹ️ Info</button>
+  </div>
+
+
+  <!-- ================= ITINERARY ================= -->
+
+  <div id="itinerary">
+
+    <!-- OCT 28 -->
+    <div class="day open">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">28<br>OCT</div>
+          <div>
+            <h2>✈️ Arrival in Osaka</h2>
+            <div class="day-sub">KIX → Shin-Osaka</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">18:00</div>
+            <div class="event-title">Arrive Kansai International Airport</div>
+            <p>Immigration → baggage → IC card / transport → Osaka.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">Hotel check-in</div>
+            <p>Smile Hotel Shin-Osaka</p>
+          </div>
+
+          <div class="event">
+            <div class="time">19:30+</div>
+            <div class="event-title">Easy Dotonbori evening</div>
+            <p>Only if energy allows. Keep the first night relaxed.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- OCT 29 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">29<br>OCT</div>
+          <div>
+            <h2>🎮 Den Den Town + Namba</h2>
+            <div class="day-sub">Anime • Toys • Electronics • Watches</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">09:30</div>
+            <div class="event-title">Nipponbashi / Den Den Town</div>
+            <p>Start early before the busiest afternoon period.</p>
+          </div>
+
+          <div class="shop">
+            <strong>Animate Osaka Nipponbashi</strong>
+            <div class="shop-meta">Anime • manga • figures • character goods • 4.2★ / ~9,500 reviews</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Animate+Osaka+Nipponbashi">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Joshin Super Kids Land Main Store</strong>
+            <div class="shop-meta">Huge hobby/toy/model store • Gundam • figures • trains • 4.3★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Joshin+Super+Kids+Land+Main+Store+Osaka">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Mandarake Grand Chaos</strong>
+            <div class="shop-meta">Used anime • collectibles • toys • retro items</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Mandarake+Grand+Chaos+Osaka">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Den Den Town</strong>
+            <div class="shop-meta">Browse the smaller specialist stores around Nipponbashi.</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Den+Den+Town+Osaka">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">Namba / Dotonbori</div>
+            <p>Food + Osaka night atmosphere.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- OCT 30 USJ -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">30<br>OCT</div>
+          <div>
+            <h2>🎢 UNIVERSAL STUDIOS JAPAN</h2>
+            <div class="day-sub">🍄 Super Nintendo World + 🎃 Halloween Horror Nights</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="alert success">
+          <strong>🎟️ YOUR TICKET</strong><br>
+          €93 package: 1-Day Studio Pass + Super Nintendo World entry at 13:00 +
+          free SNW food voucher + Have Fun in Kansai Pass (3 facilities).
+        </div>
+
+        <div class="alert info">
+          <strong>🎃 Halloween Horror Nights</strong><br>
+          Halloween Horror Nights runs Sept 11 – Nov 8, 2026, so it is active on
+          your October 30 visit.
+        </div>
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">07:00–07:30</div>
+            <div class="event-title">Leave hotel</div>
+            <p>Get to USJ early. Your goal is to enter well before your 13:00 Nintendo slot.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Non-Nintendo attractions</div>
+            <p>
+              Use the morning for major attractions outside Super Nintendo World.
+              Avoid wasting the morning waiting for Nintendo since your entry is secured.
+            </p>
+          </div>
+
+          <div class="event">
+            <div class="time">12:30</div>
+            <div class="event-title">Move toward Super Nintendo World</div>
+            <p>Be ready for your 13:00 timed entry.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">13:00</div>
+            <div class="event-title">🍄 SUPER NINTENDO WORLD</div>
+            <p>
+              Guaranteed entry. Priorities:
+              Mario Kart → Mine Cart Madness → explore Donkey Kong Country.
+            </p>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">🎃 Halloween Horror Nights</div>
+            <p>
+              Stay for Street Zombies, horror attractions and Halloween entertainment.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="alert danger">
+          <strong>Express Pass decision</strong><br>
+          Optional. Your €93 ticket already guarantees SNW entry.
+          Express is only needed if you want to reduce queues for Mario Kart /
+          Mine Cart Madness and other rides.
+        </div>
+
+        <a class="map" target="_blank"
+          href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan">
+          📍 USJ Google Maps
+        </a>
+
+      </div>
+    </div>
+
+
+    <!-- OCT 31 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">31<br>OCT</div>
+          <div>
+            <h2>🏯 Osaka — Sumiyoshi + Shinsaibashi</h2>
+            <div class="day-sub">Shrine • Shopping • Watches • Onitsuka</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Sumiyoshi Taisha</div>
+            <p>Relaxed temple/shrine morning after USJ.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Shinsaibashi shopping</div>
+          </div>
+
+          <div class="shop">
+            <strong>GINZA RASIN Shinsaibashi</strong>
+            <div class="shop-meta">Second-hand luxury watches • Rolex etc. • 4.9★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=GINZA+RASIN+Shinsaibashi">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>WATCHNIAN Shinsaibashi</strong>
+            <div class="shop-meta">Used/luxury watches • 4.9★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=WATCHNIAN+Shinsaibashi">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>OKURA Shinsaibashi</strong>
+            <div class="shop-meta">Luxury & second-hand watches • 5.0★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=OKURA+Shinsaibashi">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Onitsuka Tiger Osaka Shinsaibashi</strong>
+            <div class="shop-meta">Mexico 66 • Japan-exclusive styles • 4.2★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Onitsuka+Tiger+Osaka+Shinsaibashi">
+              📍 Google Maps
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 1 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">1<br>NOV</div>
+          <div>
+            <h2>🚄 Osaka → Kyoto</h2>
+            <div class="day-sub">Check-in + Nishiki + Gion</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="alert">
+          <strong>🛍️ TAX-FREE CHANGE</strong><br>
+          Japan's tax-free shopping system changes from Nov 1, 2026.
+          Tokyo shopping will therefore use the new refund-style system.
+          Keep passports and purchase documents with you.
+        </div>
+
+        <div class="timeline">
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Travel to Kyoto</div>
+            <p>Check in / drop luggage at Wander Kyoto Nanajo.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Nishiki Market</div>
+            <p>Food, traditional shops and Kyoto atmosphere.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">Gion + Pontocho</div>
+            <p>Walk through the historic districts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 2 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">2<br>NOV</div>
+          <div>
+            <h2>⛩️ Kyoto Temples + Nara</h2>
+            <div class="day-sub">Morning temples • Nara Park</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">Early morning</div>
+            <div class="event-title">Kyoto temple visit</div>
+            <p>Start early to avoid peak crowds.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Late morning</div>
+            <div class="event-title">Travel to Nara</div>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Nara Park</div>
+            <p>Todai-ji + deer park + surrounding area.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 3 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">3<br>NOV</div>
+          <div>
+            <h2>🎋 Arashiyama + Fushimi Inari</h2>
+            <div class="day-sub">Early start strongly recommended</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">06:30–07:00</div>
+            <div class="event-title">Arashiyama Bamboo Grove</div>
+            <p>Go very early before the main crowds arrive.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Arashiyama area</div>
+            <p>Tenryu-ji / Togetsukyo Bridge depending on energy.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Fushimi Inari</div>
+            <p>Torii gates and mountain walk.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 4 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">4<br>NOV</div>
+          <div>
+            <h2>🎨 Kyoto — Gion + Manga Museum</h2>
+            <div class="day-sub">Relaxed final Kyoto day</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Gion</div>
+            <p>Explore quieter streets and traditional architecture.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Kyoto International Manga Museum</div>
+            <p>Allow 2–3 hours.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">Final Kyoto dinner</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 5 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">5<br>NOV</div>
+          <div>
+            <h2>🚄 Kyoto → Tokyo</h2>
+            <div class="day-sub">Tokyo Tower • Azabudai Hills • Roppongi</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="alert danger">
+          <strong>🔴 BOOKING PENDING — SHINKANSEN</strong><br>
+          Book Kyoto → Tokyo for the morning.
+        </div>
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">08:30–10:00</div>
+            <div class="event-title">Shinkansen Kyoto → Tokyo</div>
+            <p>Target a morning departure.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Late morning</div>
+            <div class="event-title">Hotel / luggage</div>
+            <p>Sotetsu Fresa Inn Tokyo Tamachi.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Tokyo Tower</div>
+          </div>
+
+          <div class="event">
+            <div class="time">Late afternoon</div>
+            <div class="event-title">Azabudai Hills</div>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">Roppongi</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 6 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">6<br>NOV</div>
+          <div>
+            <h2>⛩️ Meiji → Harajuku → Shibuya</h2>
+            <div class="day-sub">Shibuya Sky sunset</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="alert danger">
+          <strong>🔴 BOOKING PENDING — SHIBUYA SKY</strong><br>
+          Target a sunset time slot.
+        </div>
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Meiji Shrine</div>
+          </div>
+
+          <div class="event">
+            <div class="time">Late morning</div>
+            <div class="event-title">Harajuku / Takeshita Street</div>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Omotesando</div>
+          </div>
+
+          <div class="event">
+            <div class="time">Sunset</div>
+            <div class="event-title">🌇 Shibuya Sky</div>
+            <p>Book a sunset slot.</p>
+          </div>
+
+          <div class="shop">
+            <strong>Onitsuka Tiger Shibuya</strong>
+            <div class="shop-meta">Shoes + Japan shopping • 3.9★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Onitsuka+Tiger+Shibuya">
+              📍 Google Maps
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 7 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">7<br>NOV</div>
+          <div>
+            <h2>🎮 Akihabara + Anime + Watches</h2>
+            <div class="day-sub">Main Tokyo shopping day</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">09:30</div>
+            <div class="event-title">Yodobashi Akiba</div>
+            <p>Electronics, cameras, watches, gaming.</p>
+          </div>
+
+          <div class="shop">
+            <strong>Yodobashi Akiba</strong>
+            <div class="shop-meta">Electronics • cameras • tech • 4.2★ / 26k+ reviews</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Yodobashi+Akiba">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Animate Akihabara</strong>
+            <div class="shop-meta">Anime goods • figures • character merchandise • 4.2★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Animate+Akihabara">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>AmiAmi Figure Tower</strong>
+            <div class="shop-meta">Figures • collectibles • hobby</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=AmiAmi+Akihabara+Figure+Tower">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Mandarake Complex</strong>
+            <div class="shop-meta">Used manga • toys • collectibles • games</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Mandarake+Complex+Akihabara">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Kotobukiya</strong>
+            <div class="shop-meta">Figures • model kits • anime merchandise</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Kotobukiya+Akihabara">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">Optional JDM / Tokyo Drift experience</div>
+            <p>
+              Best suited here if you decide to do a Daikoku / Wangan / JDM night experience.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 8 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">8<br>NOV</div>
+          <div>
+            <h2>🛍️ Tokyo — Nakano + Shinjuku</h2>
+            <div class="day-sub">Ghibli replacement day • Watches • Anime</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="alert danger">
+          <strong>❌ Ghibli Museum removed</strong><br>
+          The museum is not available for this trip. Do not book a Ghibli Museum ticket.
+        </div>
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Nakano Broadway</div>
+            <p>Excellent combination of anime collectibles and luxury watches.</p>
+          </div>
+
+          <div class="shop">
+            <strong>Jack Road</strong>
+            <div class="shop-meta">Luxury / used watches • 4.3★ / ~1,700 reviews</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Jack+Road+Nakano">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>WATCHNIAN Nakano</strong>
+            <div class="shop-meta">Second-hand luxury watches • 4.9★</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=WATCHNIAN+Nakano">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="shop">
+            <strong>Mandarake Nakano</strong>
+            <div class="shop-meta">Anime • toys • manga • collectibles</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Mandarake+Nakano">
+              📍 Google Maps
+            </a>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Shinjuku</div>
+            <p>Shopping + Tokyo city atmosphere.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 9 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">9<br>NOV</div>
+          <div>
+            <h2>🗻 Mt Fuji + Hakone</h2>
+            <div class="day-sub">Fuji • Lake Ashi • Ropeway • Owakudani</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="alert danger">
+          <strong>🔴 BOOKING PENDING — FUJI / HAKONE TOUR</strong><br>
+          Book the tour that includes Hakone Ropeway + Lake Ashi + Owakudani.
+          Verify whether the selected option includes the pirate ship.
+        </div>
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">Early morning</div>
+            <div class="event-title">Depart Tokyo</div>
+            <p>Coach tour / selected Fuji-Hakone excursion.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Daytime</div>
+            <div class="event-title">🗻 Mt Fuji area</div>
+            <p>Visibility is weather dependent.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Hakone Ropeway</div>
+            <p>Owakudani volcanic valley.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Afternoon</div>
+            <div class="event-title">Lake Ashi</div>
+            <p>Check exact tour option for pirate ship inclusion.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">Evening</div>
+            <div class="event-title">Return to Tokyo</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- NOV 10 -->
+    <div class="day">
+      <div class="day-header" onclick="toggleDay(this)">
+        <div class="day-title">
+          <div class="date">10<br>NOV</div>
+          <div>
+            <h2>✈️ Tokyo → Narita → Frankfurt</h2>
+            <div class="day-sub">Final shopping + airport</div>
+          </div>
+        </div>
+        <div class="chevron">⌄</div>
+      </div>
+
+      <div class="day-content">
+
+        <div class="timeline">
+
+          <div class="event">
+            <div class="time">Morning</div>
+            <div class="event-title">Final shopping</div>
+            <p>Keep this light. Make sure all purchases are packed correctly.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">~13:00</div>
+            <div class="event-title">Leave for Narita Airport</div>
+            <p>Allow plenty of time for airport + customs/refund procedures.</p>
+          </div>
+
+          <div class="event">
+            <div class="time">16:55</div>
+            <div class="event-title">✈️ NRT → Frankfurt</div>
+          </div>
+
+        </div>
+
+        <div class="alert info">
+          <strong>🛍️ Tax refund</strong><br>
+          From Nov 1, 2026 Japan uses the new refund-style tax-free process.
+          Keep passports, receipts and purchased goods available for the required
+          customs/refund procedure.
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ================= CHECKLIST ================= -->
+
+  <div id="checklist" style="display:none">
+
+    <h2 class="section-title">✅ Pre-Trip Checklist</h2>
+
+    <div id="checklistItems"></div>
+
+  </div>
+
+
+  <!-- ================= BOOKINGS ================= -->
+
+  <div id="bookings" style="display:none">
+
+    <h2 class="section-title">🎟️ Booking Dashboard</h2>
+
+    <div class="booking">
+      <div class="booking-title">✈️ Flights</div>
+      <div class="booking-status">✅ Booked</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🏨 Hotels</div>
+      <div class="booking-status">✅ Osaka + Kyoto + Tokyo booked</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🇯🇵 Japan Visa</div>
+      <div class="booking-status">✅ Received</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🎢 USJ — Oct 30</div>
+      <div class="booking-status">🔴 €93 Studio Pass + SNW + Food + Kansai Pass</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🎢 USJ Express Pass</div>
+      <div class="booking-status">🟡 Optional — Mine Cart & JAWS if purchased</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🚄 Kyoto → Tokyo Shinkansen — Nov 5</div>
+      <div class="booking-status">🔴 Pending</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🌇 Shibuya Sky — Nov 6</div>
+      <div class="booking-status">🔴 Pending — target sunset</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🗻 Fuji / Hakone — Nov 9</div>
+      <div class="booking-status">🔴 Pending</div>
+    </div>
+
+    <div class="booking">
+      <div class="booking-title">🏯 Ghibli Museum — Nov 8</div>
+      <div class="booking-status">❌ Not possible / removed from itinerary</div>
+    </div>
+
+  </div>
+
+
+  <!-- ================= INFO ================= -->
+
+  <div id="info" style="display:none">
+
+    <h2 class="section-title">ℹ️ Important Information</h2>
+
+    <div class="alert success">
+      <strong>🎢 USJ</strong><br>
+      USJ is Friday, October 30, 2026.
+      Your €93 package includes park entry and guaranteed Super Nintendo World
+      entry at 13:00.
+    </div>
+
+    <div class="alert info">
+      <strong>🍄 Super Nintendo World</strong><br>
+      Your timed entry is the important part. USJ notes that an Area Timed Entry
+      Ticket or Standby Entry Ticket may be required depending on conditions.
+    </div>
+
+    <div class="alert">
+      <strong>🎃 Halloween Horror Nights</strong><br>
+      Sept 11 – Nov 8, 2026. Your Oct 30 visit falls inside the event period.
+    </div>
+
+    <div class="alert danger">
+      <strong>🏰 Ghibli Museum</strong><br>
+      Removed from this itinerary. Do not purchase a ticket for Nov 8.
+    </div>
+
+    <div class="alert">
+      <strong>🛍️ Tax-free shopping</strong><br>
+      Your Osaka shopping is before Nov 1. Tokyo shopping is after Nov 1,
+      when Japan's tax-free system changes to the new refund-style procedure.
+    </div>
+
+    <h3>🏨 Hotels</h3>
+
+    <p>
+      <strong>Osaka</strong><br>
+      Smile Hotel Shin-Osaka
+    </p>
+
+    <p>
+      <strong>Kyoto</strong><br>
+      Wander Kyoto Nanajo Hotel
+    </p>
+
+    <p>
+      <strong>Tokyo</strong><br>
+      Sotetsu Fresa Inn Tokyo Tamachi
+    </p>
+
+    <h3>📞 Hotel numbers</h3>
+
+    <p>
+      Osaka: +81 6 6309 7755<br>
+      Kyoto: +81 75 330 9330<br>
+      Tokyo: +81 3 5442 2031
+    </p>
+
+  </div>
+
+
+  <div class="footer">
+    Japan 2026 • Nithin & Sindhu 🇯🇵<br>
+    Last updated: September 2026
+  </div>
+
+</div>
+
+
+<script>
+
+const checklist = [
+  ["USJ €93 ticket — Oct 30", false],
+  ["Decide on USJ Express Pass", false],
+  ["Book Kyoto → Tokyo Shinkansen — Nov 5", false],
+  ["Book Shibuya Sky sunset — Nov 6", false],
+  ["Book Mt Fuji / Hakone tour — Nov 9", false],
+  ["Check Fuji tour includes Ropeway", false],
+  ["Check Fuji tour pirate ship inclusion", false],
+  ["Download USJ official app", false],
+  ["Add USJ tickets to phone", false],
+  ["Prepare passports for Japan", false],
+  ["Prepare flight confirmations", false],
+  ["Prepare hotel confirmations", false],
+  ["Set up IC card / Suica / ICOCA", false],
+  ["Plan airport transfer to NRT", false],
+  ["Check international roaming / eSIM", false],
+  ["Notify bank/cards about Japan travel if required", false],
+  ["Prepare some Japanese yen", false],
+  ["Make watch shopping shortlist", false],
+  ["Make anime/toy shopping shortlist", false],
+  ["Make Onitsuka Tiger shortlist", false],
+  ["Make winter jacket shortlist", false],
+  ["Prepare luggage space for shopping", false],
+  ["Keep passports available for tax-free shopping", false],
+  ["Check new Japan tax-refund procedure before Tokyo shopping", false],
+  ["Download Google Maps offline areas", false],
+  ["Download translation app", false],
+  ["Check weather before Fuji day", false],
+  ["Final airport/customs check before NRT departure", false]
+];
+
+function loadChecklist() {
+  const saved = JSON.parse(localStorage.getItem("japanChecklist") || "null");
+
+  if (saved) {
+    saved.forEach((x,i) => {
+      if (checklist[i]) checklist[i][1] = x;
+    });
+  }
+
+  renderChecklist();
+}
+
+function renderChecklist() {
+  const container = document.getElementById("checklistItems");
+  container.innerHTML = "";
+
+  checklist.forEach((item,index) => {
+
+    const div = document.createElement("div");
+    div.className = "booking";
+
+    div.innerHTML = `
+      <div class="booking-row">
+        <input type="checkbox"
+          ${item[1] ? "checked" : ""}
+          onchange="toggleChecklist(${index},this.checked)">
+        <div>
+          <div class="booking-title">${item[0]}</div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+function toggleChecklist(index,value) {
+  checklist[index][1] = value;
+  localStorage.setItem(
+    "japanChecklist",
+    JSON.stringify(checklist.map(x => x[1]))
+  );
+}
+
+function toggleDay(header) {
+  header.parentElement.classList.toggle("open");
+}
+
+function openAll() {
+  document.querySelectorAll(".day").forEach(day => {
+    day.classList.add("open");
+  });
+}
+
+function closeAll() {
+  document.querySelectorAll(".day").forEach(day => {
+    day.classList.remove("open");
+  });
+}
+
+function showTab(tab,button) {
+
+  ["itinerary","checklist","bookings","info"].forEach(id => {
+    document.getElementById(id).style.display =
+      id === tab ? "block" : "none";
+  });
+
+  document.querySelectorAll(".tab").forEach(t => {
+    t.classList.remove("active");
+  });
+
+  button.classList.add("active");
+}
+
+loadChecklist();
+
+</script>
+
+</body>
+</html>
