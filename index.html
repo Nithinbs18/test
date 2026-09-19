@@ -387,6 +387,18 @@ a.map {
 }
 .cp-check-group{ margin-bottom:18px; }
 .cp-check-group h3{ margin:0 0 8px; font-size:16px; }
+.cp-group-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  cursor:pointer;
+  user-select:none;
+}
+.cp-group-right{ display:flex; align-items:center; gap:10px; }
+.cp-group-count{ font-size:12px; font-weight:600; color:var(--muted); }
+.cp-chevron{ font-size:18px; transition:.2s; }
+.cp-check-group.collapsed .cp-chevron{ transform:rotate(180deg); }
+.cp-check-group.collapsed .cp-check{ display:none; }
 .cp-check{
   display:flex;
   align-items:flex-start;
@@ -486,11 +498,6 @@ a.map {
 
   <br>
 
-  <div class="toolbar">
-    <button class="btn" onclick="openAll()">Open All</button>
-    <button class="btn-light" onclick="closeAll()">Collapse All</button>
-  </div>
-
   <div class="tabs">
     <button class="tab active" onclick="showTab('itinerary',this)">📅 Itinerary</button>
     <button class="tab" onclick="showTab('checklist',this)">✅ Checklist</button>
@@ -502,6 +509,11 @@ a.map {
   <!-- ================= ITINERARY ================= -->
 
   <div id="itinerary">
+
+    <div class="toolbar">
+      <button class="btn" onclick="openAll()">Open All</button>
+      <button class="btn-light" onclick="closeAll()">Collapse All</button>
+    </div>
 
     <!-- OCT 28 -->
     <div class="day open">
@@ -523,18 +535,30 @@ a.map {
             <div class="time">18:00</div>
             <div class="event-title">Arrive Kansai International Airport</div>
             <p>Immigration → baggage → IC card / transport → Osaka.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Evening</div>
             <div class="event-title">Hotel check-in</div>
             <p>Smile Hotel Shin-Osaka</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Smile+Hotel+Shin-Osaka">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">19:30+</div>
             <div class="event-title">Easy Dotonbori evening</div>
             <p>Only if energy allows. Keep the first night relaxed.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Dotonbori+Osaka">
+              📍 Google Maps
+            </a>
           </div>
 
         </div>
@@ -605,6 +629,10 @@ a.map {
             <div class="time">Evening</div>
             <div class="event-title">Namba / Dotonbori</div>
             <p>Food + Osaka night atmosphere.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Namba+Dotonbori+Osaka">
+              📍 Google Maps
+            </a>
           </div>
 
         </div>
@@ -627,8 +655,8 @@ a.map {
 
       <div class="day-content">
 
-        <div class="alert success">
-          <strong>🎟️ YOUR TICKET</strong><br>
+        <div class="alert danger">
+          <strong>🔴 TICKET STILL OPEN — BOOK THIS</strong><br>
           €93 package: 1-Day Studio Pass + Super Nintendo World entry at 13:00 +
           free SNW food voucher + Have Fun in Kansai Pass (3 facilities).
         </div>
@@ -718,11 +746,19 @@ a.map {
             <div class="time">Morning</div>
             <div class="event-title">Sumiyoshi Taisha</div>
             <p>Relaxed temple/shrine morning after USJ.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Sumiyoshi+Taisha+Osaka">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Shinsaibashi shopping</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Shinsaibashi+Osaka">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="shop">
@@ -793,18 +829,30 @@ a.map {
             <div class="time">Morning</div>
             <div class="event-title">Travel to Kyoto</div>
             <p>Check in / drop luggage at Wander Kyoto Nanajo.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Wander+Kyoto+Nanajo+Hotel">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Nishiki Market</div>
             <p>Food, traditional shops and Kyoto atmosphere.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Evening</div>
             <div class="event-title">Gion + Pontocho</div>
             <p>Walk through the historic districts.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Gion+Pontocho+Kyoto">
+              📍 Google Maps
+            </a>
           </div>
         </div>
       </div>
@@ -842,6 +890,10 @@ a.map {
             <div class="time">Afternoon</div>
             <div class="event-title">Nara Park</div>
             <p>Todai-ji + deer park + surrounding area.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Nara+Park">
+              📍 Google Maps
+            </a>
           </div>
 
         </div>
@@ -869,18 +921,30 @@ a.map {
             <div class="time">06:30–07:00</div>
             <div class="event-title">Arashiyama Bamboo Grove</div>
             <p>Go very early before the main crowds arrive.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove+Kyoto">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Morning</div>
             <div class="event-title">Arashiyama area</div>
             <p>Tenryu-ji / Togetsukyo Bridge depending on energy.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Tenryu-ji+Arashiyama+Kyoto">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Fushimi Inari</div>
             <p>Torii gates and mountain walk.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha+Kyoto">
+              📍 Google Maps
+            </a>
           </div>
 
         </div>
@@ -908,12 +972,20 @@ a.map {
             <div class="time">Morning</div>
             <div class="event-title">Gion</div>
             <p>Explore quieter streets and traditional architecture.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Gion+Kyoto">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Kyoto International Manga Museum</div>
             <p>Allow 2–3 hours.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Kyoto+International+Manga+Museum">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
@@ -958,21 +1030,37 @@ a.map {
             <div class="time">Late morning</div>
             <div class="event-title">Hotel / luggage</div>
             <p>Sotetsu Fresa Inn Tokyo Tamachi.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Tokyo+Tamachi">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Tokyo Tower</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Tokyo+Tower">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Late afternoon</div>
             <div class="event-title">Azabudai Hills</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Azabudai+Hills+Tokyo">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Evening</div>
             <div class="event-title">Roppongi</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Roppongi+Tokyo">
+              📍 Google Maps
+            </a>
           </div>
 
         </div>
@@ -1005,22 +1093,38 @@ a.map {
           <div class="event">
             <div class="time">Morning</div>
             <div class="event-title">Meiji Shrine</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Meiji+Shrine+Tokyo">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Late morning</div>
             <div class="event-title">Harajuku / Takeshita Street</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Takeshita+Street+Harajuku">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Omotesando</div>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Sunset</div>
             <div class="event-title">🌇 Shibuya Sky</div>
             <p>Book a sunset slot.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky+Tokyo">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="shop">
@@ -1144,6 +1248,10 @@ a.map {
             <div class="time">Morning</div>
             <div class="event-title">Nakano Broadway</div>
             <p>Excellent combination of anime collectibles and luxury watches.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Nakano+Broadway+Tokyo">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="shop">
@@ -1177,6 +1285,10 @@ a.map {
             <div class="time">Afternoon</div>
             <div class="event-title">Shinjuku</div>
             <p>Shopping + Tokyo city atmosphere.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Tokyo">
+              📍 Google Maps
+            </a>
           </div>
 
         </div>
@@ -1217,18 +1329,30 @@ a.map {
             <div class="time">Daytime</div>
             <div class="event-title">🗻 Mt Fuji area</div>
             <p>Visibility is weather dependent.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Mount+Fuji">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Hakone Ropeway</div>
             <p>Owakudani volcanic valley.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Hakone+Ropeway+Owakudani">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
             <div class="time">Afternoon</div>
             <div class="event-title">Lake Ashi</div>
             <p>Check exact tour option for pirate ship inclusion.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Lake+Ashi+Hakone">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
@@ -1268,6 +1392,10 @@ a.map {
             <div class="time">~13:00</div>
             <div class="event-title">Leave for Narita Airport</div>
             <p>Allow plenty of time for airport + customs/refund procedures.</p>
+            <a class="map" target="_blank"
+              href="https://www.google.com/maps/search/?api=1&query=Narita+International+Airport">
+              📍 Google Maps
+            </a>
           </div>
 
           <div class="event">
@@ -1302,6 +1430,8 @@ a.map {
     </div>
     <div class="cp-toolbar">
       <button class="cp-btn" onclick="openAddModal()">＋ Add checkpoint</button>
+      <button class="btn" onclick="expandAllChecks()">Open all</button>
+      <button class="btn-light" onclick="collapseAllChecks()">Collapse all</button>
       <button class="cp-btn cp-secondary" onclick="toggleCompleted(event)">Show completed</button>
       <button class="cp-btn cp-danger" onclick="clearCompleted()">Clear completed</button>
     </div>
@@ -1333,7 +1463,7 @@ a.map {
 
     <div class="booking">
       <div class="booking-title">🎢 USJ — Oct 30</div>
-      <div class="booking-status">🔴 €93 Studio Pass + SNW + Food + Kansai Pass</div>
+      <div class="booking-status">🔴 Pending — €93 Studio Pass + SNW + Food + Kansai Pass</div>
     </div>
 
     <div class="booking">
@@ -1370,11 +1500,10 @@ a.map {
 
     <h2 class="section-title">ℹ️ Important Information</h2>
 
-    <div class="alert success">
-      <strong>🎢 USJ</strong><br>
-      USJ is Friday, October 30, 2026.
-      Your €93 package includes park entry and guaranteed Super Nintendo World
-      entry at 13:00.
+    <div class="alert danger">
+      <strong>🎢 USJ — 🔴 STILL OPEN</strong><br>
+      USJ is Friday, October 30, 2026. The €93 package (park entry + guaranteed
+      Super Nintendo World entry at 13:00) still needs to be booked.
     </div>
 
     <div class="alert info">
@@ -1528,7 +1657,11 @@ function renderChecklist(){
     return (ia<0?999:ia) - (ib<0?999:ib);
   }).forEach(day => {
     const card = document.createElement("div"); card.className = "cp-card cp-check-group";
-    const title = document.createElement("h3"); title.textContent = day; card.appendChild(title);
+    const title = document.createElement("h3"); title.className = "cp-group-header";
+    const doneInGroup = groups[day].filter(i => i.done).length;
+    title.innerHTML = `<span>${cpEsc(day)}</span><span class="cp-group-right"><span class="cp-group-count">${doneInGroup}/${groups[day].length}</span><span class="cp-chevron">⌄</span></span>`;
+    title.onclick = () => card.classList.toggle("collapsed");
+    card.appendChild(title);
     groups[day].forEach(x => {
       const row = document.createElement("div"); row.className = "cp-check" + (x.done ? " done" : "");
       row.innerHTML = `
@@ -1616,6 +1749,12 @@ function toggleCompleted(event){
   cpShowCompleted = !cpShowCompleted;
   event.currentTarget.textContent = cpShowCompleted ? "Hide completed" : "Show completed";
   renderChecklist();
+}
+function expandAllChecks(){
+  document.querySelectorAll("#checklistContainer .cp-check-group").forEach(c => c.classList.remove("collapsed"));
+}
+function collapseAllChecks(){
+  document.querySelectorAll("#checklistContainer .cp-check-group").forEach(c => c.classList.add("collapsed"));
 }
 document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
