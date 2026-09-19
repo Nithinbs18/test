@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#111827">
-<title>Japan 2026 — Nithin & Sindhu</title>
+<title>N&S</title>
 
 <style>
 :root {
@@ -338,6 +338,120 @@ a.map {
     grid-template-columns:repeat(4,1fr);
   }
 }
+
+
+/* ===== Dynamic checklist feature (added) ===== */
+.cp-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
+}
+.cp-toolbar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-bottom:14px;
+}
+.cp-btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 13px;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+.cp-btn.cp-secondary{ background:#eef2f7; color:#334155; }
+.cp-btn.cp-danger{ background:#fee2e2; color:#991b1b; }
+.cp-progress{
+  height:10px;
+  background:#e5e7eb;
+  border-radius:99px;
+  overflow:hidden;
+}
+.cp-progress>div{
+  height:100%;
+  background:var(--accent);
+  width:0%;
+  transition:.2s;
+}
+.cp-stats{
+  display:flex;
+  justify-content:space-between;
+  margin:8px 0;
+  font-size:14px;
+  font-weight:600;
+}
+.cp-check-group{ margin-bottom:18px; }
+.cp-check-group h3{ margin:0 0 8px; font-size:16px; }
+.cp-check{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 8px;
+  border-bottom:1px solid var(--border);
+}
+.cp-check:last-child{ border-bottom:0; }
+.cp-check input{
+  width:20px;
+  height:20px;
+  margin-top:1px;
+  accent-color:var(--accent);
+}
+.cp-check-main{ flex:1; min-width:0; }
+.cp-check-title{ font-weight:600; }
+.cp-check.done .cp-check-title{ text-decoration:line-through; color:#94a3b8; }
+.cp-check-meta{ display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+.cp-tag{
+  font-size:11px;
+  background:#f1f5f9;
+  color:#64748b;
+  padding:2px 7px;
+  border-radius:999px;
+}
+.cp-actions{ display:flex; gap:5px; }
+.cp-iconbtn{
+  border:0;
+  background:#f8fafc;
+  color:#475569;
+  border-radius:8px;
+  padding:6px 8px;
+  cursor:pointer;
+}
+.cp-empty{ text-align:center; padding:28px; color:var(--muted); }
+.cp-modal-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0008;
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.cp-modal-backdrop.show{ display:flex; }
+.cp-modal{
+  background:#fff;
+  border-radius:18px;
+  width:min(520px,100%);
+  padding:20px;
+  max-height:90vh;
+  overflow:auto;
+}
+.cp-modal h2{ margin-top:0; }
+.cp-modal label{ display:block; font-weight:700; font-size:13px; margin:12px 0 6px; }
+.cp-modal input[type=text],.cp-modal select,.cp-modal textarea{
+  width:100%;
+  padding:11px 12px;
+  border:1px solid #d1d5db;
+  border-radius:10px;
+  font:inherit;
+  background:#fff;
+}
+.cp-modal-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:18px; }
 </style>
 </head>
 
@@ -1182,7 +1296,16 @@ a.map {
 
     <h2 class="section-title">✅ Pre-Trip Checklist</h2>
 
-    <div id="checklistItems"></div>
+    <div class="cp-card">
+      <div class="cp-stats"><span id="checkStats">0 / 0 completed</span><span id="checkPercent">0%</span></div>
+      <div class="cp-progress"><div id="progressBar"></div></div>
+    </div>
+    <div class="cp-toolbar">
+      <button class="cp-btn" onclick="openAddModal()">＋ Add checkpoint</button>
+      <button class="cp-btn cp-secondary" onclick="toggleCompleted(event)">Show completed</button>
+      <button class="cp-btn cp-danger" onclick="clearCompleted()">Clear completed</button>
+    </div>
+    <div id="checklistContainer"></div>
 
   </div>
 
@@ -1312,82 +1435,190 @@ a.map {
 </div>
 
 
+
+<div id="modalBackdrop" class="cp-modal-backdrop">
+  <div class="cp-modal">
+    <h2 id="modalTitle">Add checkpoint</h2>
+    <label for="cpTitle">Checkpoint</label>
+    <input id="cpTitle" type="text" placeholder="e.g. Find a Seiko watch">
+    <label for="cpDay">Day</label>
+    <select id="cpDay"></select>
+    <label for="cpCategory">Category</label>
+    <select id="cpCategory">
+      <option>General</option><option>Shopping</option><option>Food</option><option>Transport</option><option>Booking</option><option>Sightseeing</option><option>USJ</option>
+    </select>
+    <label for="cpNotes">Notes (optional)</label>
+    <textarea id="cpNotes" rows="3" placeholder="Optional details"></textarea>
+    <div class="cp-modal-actions">
+      <button class="cp-btn cp-secondary" onclick="closeModal()">Cancel</button>
+      <button class="cp-btn" onclick="saveCheckpoint()">Save checkpoint</button>
+    </div>
+  </div>
+</div>
+
 <script>
 
-const checklist = [
-  ["USJ €93 ticket — Oct 30", false],
-  ["Decide on USJ Express Pass", false],
-  ["Book Kyoto → Tokyo Shinkansen — Nov 5", false],
-  ["Book Shibuya Sky sunset — Nov 6", false],
-  ["Book Mt Fuji / Hakone tour — Nov 9", false],
-  ["Check Fuji tour includes Ropeway", false],
-  ["Check Fuji tour pirate ship inclusion", false],
-  ["Download USJ official app", false],
-  ["Add USJ tickets to phone", false],
-  ["Prepare passports for Japan", false],
-  ["Prepare flight confirmations", false],
-  ["Prepare hotel confirmations", false],
-  ["Set up IC card / Suica / ICOCA", false],
-  ["Plan airport transfer to NRT", false],
-  ["Check international roaming / eSIM", false],
-  ["Notify bank/cards about Japan travel if required", false],
-  ["Prepare some Japanese yen", false],
-  ["Make watch shopping shortlist", false],
-  ["Make anime/toy shopping shortlist", false],
-  ["Make Onitsuka Tiger shortlist", false],
-  ["Make winter jacket shortlist", false],
-  ["Prepare luggage space for shopping", false],
-  ["Keep passports available for tax-free shopping", false],
-  ["Check new Japan tax-refund procedure before Tokyo shopping", false],
-  ["Download Google Maps offline areas", false],
-  ["Download translation app", false],
-  ["Check weather before Fuji day", false],
-  ["Final airport/customs check before NRT departure", false]
+/* ===== Dynamic checklist feature (added) ===== */
+const CP_STORAGE_KEY = "japan2026_index_checklist_v1";
+
+const cpDays = [
+  ["28 Oct","Arrival in Osaka"],["29 Oct","Den Den Town + Namba"],
+  ["30 Oct","Universal Studios Japan"],["31 Oct","Sumiyoshi + Shinsaibashi"],
+  ["1 Nov","Osaka → Kyoto"],["2 Nov","Kyoto Temples + Nara"],
+  ["3 Nov","Arashiyama + Fushimi Inari"],["4 Nov","Kyoto — Gion + Manga Museum"],
+  ["5 Nov","Kyoto → Tokyo"],["6 Nov","Meiji → Harajuku → Shibuya"],
+  ["7 Nov","Akihabara + Anime + Watches"],["8 Nov","Tokyo — Nakano + Shinjuku"],
+  ["9 Nov","Mt Fuji + Hakone"],["10 Nov","Tokyo → Narita → Frankfurt"]
 ];
 
-function loadChecklist() {
-  const saved = JSON.parse(localStorage.getItem("japanChecklist") || "null");
+const cpStarter = [
+  ["USJ €93 ticket — Oct 30","30 Oct","USJ"],
+  ["Decide on USJ Express Pass","30 Oct","USJ"],
+  ["Download USJ official app","30 Oct","USJ"],
+  ["Add USJ tickets to phone","30 Oct","USJ"],
+  ["Book Kyoto → Tokyo Shinkansen — Nov 5","5 Nov","Transport"],
+  ["Book Shibuya Sky sunset — Nov 6","6 Nov","Booking"],
+  ["Book Mt Fuji / Hakone tour — Nov 9","9 Nov","Booking"],
+  ["Check Fuji tour includes Ropeway","9 Nov","Booking"],
+  ["Check Fuji tour pirate ship inclusion","9 Nov","Booking"],
+  ["Check weather before Fuji day","9 Nov","Booking"],
+  ["Prepare passports for Japan","28 Oct","General"],
+  ["Prepare flight confirmations","28 Oct","General"],
+  ["Prepare hotel confirmations","28 Oct","General"],
+  ["Set up IC card / Suica / ICOCA","28 Oct","Transport"],
+  ["Check international roaming / eSIM","28 Oct","General"],
+  ["Notify bank/cards about Japan travel if required","28 Oct","General"],
+  ["Prepare some Japanese yen","28 Oct","General"],
+  ["Download Google Maps offline areas","28 Oct","General"],
+  ["Download translation app","28 Oct","General"],
+  ["Make anime/toy shopping shortlist","29 Oct","Shopping"],
+  ["Make watch shopping shortlist","31 Oct","Shopping"],
+  ["Make Onitsuka Tiger shortlist","31 Oct","Shopping"],
+  ["Make winter jacket shortlist","Other","Shopping"],
+  ["Prepare luggage space for shopping","Other","Shopping"],
+  ["Keep passports available for tax-free shopping","7 Nov","Shopping"],
+  ["Check new Japan tax-refund procedure before Tokyo shopping","7 Nov","Shopping"],
+  ["Plan airport transfer to NRT","10 Nov","Transport"],
+  ["Final airport/customs check before NRT departure","10 Nov","General"]
+].map((x,i)=>({id:"starter_"+i,title:x[0],day:x[1],category:x[2],notes:"",done:false}));
 
-  if (saved) {
-    saved.forEach((x,i) => {
-      if (checklist[i]) checklist[i][1] = x;
+let cpItems = cpLoad();
+let cpEditingId = null;
+let cpShowCompleted = true;
+
+function cpLoad(){
+  try {
+    const raw = localStorage.getItem(CP_STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return cpStarter;
+}
+function cpSave(){ localStorage.setItem(CP_STORAGE_KEY, JSON.stringify(cpItems)); }
+function cpEsc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
+
+function renderChecklist(){
+  const root = document.getElementById("checklistContainer");
+  const visible = cpItems.filter(x => cpShowCompleted || !x.done);
+  const groups = {};
+  visible.forEach(x => { const key = x.day || "Other"; (groups[key] ??= []).push(x); });
+  root.innerHTML = "";
+  const orderedDays = cpDays.map(x => x[0]);
+  Object.keys(groups).sort((a,b) => {
+    const ia = orderedDays.indexOf(a), ib = orderedDays.indexOf(b);
+    return (ia<0?999:ia) - (ib<0?999:ib);
+  }).forEach(day => {
+    const card = document.createElement("div"); card.className = "cp-card cp-check-group";
+    const title = document.createElement("h3"); title.textContent = day; card.appendChild(title);
+    groups[day].forEach(x => {
+      const row = document.createElement("div"); row.className = "cp-check" + (x.done ? " done" : "");
+      row.innerHTML = `
+        <input type="checkbox" ${x.done ? "checked" : ""} aria-label="Complete checkpoint">
+        <div class="cp-check-main">
+          <div class="cp-check-title">${cpEsc(x.title)}</div>
+          <div class="cp-check-meta"><span class="cp-tag">${cpEsc(x.category||"General")}</span>${x.notes?`<span class="cp-tag">${cpEsc(x.notes)}</span>`:""}</div>
+        </div>
+        <div class="cp-actions">
+          <button class="cp-iconbtn" title="Edit">✏️</button>
+          <button class="cp-iconbtn" title="Delete">🗑️</button>
+        </div>`;
+      row.querySelector("input").onchange = () => { x.done = !x.done; cpSave(); renderChecklist(); };
+      row.querySelectorAll(".cp-iconbtn")[0].onclick = () => openEditModal(x.id);
+      row.querySelectorAll(".cp-iconbtn")[1].onclick = () => deleteCheckpoint(x.id);
+      card.appendChild(row);
     });
-  }
+    root.appendChild(card);
+  });
+  if (!visible.length) root.innerHTML = '<div class="cp-card cp-empty">No checkpoints to show.<br>Add one with <strong>＋ Add checkpoint</strong>.</div>';
+  updateProgress();
+}
 
+function updateProgress(){
+  const total = cpItems.length, done = cpItems.filter(x => x.done).length;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById("checkStats").textContent = `${done} / ${total} completed`;
+  document.getElementById("checkPercent").textContent = `${pct}%`;
+  document.getElementById("progressBar").style.width = pct + "%";
+}
+
+function populateDays(){
+  const select = document.getElementById("cpDay");
+  select.innerHTML = cpDays.map(x => `<option value="${cpEsc(x[0])}">${cpEsc(x[0])} · ${cpEsc(x[1])}</option>`).join("");
+  select.innerHTML += `<option value="Other">Other</option>`;
+}
+
+function openAddModal(){
+  cpEditingId = null;
+  document.getElementById("modalTitle").textContent = "Add checkpoint";
+  document.getElementById("cpTitle").value = "";
+  document.getElementById("cpNotes").value = "";
+  document.getElementById("cpCategory").value = "General";
+  document.getElementById("cpDay").value = "Other";
+  document.getElementById("modalBackdrop").classList.add("show");
+  setTimeout(() => document.getElementById("cpTitle").focus(), 50);
+}
+function openEditModal(id){
+  const x = cpItems.find(i => i.id === id); if (!x) return;
+  cpEditingId = id;
+  document.getElementById("modalTitle").textContent = "Edit checkpoint";
+  document.getElementById("cpTitle").value = x.title;
+  document.getElementById("cpDay").value = x.day || "Other";
+  document.getElementById("cpCategory").value = x.category || "General";
+  document.getElementById("cpNotes").value = x.notes || "";
+  document.getElementById("modalBackdrop").classList.add("show");
+}
+function closeModal(){ document.getElementById("modalBackdrop").classList.remove("show"); cpEditingId = null; }
+function saveCheckpoint(){
+  const title = document.getElementById("cpTitle").value.trim();
+  if (!title) { alert("Please enter a checkpoint."); return; }
+  const data = {
+    title,
+    day: document.getElementById("cpDay").value,
+    category: document.getElementById("cpCategory").value,
+    notes: document.getElementById("cpNotes").value.trim()
+  };
+  if (cpEditingId) {
+    const x = cpItems.find(i => i.id === cpEditingId); Object.assign(x, data);
+  } else {
+    cpItems.push({ id: "cp_" + Date.now() + "_" + Math.random().toString(36).slice(2,8), ...data, done: false });
+  }
+  cpSave(); closeModal(); renderChecklist();
+}
+function deleteCheckpoint(id){
+  const x = cpItems.find(i => i.id === id); if (!x) return;
+  if (confirm(`Delete "${x.title}"?`)) { cpItems = cpItems.filter(i => i.id !== id); cpSave(); renderChecklist(); }
+}
+function clearCompleted(){
+  const count = cpItems.filter(x => x.done).length;
+  if (!count) return;
+  if (confirm(`Delete ${count} completed checkpoint${count===1?"":"s"}?`)) { cpItems = cpItems.filter(x => !x.done); cpSave(); renderChecklist(); }
+}
+function toggleCompleted(event){
+  cpShowCompleted = !cpShowCompleted;
+  event.currentTarget.textContent = cpShowCompleted ? "Hide completed" : "Show completed";
   renderChecklist();
 }
-
-function renderChecklist() {
-  const container = document.getElementById("checklistItems");
-  container.innerHTML = "";
-
-  checklist.forEach((item,index) => {
-
-    const div = document.createElement("div");
-    div.className = "booking";
-
-    div.innerHTML = `
-      <div class="booking-row">
-        <input type="checkbox"
-          ${item[1] ? "checked" : ""}
-          onchange="toggleChecklist(${index},this.checked)">
-        <div>
-          <div class="booking-title">${item[0]}</div>
-        </div>
-      </div>
-    `;
-
-    container.appendChild(div);
-  });
-}
-
-function toggleChecklist(index,value) {
-  checklist[index][1] = value;
-  localStorage.setItem(
-    "japanChecklist",
-    JSON.stringify(checklist.map(x => x[1]))
-  );
-}
+document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
 function toggleDay(header) {
   header.parentElement.classList.toggle("open");
@@ -1419,7 +1650,8 @@ function showTab(tab,button) {
   button.classList.add("active");
 }
 
-loadChecklist();
+populateDays();
+renderChecklist();
 
 </script>
 
