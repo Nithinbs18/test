@@ -1,1798 +1,1864 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#111827">
-<title>N&S</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <title>N&S</title>
 
-<style>
-:root {
-  --bg:#f4f6f8;
-  --card:#ffffff;
-  --text:#172033;
-  --muted:#667085;
-  --accent:#e11d48;
-  --accent2:#7c3aed;
-  --green:#16a34a;
-  --yellow:#d97706;
-  --blue:#2563eb;
-  --border:#e5e7eb;
-  --shadow:0 3px 15px rgba(0,0,0,.07);
-}
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --accent: #e11d48;
+      --accent2: #7c3aed;
+      --green: #16a34a;
+      --yellow: #d97706;
+      --blue: #2563eb;
+      --border: #e5e7eb;
+      --shadow: 0 3px 15px rgba(0, 0, 0, .07);
+    }
 
-* { box-sizing:border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  line-height:1.5;
-}
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
 
-header {
-  background:linear-gradient(135deg,#111827,#312e81);
-  color:white;
-  padding:28px 18px 22px;
-  padding-top:max(28px, env(safe-area-inset-top));
-}
+    header {
+      background: linear-gradient(135deg, #111827, #312e81);
+      color: white;
+      padding: 28px 18px 22px;
+      padding-top: max(28px, env(safe-area-inset-top));
+    }
 
-header h1 {
-  margin:0;
-  font-size:28px;
-}
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
 
-header p {
-  margin:5px 0 0;
-  opacity:.85;
-}
+    header p {
+      margin: 5px 0 0;
+      opacity: .85;
+    }
 
-.container {
-  max-width:900px;
-  margin:auto;
-  padding:16px;
-}
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 16px;
+    }
 
-.toolbar {
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:14px;
-}
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
 
-button {
-  border:0;
-  border-radius:10px;
-  padding:10px 14px;
-  font-weight:600;
-  cursor:pointer;
-}
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-.btn {
-  background:#111827;
-  color:white;
-}
+    .btn {
+      background: #111827;
+      color: white;
+    }
 
-.btn-light {
-  background:white;
-  border:1px solid var(--border);
-  color:var(--text);
-}
+    .btn-light {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
 
-.tabs {
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
-  margin-bottom:16px;
-  padding-bottom:4px;
-}
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      padding-bottom: 4px;
+    }
 
-.tab {
-  white-space:nowrap;
-  background:white;
-  border:1px solid var(--border);
-}
+    .tab {
+      white-space: nowrap;
+      background: white;
+      border: 1px solid var(--border);
+    }
 
-.tab.active {
-  background:#111827;
-  color:white;
-}
+    .tab.active {
+      background: #111827;
+      color: white;
+    }
 
-.day {
-  background:var(--card);
-  border-radius:16px;
-  margin-bottom:12px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
+    .day {
+      background: var(--card);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
 
-.day-header {
-  padding:16px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  cursor:pointer;
-}
+    .day-header {
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+    }
 
-.day-title {
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
+    .day-title {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
 
-.date {
-  background:#111827;
-  color:white;
-  border-radius:10px;
-  padding:8px 10px;
-  min-width:58px;
-  text-align:center;
-  font-size:13px;
-  font-weight:700;
-}
+    .date {
+      background: #111827;
+      color: white;
+      border-radius: 10px;
+      padding: 8px 10px;
+      min-width: 58px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
 
-.day h2 {
-  margin:0;
-  font-size:17px;
-}
+    .day h2 {
+      margin: 0;
+      font-size: 17px;
+    }
 
-.day-sub {
-  color:var(--muted);
-  font-size:13px;
-}
+    .day-sub {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-.chevron {
-  font-size:20px;
-  transition:.2s;
-}
+    .chevron {
+      font-size: 20px;
+      transition: .2s;
+    }
 
-.day.open .chevron {
-  transform:rotate(180deg);
-}
+    .day.open .chevron {
+      transform: rotate(180deg);
+    }
 
-.day-content {
-  display:none;
-  padding:0 16px 18px;
-  border-top:1px solid var(--border);
-}
+    .day-content {
+      display: none;
+      padding: 0 16px 18px;
+      border-top: 1px solid var(--border);
+    }
 
-.day.open .day-content {
-  display:block;
-}
+    .day.open .day-content {
+      display: block;
+    }
 
-.timeline {
-  border-left:3px solid #e5e7eb;
-  margin:16px 0 0 8px;
-  padding-left:16px;
-}
+    .timeline {
+      border-left: 3px solid #e5e7eb;
+      margin: 16px 0 0 8px;
+      padding-left: 16px;
+    }
 
-.event {
-  margin-bottom:18px;
-  position:relative;
-}
+    .event {
+      margin-bottom: 18px;
+      position: relative;
+    }
 
-.event:before {
-  content:"";
-  width:10px;
-  height:10px;
-  background:var(--accent);
-  border-radius:50%;
-  position:absolute;
-  left:-22px;
-  top:7px;
-}
+    .event:before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: absolute;
+      left: -22px;
+      top: 7px;
+    }
 
-.time {
-  font-weight:800;
-  color:var(--accent);
-  font-size:13px;
-}
+    .time {
+      font-weight: 800;
+      color: var(--accent);
+      font-size: 13px;
+    }
 
-.event-title {
-  font-weight:700;
-  margin:2px 0;
-}
+    .event-title {
+      font-weight: 700;
+      margin: 2px 0;
+    }
 
-.event p {
-  margin:3px 0;
-  color:#4b5563;
-  font-size:14px;
-}
+    .event p {
+      margin: 3px 0;
+      color: #4b5563;
+      font-size: 14px;
+    }
 
-.tags {
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-  margin-top:7px;
-}
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 7px;
+    }
 
-.tag {
-  font-size:11px;
-  background:#f3f4f6;
-  padding:4px 7px;
-  border-radius:7px;
-}
+    .tag {
+      font-size: 11px;
+      background: #f3f4f6;
+      padding: 4px 7px;
+      border-radius: 7px;
+    }
 
-.shop {
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px;
-  margin:10px 0;
-  background:#fafafa;
-}
+    .shop {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin: 10px 0;
+      background: #fafafa;
+    }
 
-.shop strong {
-  display:block;
-}
+    .shop strong {
+      display: block;
+    }
 
-.shop-meta {
-  color:var(--muted);
-  font-size:13px;
-}
+    .shop-meta {
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-a.map {
-  display:inline-block;
-  margin-top:7px;
-  color:var(--blue);
-  text-decoration:none;
-  font-weight:600;
-  font-size:13px;
-}
+    a.map {
+      display: inline-block;
+      margin-top: 7px;
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+    }
 
-.alert {
-  border-left:4px solid var(--yellow);
-  background:#fff7ed;
-  padding:12px;
-  border-radius:8px;
-  margin:12px 0;
-  font-size:14px;
-}
+    .alert {
+      border-left: 4px solid var(--yellow);
+      background: #fff7ed;
+      padding: 12px;
+      border-radius: 8px;
+      margin: 12px 0;
+      font-size: 14px;
+    }
 
-.success {
-  border-left-color:var(--green);
-  background:#f0fdf4;
-}
+    .success {
+      border-left-color: var(--green);
+      background: #f0fdf4;
+    }
 
-.info {
-  border-left-color:var(--blue);
-  background:#eff6ff;
-}
+    .info {
+      border-left-color: var(--blue);
+      background: #eff6ff;
+    }
 
-.danger {
-  border-left-color:var(--accent);
-  background:#fff1f2;
-}
+    .danger {
+      border-left-color: var(--accent);
+      background: #fff1f2;
+    }
 
-.booking {
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:13px;
-  margin-bottom:10px;
-  background:white;
-}
+    .booking {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px;
+      margin-bottom: 10px;
+      background: white;
+    }
 
-.booking-row {
-  display:flex;
-  gap:10px;
-  align-items:flex-start;
-}
+    .booking-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
 
-.booking input[type="checkbox"] {
-  width:20px;
-  height:20px;
-  margin-top:2px;
-}
+    .booking input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+    }
 
-.booking-title {
-  font-weight:700;
-}
+    .booking-title {
+      font-weight: 700;
+    }
 
-.booking-status {
-  font-size:12px;
-  color:var(--muted);
-}
+    .booking-status {
+      font-size: 12px;
+      color: var(--muted);
+    }
 
-.section-title {
-  margin:22px 0 10px;
-  font-size:20px;
-}
+    .section-title {
+      margin: 22px 0 10px;
+      font-size: 20px;
+    }
 
-.kpi {
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
+    .kpi {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
 
-.kpi-card {
-  background:white;
-  border-radius:12px;
-  padding:13px;
-  box-shadow:var(--shadow);
-}
+    .kpi-card {
+      background: white;
+      border-radius: 12px;
+      padding: 13px;
+      box-shadow: var(--shadow);
+    }
 
-.kpi-number {
-  font-size:22px;
-  font-weight:800;
-}
+    .kpi-number {
+      font-size: 22px;
+      font-weight: 800;
+    }
 
-.kpi-label {
-  color:var(--muted);
-  font-size:12px;
-}
+    .kpi-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-.small {
-  font-size:12px;
-  color:var(--muted);
-}
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
 
-.footer {
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-  padding:30px 10px;
-}
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 30px 10px;
+    }
 
-@media(min-width:700px) {
-  .kpi {
-    grid-template-columns:repeat(4,1fr);
-  }
-}
+    @media(min-width:700px) {
+      .kpi {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
 
 
-/* ===== Dynamic checklist feature (added) ===== */
-.cp-card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:14px;
-  box-shadow:var(--shadow);
-}
-.cp-toolbar{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-bottom:14px;
-}
-.cp-btn{
-  border:0;
-  border-radius:10px;
-  padding:10px 13px;
-  background:var(--accent);
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
-}
-.cp-btn.cp-secondary{ background:#eef2f7; color:#334155; }
-.cp-btn.cp-danger{ background:#fee2e2; color:#991b1b; }
-.cp-progress{
-  height:10px;
-  background:#e5e7eb;
-  border-radius:99px;
-  overflow:hidden;
-}
-.cp-progress>div{
-  height:100%;
-  background:var(--accent);
-  width:0%;
-  transition:.2s;
-}
-.cp-stats{
-  display:flex;
-  justify-content:space-between;
-  margin:8px 0;
-  font-size:14px;
-  font-weight:600;
-}
-.cp-check-group{ margin-bottom:18px; }
-.cp-check-group h3{ margin:0 0 8px; font-size:16px; }
-.cp-group-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  cursor:pointer;
-  user-select:none;
-}
-.cp-group-right{ display:flex; align-items:center; gap:10px; }
-.cp-group-count{ font-size:12px; font-weight:600; color:var(--muted); }
-.cp-chevron{ font-size:18px; transition:.2s; }
-.cp-check-group.collapsed .cp-chevron{ transform:rotate(180deg); }
-.cp-check-group.collapsed .cp-check{ display:none; }
-.cp-check{
-  display:flex;
-  align-items:flex-start;
-  gap:10px;
-  padding:12px 8px;
-  border-bottom:1px solid var(--border);
-}
-.cp-check:last-child{ border-bottom:0; }
-.cp-check input{
-  width:20px;
-  height:20px;
-  margin-top:1px;
-  accent-color:var(--accent);
-}
-.cp-check-main{ flex:1; min-width:0; }
-.cp-check-title{ font-weight:600; }
-.cp-check.done .cp-check-title{ text-decoration:line-through; color:#94a3b8; }
-.cp-check-meta{ display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
-.cp-tag{
-  font-size:11px;
-  background:#f1f5f9;
-  color:#64748b;
-  padding:2px 7px;
-  border-radius:999px;
-}
-.cp-actions{ display:flex; gap:5px; }
-.cp-iconbtn{
-  border:0;
-  background:#f8fafc;
-  color:#475569;
-  border-radius:8px;
-  padding:6px 8px;
-  cursor:pointer;
-}
-.cp-empty{ text-align:center; padding:28px; color:var(--muted); }
-.cp-modal-backdrop{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#0008;
-  z-index:100;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
-.cp-modal-backdrop.show{ display:flex; }
-.cp-modal{
-  background:#fff;
-  border-radius:18px;
-  width:min(520px,100%);
-  padding:20px;
-  max-height:90vh;
-  overflow:auto;
-}
-.cp-modal h2{ margin-top:0; }
-.cp-modal label{ display:block; font-weight:700; font-size:13px; margin:12px 0 6px; }
-.cp-modal input[type=text],.cp-modal select,.cp-modal textarea{
-  width:100%;
-  padding:11px 12px;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-  font:inherit;
-  background:#fff;
-}
-.cp-modal-actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:18px; }
-</style>
+    /* ===== Dynamic checklist feature (added) ===== */
+    .cp-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .cp-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .cp-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 13px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .cp-btn.cp-secondary {
+      background: #eef2f7;
+      color: #334155;
+    }
+
+    .cp-btn.cp-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .cp-progress {
+      height: 10px;
+      background: #e5e7eb;
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .cp-progress>div {
+      height: 100%;
+      background: var(--accent);
+      width: 0%;
+      transition: .2s;
+    }
+
+    .cp-stats {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .cp-check-group {
+      margin-bottom: 18px;
+    }
+
+    .cp-check-group h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+
+    .cp-group-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .cp-group-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cp-group-count {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .cp-chevron {
+      font-size: 18px;
+      transition: .2s;
+    }
+
+    .cp-check-group.collapsed .cp-chevron {
+      transform: rotate(180deg);
+    }
+
+    .cp-check-group.collapsed .cp-check {
+      display: none;
+    }
+
+    .cp-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cp-check:last-child {
+      border-bottom: 0;
+    }
+
+    .cp-check input {
+      width: 20px;
+      height: 20px;
+      margin-top: 1px;
+      accent-color: var(--accent);
+    }
+
+    .cp-check-main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cp-check-title {
+      font-weight: 600;
+    }
+
+    .cp-check.done .cp-check-title {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+
+    .cp-check-meta {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .cp-tag {
+      font-size: 11px;
+      background: #f1f5f9;
+      color: #64748b;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .cp-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .cp-iconbtn {
+      border: 0;
+      background: #f8fafc;
+      color: #475569;
+      border-radius: 8px;
+      padding: 6px 8px;
+      cursor: pointer;
+    }
+
+    .cp-empty {
+      text-align: center;
+      padding: 28px;
+      color: var(--muted);
+    }
+
+    .cp-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0008;
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .cp-modal-backdrop.show {
+      display: flex;
+    }
+
+    .cp-modal {
+      background: #fff;
+      border-radius: 18px;
+      width: min(520px, 100%);
+      padding: 20px;
+      max-height: 90vh;
+      overflow: auto;
+    }
+
+    .cp-modal h2 {
+      margin-top: 0;
+    }
+
+    .cp-modal label {
+      display: block;
+      font-weight: 700;
+      font-size: 13px;
+      margin: 12px 0 6px;
+    }
+
+    .cp-modal input[type=text],
+    .cp-modal select,
+    .cp-modal textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font: inherit;
+      background: #fff;
+    }
+
+    .cp-modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 18px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <h1>🇯🇵 Japan 2026</h1>
-  <p>Nithin & Sindhu • Osaka → Kyoto → Tokyo</p>
-  <p>28 Oct – 10 Nov 2026</p>
-</header>
+  <header>
+    <h1>🇯🇵 Japan 2026</h1>
+    <p>Nithin & Sindhu • Osaka → Kyoto → Tokyo</p>
+    <p>28 Oct – 10 Nov 2026</p>
+  </header>
 
-<div class="container">
+  <div class="container">
 
-  <div class="kpi">
-    <div class="kpi-card">
-      <div class="kpi-number">14</div>
-      <div class="kpi-label">Days in Japan</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-number">3</div>
-      <div class="kpi-label">Cities</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-number">30 Oct</div>
-      <div class="kpi-label">USJ</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-number">9 Nov</div>
-      <div class="kpi-label">Fuji / Hakone</div>
-    </div>
-  </div>
-
-  <br>
-
-  <div class="tabs">
-    <button class="tab active" onclick="showTab('itinerary',this)">📅 Itinerary</button>
-    <button class="tab" onclick="showTab('checklist',this)">✅ Checklist</button>
-    <button class="tab" onclick="showTab('bookings',this)">🎟️ Bookings</button>
-    <button class="tab" onclick="showTab('info',this)">ℹ️ Info</button>
-  </div>
-
-
-  <!-- ================= ITINERARY ================= -->
-
-  <div id="itinerary">
-
-    <div class="toolbar">
-      <button class="btn" onclick="openAll()">Open All</button>
-      <button class="btn-light" onclick="closeAll()">Collapse All</button>
-    </div>
-
-    <!-- OCT 28 -->
-    <div class="day open">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">28<br>OCT</div>
-          <div>
-            <h2>✈️ Arrival in Osaka</h2>
-            <div class="day-sub">KIX → Shin-Osaka</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
+    <div class="kpi">
+      <div class="kpi-card">
+        <div class="kpi-number">14</div>
+        <div class="kpi-label">Days in Japan</div>
       </div>
-
-      <div class="day-content">
-        <div class="timeline">
-
-          <div class="event">
-            <div class="time">18:00</div>
-            <div class="event-title">Arrive Kansai International Airport</div>
-            <p>Immigration → baggage → IC card / transport → Osaka.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">Hotel check-in</div>
-            <p>Smile Hotel Shin-Osaka</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Smile+Hotel+Shin-Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">19:30+</div>
-            <div class="event-title">Easy Dotonbori evening</div>
-            <p>Only if energy allows. Keep the first night relaxed.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Dotonbori+Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-        </div>
+      <div class="kpi-card">
+        <div class="kpi-number">3</div>
+        <div class="kpi-label">Cities</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-number">30 Oct</div>
+        <div class="kpi-label">USJ</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-number">9 Nov</div>
+        <div class="kpi-label">Fuji / Hakone</div>
       </div>
     </div>
 
+    <br>
 
-    <!-- OCT 29 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">29<br>OCT</div>
-          <div>
-            <h2>🎮 Den Den Town + Namba</h2>
-            <div class="day-sub">Anime • Toys • Electronics • Watches</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="timeline">
-
-          <div class="event">
-            <div class="time">09:30</div>
-            <div class="event-title">Nipponbashi / Den Den Town</div>
-            <p>Start early before the busiest afternoon period.</p>
-          </div>
-
-          <div class="shop">
-            <strong>Animate Osaka Nipponbashi</strong>
-            <div class="shop-meta">Anime • manga • figures • character goods • 4.2★ / ~9,500 reviews</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Animate+Osaka+Nipponbashi">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Joshin Super Kids Land Main Store</strong>
-            <div class="shop-meta">Huge hobby/toy/model store • Gundam • figures • trains • 4.3★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Joshin+Super+Kids+Land+Main+Store+Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Mandarake Grand Chaos</strong>
-            <div class="shop-meta">Used anime • collectibles • toys • retro items</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Mandarake+Grand+Chaos+Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Den Den Town</strong>
-            <div class="shop-meta">Browse the smaller specialist stores around Nipponbashi.</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Den+Den+Town+Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">Namba / Dotonbori</div>
-            <p>Food + Osaka night atmosphere.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Namba+Dotonbori+Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-        </div>
-      </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('itinerary',this)">📅 Itinerary</button>
+      <button class="tab" onclick="showTab('checklist',this)">✅ Checklist</button>
+      <button class="tab" onclick="showTab('bookings',this)">🎟️ Bookings</button>
+      <button class="tab" onclick="showTab('info',this)">ℹ️ Info</button>
     </div>
 
 
-    <!-- OCT 30 USJ -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">30<br>OCT</div>
-          <div>
-            <h2>🎢 UNIVERSAL STUDIOS JAPAN</h2>
-            <div class="day-sub">🍄 Super Nintendo World + 🎃 Halloween Horror Nights</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
+    <!-- ================= ITINERARY ================= -->
+
+    <div id="itinerary">
+
+      <div class="toolbar">
+        <button class="btn" onclick="openAll()">Open All</button>
+        <button class="btn-light" onclick="closeAll()">Collapse All</button>
       </div>
 
-      <div class="day-content">
-
-        <div class="alert danger">
-          <strong>🔴 TICKET STILL OPEN — BOOK THIS</strong><br>
-          €93 package: 1-Day Studio Pass + Super Nintendo World entry at 13:00 +
-          free SNW food voucher + Have Fun in Kansai Pass (3 facilities).
+      <!-- OCT 28 -->
+      <div class="day open">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">28<br>OCT</div>
+            <div>
+              <h2>✈️ Arrival in Osaka</h2>
+              <div class="day-sub">KIX → Shin-Osaka</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
         </div>
 
-        <div class="alert info">
-          <strong>🎃 Halloween Horror Nights</strong><br>
-          Halloween Horror Nights runs Sept 11 – Nov 8, 2026, so it is active on
-          your October 30 visit.
-        </div>
+        <div class="day-content">
+          <div class="timeline">
 
-        <div class="timeline">
+            <div class="event">
+              <div class="time">18:00</div>
+              <div class="event-title">Arrive Kansai International Airport</div>
+              <p>Immigration → baggage → IC card / transport → Osaka.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport">
+                📍 Google Maps
+              </a>
+            </div>
 
-          <div class="event">
-            <div class="time">07:00–07:30</div>
-            <div class="event-title">Leave hotel</div>
-            <p>Get to USJ early. Your goal is to enter well before your 13:00 Nintendo slot.</p>
-          </div>
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">Hotel check-in</div>
+              <p>Smile Hotel Shin-Osaka</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Smile+Hotel+Shin-Osaka">
+                📍 Google Maps
+              </a>
+            </div>
 
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Non-Nintendo attractions</div>
-            <p>
-              Use the morning for major attractions outside Super Nintendo World.
-              Avoid wasting the morning waiting for Nintendo since your entry is secured.
-            </p>
-          </div>
+            <div class="event">
+              <div class="time">19:30+</div>
+              <div class="event-title">Easy Dotonbori evening</div>
+              <p>Only if energy allows. Keep the first night relaxed.</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Dotonbori+Osaka">
+                📍 Google Maps
+              </a>
+            </div>
 
-          <div class="event">
-            <div class="time">12:30</div>
-            <div class="event-title">Move toward Super Nintendo World</div>
-            <p>Be ready for your 13:00 timed entry.</p>
-          </div>
-
-          <div class="event">
-            <div class="time">13:00</div>
-            <div class="event-title">🍄 SUPER NINTENDO WORLD</div>
-            <p>
-              Guaranteed entry. Priorities:
-              Mario Kart → Mine Cart Madness → explore Donkey Kong Country.
-            </p>
-          </div>
-
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">🎃 Halloween Horror Nights</div>
-            <p>
-              Stay for Street Zombies, horror attractions and Halloween entertainment.
-            </p>
-          </div>
-
-        </div>
-
-        <div class="alert danger">
-          <strong>Express Pass decision</strong><br>
-          Optional. Your €93 ticket already guarantees SNW entry.
-          Express is only needed if you want to reduce queues for Mario Kart /
-          Mine Cart Madness and other rides.
-        </div>
-
-        <a class="map" target="_blank"
-          href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan">
-          📍 USJ Google Maps
-        </a>
-
-      </div>
-    </div>
-
-
-    <!-- OCT 31 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">31<br>OCT</div>
-          <div>
-            <h2>🏯 Osaka — Sumiyoshi + Shinsaibashi</h2>
-            <div class="day-sub">Shrine • Shopping • Watches • Onitsuka</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="timeline">
-
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Sumiyoshi Taisha</div>
-            <p>Relaxed temple/shrine morning after USJ.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Sumiyoshi+Taisha+Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Shinsaibashi shopping</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Shinsaibashi+Osaka">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>GINZA RASIN Shinsaibashi</strong>
-            <div class="shop-meta">Second-hand luxury watches • Rolex etc. • 4.9★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=GINZA+RASIN+Shinsaibashi">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>WATCHNIAN Shinsaibashi</strong>
-            <div class="shop-meta">Used/luxury watches • 4.9★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=WATCHNIAN+Shinsaibashi">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>OKURA Shinsaibashi</strong>
-            <div class="shop-meta">Luxury & second-hand watches • 5.0★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=OKURA+Shinsaibashi">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Onitsuka Tiger Osaka Shinsaibashi</strong>
-            <div class="shop-meta">Mexico 66 • Japan-exclusive styles • 4.2★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Onitsuka+Tiger+Osaka+Shinsaibashi">
-              📍 Google Maps
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-    <!-- NOV 1 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">1<br>NOV</div>
-          <div>
-            <h2>🚄 Osaka → Kyoto</h2>
-            <div class="day-sub">Check-in + Nishiki + Gion</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="alert">
-          <strong>🛍️ TAX-FREE CHANGE</strong><br>
-          Japan's tax-free shopping system changes from Nov 1, 2026.
-          Tokyo shopping will therefore use the new refund-style system.
-          Keep passports and purchase documents with you.
-        </div>
-
-        <div class="timeline">
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Travel to Kyoto</div>
-            <p>Check in / drop luggage at Wander Kyoto Nanajo.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Wander+Kyoto+Nanajo+Hotel">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Nishiki Market</div>
-            <p>Food, traditional shops and Kyoto atmosphere.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">Gion + Pontocho</div>
-            <p>Walk through the historic districts.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Gion+Pontocho+Kyoto">
-              📍 Google Maps
-            </a>
           </div>
         </div>
       </div>
-    </div>
 
 
-    <!-- NOV 2 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">2<br>NOV</div>
-          <div>
-            <h2>⛩️ Kyoto Temples + Nara</h2>
-            <div class="day-sub">Morning temples • Nara Park</div>
+      <!-- OCT 29 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">29<br>OCT</div>
+            <div>
+              <h2>🎮 Den Den Town + Namba</h2>
+              <div class="day-sub">Anime • Toys • Electronics • Watches</div>
+            </div>
           </div>
+          <div class="chevron">⌄</div>
         </div>
-        <div class="chevron">⌄</div>
-      </div>
 
-      <div class="day-content">
-        <div class="timeline">
+        <div class="day-content">
 
-          <div class="event">
-            <div class="time">Early morning</div>
-            <div class="event-title">Kyoto temple visit</div>
-            <p>Start early to avoid peak crowds.</p>
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">09:30</div>
+              <div class="event-title">Nipponbashi / Den Den Town</div>
+              <p>Start early before the busiest afternoon period.</p>
+            </div>
+
+            <div class="shop">
+              <strong>Animate Osaka Nipponbashi</strong>
+              <div class="shop-meta">Anime • manga • figures • character goods • 4.2★ / ~9,500 reviews</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Animate+Osaka+Nipponbashi">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Joshin Super Kids Land Main Store</strong>
+              <div class="shop-meta">Huge hobby/toy/model store • Gundam • figures • trains • 4.3★</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Joshin+Super+Kids+Land+Main+Store+Osaka">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Mandarake Grand Chaos</strong>
+              <div class="shop-meta">Used anime • collectibles • toys • retro items</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Mandarake+Grand+Chaos+Osaka">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Den Den Town</strong>
+              <div class="shop-meta">Browse the smaller specialist stores around Nipponbashi.</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Den+Den+Town+Osaka">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">Namba / Dotonbori</div>
+              <p>Food + Osaka night atmosphere.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Namba+Dotonbori+Osaka">
+                📍 Google Maps
+              </a>
+            </div>
+
           </div>
-
-          <div class="event">
-            <div class="time">Late morning</div>
-            <div class="event-title">Travel to Nara</div>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Nara Park</div>
-            <p>Todai-ji + deer park + surrounding area.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Nara+Park">
-              📍 Google Maps
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-    <!-- NOV 3 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">3<br>NOV</div>
-          <div>
-            <h2>🎋 Arashiyama + Fushimi Inari</h2>
-            <div class="day-sub">Early start strongly recommended</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-        <div class="timeline">
-
-          <div class="event">
-            <div class="time">06:30–07:00</div>
-            <div class="event-title">Arashiyama Bamboo Grove</div>
-            <p>Go very early before the main crowds arrive.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove+Kyoto">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Arashiyama area</div>
-            <p>Tenryu-ji / Togetsukyo Bridge depending on energy.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Tenryu-ji+Arashiyama+Kyoto">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Fushimi Inari</div>
-            <p>Torii gates and mountain walk.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha+Kyoto">
-              📍 Google Maps
-            </a>
-          </div>
-
         </div>
       </div>
-    </div>
 
 
-    <!-- NOV 4 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">4<br>NOV</div>
-          <div>
-            <h2>🎨 Kyoto — Gion + Manga Museum</h2>
-            <div class="day-sub">Relaxed final Kyoto day</div>
+      <!-- OCT 30 USJ -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">30<br>OCT</div>
+            <div>
+              <h2>🎢 UNIVERSAL STUDIOS JAPAN</h2>
+              <div class="day-sub">🍄 Super Nintendo World + 🎃 Halloween Horror Nights</div>
+            </div>
           </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-        <div class="timeline">
-
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Gion</div>
-            <p>Explore quieter streets and traditional architecture.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Gion+Kyoto">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Kyoto International Manga Museum</div>
-            <p>Allow 2–3 hours.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Kyoto+International+Manga+Museum">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">Final Kyoto dinner</div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-    <!-- NOV 5 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">5<br>NOV</div>
-          <div>
-            <h2>🚄 Kyoto → Tokyo</h2>
-            <div class="day-sub">Tokyo Tower • Azabudai Hills • Roppongi</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="alert danger">
-          <strong>🔴 BOOKING PENDING — SHINKANSEN</strong><br>
-          Book Kyoto → Tokyo for the morning.
+          <div class="chevron">⌄</div>
         </div>
 
-        <div class="timeline">
+        <div class="day-content">
 
-          <div class="event">
-            <div class="time">08:30–10:00</div>
-            <div class="event-title">Shinkansen Kyoto → Tokyo</div>
-            <p>Target a morning departure.</p>
+          <div class="alert danger">
+            <strong>🔴 TICKET STILL OPEN — BOOK THIS</strong><br>
+            €93 package: 1-Day Studio Pass + Super Nintendo World entry at 13:00 +
+            free SNW food voucher + Have Fun in Kansai Pass (3 facilities).
           </div>
 
-          <div class="event">
-            <div class="time">Late morning</div>
-            <div class="event-title">Hotel / luggage</div>
-            <p>Sotetsu Fresa Inn Tokyo Tamachi.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Tokyo+Tamachi">
-              📍 Google Maps
-            </a>
+          <div class="alert info">
+            <strong>🎃 Halloween Horror Nights</strong><br>
+            Halloween Horror Nights runs Sept 11 – Nov 8, 2026, so it is active on
+            your October 30 visit.
           </div>
 
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Tokyo Tower</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Tokyo+Tower">
-              📍 Google Maps
-            </a>
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">07:00–07:30</div>
+              <div class="event-title">Leave hotel</div>
+              <p>Get to USJ early. Your goal is to enter well before your 13:00 Nintendo slot.</p>
+            </div>
+
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Non-Nintendo attractions</div>
+              <p>
+                Use the morning for major attractions outside Super Nintendo World.
+                Avoid wasting the morning waiting for Nintendo since your entry is secured.
+              </p>
+            </div>
+
+            <div class="event">
+              <div class="time">12:30</div>
+              <div class="event-title">Move toward Super Nintendo World</div>
+              <p>Be ready for your 13:00 timed entry.</p>
+            </div>
+
+            <div class="event">
+              <div class="time">13:00</div>
+              <div class="event-title">🍄 SUPER NINTENDO WORLD</div>
+              <p>
+                Guaranteed entry. Priorities:
+                Mario Kart → Mine Cart Madness → explore Donkey Kong Country.
+              </p>
+            </div>
+
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">🎃 Halloween Horror Nights</div>
+              <p>
+                Stay for Street Zombies, horror attractions and Halloween entertainment.
+              </p>
+            </div>
+
           </div>
 
-          <div class="event">
-            <div class="time">Late afternoon</div>
-            <div class="event-title">Azabudai Hills</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Azabudai+Hills+Tokyo">
-              📍 Google Maps
-            </a>
+          <div class="alert danger">
+            <strong>Express Pass decision</strong><br>
+            Optional. Your €93 ticket already guarantees SNW entry.
+            Express is only needed if you want to reduce queues for Mario Kart /
+            Mine Cart Madness and other rides.
           </div>
 
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">Roppongi</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Roppongi+Tokyo">
-              📍 Google Maps
-            </a>
-          </div>
+          <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan">
+            📍 USJ Google Maps
+          </a>
 
         </div>
       </div>
-    </div>
 
 
-    <!-- NOV 6 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">6<br>NOV</div>
-          <div>
-            <h2>⛩️ Meiji → Harajuku → Shibuya</h2>
-            <div class="day-sub">Shibuya Sky sunset</div>
+      <!-- OCT 31 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">31<br>OCT</div>
+            <div>
+              <h2>🏯 Osaka — Sumiyoshi + Shinsaibashi</h2>
+              <div class="day-sub">Shrine • Shopping • Watches • Onitsuka</div>
+            </div>
           </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="alert danger">
-          <strong>🔴 BOOKING PENDING — SHIBUYA SKY</strong><br>
-          Target a sunset time slot.
+          <div class="chevron">⌄</div>
         </div>
 
-        <div class="timeline">
+        <div class="day-content">
 
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Meiji Shrine</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Meiji+Shrine+Tokyo">
-              📍 Google Maps
-            </a>
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Sumiyoshi Taisha</div>
+              <p>Relaxed temple/shrine morning after USJ.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Sumiyoshi+Taisha+Osaka">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Shinsaibashi shopping</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Shinsaibashi+Osaka">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>GINZA RASIN Shinsaibashi</strong>
+              <div class="shop-meta">Second-hand luxury watches • Rolex etc. • 4.9★</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=GINZA+RASIN+Shinsaibashi">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>WATCHNIAN Shinsaibashi</strong>
+              <div class="shop-meta">Used/luxury watches • 4.9★</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=WATCHNIAN+Shinsaibashi">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>OKURA Shinsaibashi</strong>
+              <div class="shop-meta">Luxury & second-hand watches • 5.0★</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=OKURA+Shinsaibashi">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Onitsuka Tiger Osaka Shinsaibashi</strong>
+              <div class="shop-meta">Mexico 66 • Japan-exclusive styles • 4.2★</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Onitsuka+Tiger+Osaka+Shinsaibashi">
+                📍 Google Maps
+              </a>
+            </div>
+
           </div>
-
-          <div class="event">
-            <div class="time">Late morning</div>
-            <div class="event-title">Harajuku / Takeshita Street</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Takeshita+Street+Harajuku">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Omotesando</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Sunset</div>
-            <div class="event-title">🌇 Shibuya Sky</div>
-            <p>Book a sunset slot.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky+Tokyo">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Onitsuka Tiger Shibuya</strong>
-            <div class="shop-meta">Shoes + Japan shopping • 3.9★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Onitsuka+Tiger+Shibuya">
-              📍 Google Maps
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-
-    <!-- NOV 7 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">7<br>NOV</div>
-          <div>
-            <h2>🎮 Akihabara + Anime + Watches</h2>
-            <div class="day-sub">Main Tokyo shopping day</div>
-          </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="timeline">
-
-          <div class="event">
-            <div class="time">09:30</div>
-            <div class="event-title">Yodobashi Akiba</div>
-            <p>Electronics, cameras, watches, gaming.</p>
-          </div>
-
-          <div class="shop">
-            <strong>Yodobashi Akiba</strong>
-            <div class="shop-meta">Electronics • cameras • tech • 4.2★ / 26k+ reviews</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Yodobashi+Akiba">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Animate Akihabara</strong>
-            <div class="shop-meta">Anime goods • figures • character merchandise • 4.2★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Animate+Akihabara">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>AmiAmi Figure Tower</strong>
-            <div class="shop-meta">Figures • collectibles • hobby</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=AmiAmi+Akihabara+Figure+Tower">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Mandarake Complex</strong>
-            <div class="shop-meta">Used manga • toys • collectibles • games</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Mandarake+Complex+Akihabara">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="shop">
-            <strong>Kotobukiya</strong>
-            <div class="shop-meta">Figures • model kits • anime merchandise</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Kotobukiya+Akihabara">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">Optional JDM / Tokyo Drift experience</div>
-            <p>
-              Best suited here if you decide to do a Daikoku / Wangan / JDM night experience.
-            </p>
-          </div>
-
         </div>
       </div>
-    </div>
 
 
-    <!-- NOV 8 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">8<br>NOV</div>
-          <div>
-            <h2>🛍️ Tokyo — Nakano + Shinjuku</h2>
-            <div class="day-sub">Ghibli replacement day • Watches • Anime</div>
+      <!-- NOV 1 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">1<br>NOV</div>
+            <div>
+              <h2>🚄 Osaka → Kyoto</h2>
+              <div class="day-sub">Check-in + Nishiki + Gion</div>
+            </div>
           </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="alert danger">
-          <strong>❌ Ghibli Museum removed</strong><br>
-          The museum is not available for this trip. Do not book a Ghibli Museum ticket.
+          <div class="chevron">⌄</div>
         </div>
 
-        <div class="timeline">
+        <div class="day-content">
 
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Nakano Broadway</div>
-            <p>Excellent combination of anime collectibles and luxury watches.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Nakano+Broadway+Tokyo">
-              📍 Google Maps
-            </a>
+          <div class="alert">
+            <strong>🛍️ TAX-FREE CHANGE</strong><br>
+            Japan's tax-free shopping system changes from Nov 1, 2026.
+            Tokyo shopping will therefore use the new refund-style system.
+            Keep passports and purchase documents with you.
           </div>
 
-          <div class="shop">
-            <strong>Jack Road</strong>
-            <div class="shop-meta">Luxury / used watches • 4.3★ / ~1,700 reviews</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Jack+Road+Nakano">
-              📍 Google Maps
-            </a>
-          </div>
+          <div class="timeline">
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Travel to Kyoto</div>
+              <p>Check in / drop luggage at Wander Kyoto Nanajo.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Wander+Kyoto+Nanajo+Hotel">
+                📍 Google Maps
+              </a>
+            </div>
 
-          <div class="shop">
-            <strong>WATCHNIAN Nakano</strong>
-            <div class="shop-meta">Second-hand luxury watches • 4.9★</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=WATCHNIAN+Nakano">
-              📍 Google Maps
-            </a>
-          </div>
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Nishiki Market</div>
+              <p>Food, traditional shops and Kyoto atmosphere.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto">
+                📍 Google Maps
+              </a>
+            </div>
 
-          <div class="shop">
-            <strong>Mandarake Nakano</strong>
-            <div class="shop-meta">Anime • toys • manga • collectibles</div>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Mandarake+Nakano">
-              📍 Google Maps
-            </a>
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">Gion + Pontocho</div>
+              <p>Walk through the historic districts.</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Gion+Pontocho+Kyoto">
+                📍 Google Maps
+              </a>
+            </div>
           </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Shinjuku</div>
-            <p>Shopping + Tokyo city atmosphere.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Tokyo">
-              📍 Google Maps
-            </a>
-          </div>
-
         </div>
       </div>
-    </div>
 
 
-    <!-- NOV 9 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">9<br>NOV</div>
-          <div>
-            <h2>🗻 Mt Fuji + Hakone</h2>
-            <div class="day-sub">Fuji • Lake Ashi • Ropeway • Owakudani</div>
+      <!-- NOV 2 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">2<br>NOV</div>
+            <div>
+              <h2>⛩️ Kyoto Temples + Nara</h2>
+              <div class="day-sub">Morning temples • Nara Park</div>
+            </div>
           </div>
-        </div>
-        <div class="chevron">⌄</div>
-      </div>
-
-      <div class="day-content">
-
-        <div class="alert danger">
-          <strong>🔴 BOOKING PENDING — FUJI / HAKONE TOUR</strong><br>
-          Book the tour that includes Hakone Ropeway + Lake Ashi + Owakudani.
-          Verify whether the selected option includes the pirate ship.
+          <div class="chevron">⌄</div>
         </div>
 
-        <div class="timeline">
+        <div class="day-content">
+          <div class="timeline">
 
-          <div class="event">
-            <div class="time">Early morning</div>
-            <div class="event-title">Depart Tokyo</div>
-            <p>Coach tour / selected Fuji-Hakone excursion.</p>
+            <div class="event">
+              <div class="time">Early morning</div>
+              <div class="event-title">Kyoto temple visit</div>
+              <p>Start early to avoid peak crowds.</p>
+            </div>
+
+            <div class="event">
+              <div class="time">Late morning</div>
+              <div class="event-title">Travel to Nara</div>
+            </div>
+
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Nara Park</div>
+              <p>Todai-ji + deer park + surrounding area.</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Nara+Park">
+                📍 Google Maps
+              </a>
+            </div>
+
           </div>
-
-          <div class="event">
-            <div class="time">Daytime</div>
-            <div class="event-title">🗻 Mt Fuji area</div>
-            <p>Visibility is weather dependent.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Mount+Fuji">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Hakone Ropeway</div>
-            <p>Owakudani volcanic valley.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Hakone+Ropeway+Owakudani">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Afternoon</div>
-            <div class="event-title">Lake Ashi</div>
-            <p>Check exact tour option for pirate ship inclusion.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Lake+Ashi+Hakone">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">Evening</div>
-            <div class="event-title">Return to Tokyo</div>
-          </div>
-
         </div>
       </div>
-    </div>
 
 
-    <!-- NOV 10 -->
-    <div class="day">
-      <div class="day-header" onclick="toggleDay(this)">
-        <div class="day-title">
-          <div class="date">10<br>NOV</div>
-          <div>
-            <h2>✈️ Tokyo → Narita → Frankfurt</h2>
-            <div class="day-sub">Final shopping + airport</div>
+      <!-- NOV 3 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">3<br>NOV</div>
+            <div>
+              <h2>🎋 Arashiyama + Fushimi Inari</h2>
+              <div class="day-sub">Early start strongly recommended</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
+        </div>
+
+        <div class="day-content">
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">06:30–07:00</div>
+              <div class="event-title">Arashiyama Bamboo Grove</div>
+              <p>Go very early before the main crowds arrive.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Grove+Kyoto">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Arashiyama area</div>
+              <p>Tenryu-ji / Togetsukyo Bridge depending on energy.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Tenryu-ji+Arashiyama+Kyoto">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Fushimi Inari</div>
+              <p>Torii gates and mountain walk.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha+Kyoto">
+                📍 Google Maps
+              </a>
+            </div>
+
           </div>
         </div>
-        <div class="chevron">⌄</div>
       </div>
 
-      <div class="day-content">
 
-        <div class="timeline">
-
-          <div class="event">
-            <div class="time">Morning</div>
-            <div class="event-title">Final shopping</div>
-            <p>Keep this light. Make sure all purchases are packed correctly.</p>
+      <!-- NOV 4 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">4<br>NOV</div>
+            <div>
+              <h2>🎨 Kyoto — Gion + Manga Museum</h2>
+              <div class="day-sub">Relaxed final Kyoto day</div>
+            </div>
           </div>
-
-          <div class="event">
-            <div class="time">~13:00</div>
-            <div class="event-title">Leave for Narita Airport</div>
-            <p>Allow plenty of time for airport + customs/refund procedures.</p>
-            <a class="map" target="_blank"
-              href="https://www.google.com/maps/search/?api=1&query=Narita+International+Airport">
-              📍 Google Maps
-            </a>
-          </div>
-
-          <div class="event">
-            <div class="time">16:55</div>
-            <div class="event-title">✈️ NRT → Frankfurt</div>
-          </div>
-
+          <div class="chevron">⌄</div>
         </div>
 
-        <div class="alert info">
-          <strong>🛍️ Tax refund</strong><br>
-          From Nov 1, 2026 Japan uses the new refund-style tax-free process.
-          Keep passports, receipts and purchased goods available for the required
-          customs/refund procedure.
-        </div>
+        <div class="day-content">
+          <div class="timeline">
 
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Gion</div>
+              <p>Explore quieter streets and traditional architecture.</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Gion+Kyoto">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Kyoto International Manga Museum</div>
+              <p>Allow 2–3 hours.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Kyoto+International+Manga+Museum">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">Final Kyoto dinner</div>
+            </div>
+
+          </div>
+        </div>
       </div>
+
+
+      <!-- NOV 5 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">5<br>NOV</div>
+            <div>
+              <h2>🚄 Kyoto → Tokyo</h2>
+              <div class="day-sub">Tokyo Tower • Azabudai Hills • Roppongi</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
+        </div>
+
+        <div class="day-content">
+
+          <div class="alert danger">
+            <strong>🔴 BOOKING PENDING — SHINKANSEN</strong><br>
+            Book Kyoto → Tokyo for the morning.
+          </div>
+
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">08:30–10:00</div>
+              <div class="event-title">Shinkansen Kyoto → Tokyo</div>
+              <p>Target a morning departure.</p>
+            </div>
+
+            <div class="event">
+              <div class="time">Late morning</div>
+              <div class="event-title">Hotel / luggage</div>
+              <p>Sotetsu Fresa Inn Tokyo Tamachi.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Tokyo+Tamachi">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Tokyo Tower</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Tokyo+Tower">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Late afternoon</div>
+              <div class="event-title">Azabudai Hills</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Azabudai+Hills+Tokyo">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">Roppongi</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Roppongi+Tokyo">
+                📍 Google Maps
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- NOV 6 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">6<br>NOV</div>
+            <div>
+              <h2>⛩️ Meiji → Harajuku → Shibuya</h2>
+              <div class="day-sub">Shibuya Sky sunset</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
+        </div>
+
+        <div class="day-content">
+
+          <div class="alert danger">
+            <strong>🔴 BOOKING PENDING — SHIBUYA SKY</strong><br>
+            Target a sunset time slot.
+          </div>
+
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Meiji Shrine</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Meiji+Shrine+Tokyo">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Late morning</div>
+              <div class="event-title">Harajuku / Takeshita Street</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Takeshita+Street+Harajuku">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Omotesando</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Sunset</div>
+              <div class="event-title">🌇 Shibuya Sky</div>
+              <p>Book a sunset slot.</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky+Tokyo">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Onitsuka Tiger Shibuya</strong>
+              <div class="shop-meta">Shoes + Japan shopping • 3.9★</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Onitsuka+Tiger+Shibuya">
+                📍 Google Maps
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- NOV 7 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">7<br>NOV</div>
+            <div>
+              <h2>🎮 Akihabara + Anime + Watches</h2>
+              <div class="day-sub">Main Tokyo shopping day</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
+        </div>
+
+        <div class="day-content">
+
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">09:30</div>
+              <div class="event-title">Yodobashi Akiba</div>
+              <p>Electronics, cameras, watches, gaming.</p>
+            </div>
+
+            <div class="shop">
+              <strong>Yodobashi Akiba</strong>
+              <div class="shop-meta">Electronics • cameras • tech • 4.2★ / 26k+ reviews</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Yodobashi+Akiba">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Animate Akihabara</strong>
+              <div class="shop-meta">Anime goods • figures • character merchandise • 4.2★</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Animate+Akihabara">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>AmiAmi Figure Tower</strong>
+              <div class="shop-meta">Figures • collectibles • hobby</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=AmiAmi+Akihabara+Figure+Tower">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Mandarake Complex</strong>
+              <div class="shop-meta">Used manga • toys • collectibles • games</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Mandarake+Complex+Akihabara">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Kotobukiya</strong>
+              <div class="shop-meta">Figures • model kits • anime merchandise</div>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Kotobukiya+Akihabara">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">Optional JDM / Tokyo Drift experience</div>
+              <p>
+                Best suited here if you decide to do a Daikoku / Wangan / JDM night experience.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- NOV 8 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">8<br>NOV</div>
+            <div>
+              <h2>🛍️ Tokyo — Nakano + Shinjuku</h2>
+              <div class="day-sub">Ghibli replacement day • Watches • Anime</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
+        </div>
+
+        <div class="day-content">
+
+          <div class="alert danger">
+            <strong>❌ Ghibli Museum removed</strong><br>
+            The museum is not available for this trip. Do not book a Ghibli Museum ticket.
+          </div>
+
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">teamLab Planets TOKYO</div>
+              <p>Ticket booked 11:30 AM</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/place/teamLab+Planets+TOKYO/@35.6491207,139.7875852,17z/data=!3m1!4b1!4m5!3m4!1s0x60188908e728e749:0x6de450c94bd3d622!8m2!3d35.6491075!4d139.7898285?spm=BookingDetail.GettingThere.Link&clickId=cb0fe4028a">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Nakano Broadway</div>
+              <p>Excellent combination of anime collectibles and luxury watches.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Nakano+Broadway+Tokyo">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Jack Road</strong>
+              <div class="shop-meta">Luxury / used watches • 4.3★ / ~1,700 reviews</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Jack+Road+Nakano">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>WATCHNIAN Nakano</strong>
+              <div class="shop-meta">Second-hand luxury watches • 4.9★</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=WATCHNIAN+Nakano">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="shop">
+              <strong>Mandarake Nakano</strong>
+              <div class="shop-meta">Anime • toys • manga • collectibles</div>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Mandarake+Nakano">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Afternoon</div>
+              <div class="event-title">Shinjuku</div>
+              <p>Shopping + Tokyo city atmosphere.</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Tokyo">
+                📍 Google Maps
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- NOV 9 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">9<br>NOV</div>
+            <div>
+              <h2>🗻 Mt Fuji + Hakone</h2>
+              <div class="day-sub">Fuji • Lake Ashi • Ropeway • Owakudani</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
+        </div>
+
+        <div class="day-content">
+
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">Early morning</div>
+              <div class="event-title">Depart Tokyo</div>
+              <p>Coach tour / selected Fuji-Hakone excursion.</p>
+              <a class="map" target="_blank" href="https://www.google.com/maps/place/35.682489,139.765532/@35.682489,139.765532,16z">
+                📍 Google Maps - meeting point at 7:30 AM
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">Evening</div>
+              <div class="event-title">Return to Tokyo</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+      <!-- NOV 10 -->
+      <div class="day">
+        <div class="day-header" onclick="toggleDay(this)">
+          <div class="day-title">
+            <div class="date">10<br>NOV</div>
+            <div>
+              <h2>✈️ Tokyo → Narita → Frankfurt</h2>
+              <div class="day-sub">Final shopping + airport</div>
+            </div>
+          </div>
+          <div class="chevron">⌄</div>
+        </div>
+
+        <div class="day-content">
+
+          <div class="timeline">
+
+            <div class="event">
+              <div class="time">Morning</div>
+              <div class="event-title">Final shopping</div>
+              <p>Keep this light. Make sure all purchases are packed correctly.</p>
+            </div>
+
+            <div class="event">
+              <div class="time">~13:00</div>
+              <div class="event-title">Leave for Narita Airport</div>
+              <p>Allow plenty of time for airport + customs/refund procedures.</p>
+              <a class="map" target="_blank"
+                href="https://www.google.com/maps/search/?api=1&query=Narita+International+Airport">
+                📍 Google Maps
+              </a>
+            </div>
+
+            <div class="event">
+              <div class="time">16:55</div>
+              <div class="event-title">✈️ NRT → Frankfurt</div>
+            </div>
+
+          </div>
+
+          <div class="alert info">
+            <strong>🛍️ Tax refund</strong><br>
+            From Nov 1, 2026 Japan uses the new refund-style tax-free process.
+            Keep passports, receipts and purchased goods available for the required
+            customs/refund procedure.
+          </div>
+
+        </div>
+      </div>
+
     </div>
 
-  </div>
 
+    <!-- ================= CHECKLIST ================= -->
 
-  <!-- ================= CHECKLIST ================= -->
+    <div id="checklist" style="display:none">
 
-  <div id="checklist" style="display:none">
+      <h2 class="section-title">✅ Pre-Trip Checklist</h2>
 
-    <h2 class="section-title">✅ Pre-Trip Checklist</h2>
+      <div class="cp-card">
+        <div class="cp-stats"><span id="checkStats">0 / 0 completed</span><span id="checkPercent">0%</span></div>
+        <div class="cp-progress">
+          <div id="progressBar"></div>
+        </div>
+      </div>
+      <div class="cp-toolbar">
+        <button class="cp-btn" onclick="openAddModal()">＋ Add checkpoint</button>
+        <button class="btn" onclick="expandAllChecks()">Open all</button>
+        <button class="btn-light" onclick="collapseAllChecks()">Collapse all</button>
+        <button class="cp-btn cp-secondary" onclick="toggleCompleted(event)">Show completed</button>
+        <button class="cp-btn cp-danger" onclick="clearCompleted()">Clear completed</button>
+      </div>
+      <div id="checklistContainer"></div>
 
-    <div class="cp-card">
-      <div class="cp-stats"><span id="checkStats">0 / 0 completed</span><span id="checkPercent">0%</span></div>
-      <div class="cp-progress"><div id="progressBar"></div></div>
-    </div>
-    <div class="cp-toolbar">
-      <button class="cp-btn" onclick="openAddModal()">＋ Add checkpoint</button>
-      <button class="btn" onclick="expandAllChecks()">Open all</button>
-      <button class="btn-light" onclick="collapseAllChecks()">Collapse all</button>
-      <button class="cp-btn cp-secondary" onclick="toggleCompleted(event)">Show completed</button>
-      <button class="cp-btn cp-danger" onclick="clearCompleted()">Clear completed</button>
-    </div>
-    <div id="checklistContainer"></div>
-
-  </div>
-
-
-  <!-- ================= BOOKINGS ================= -->
-
-  <div id="bookings" style="display:none">
-
-    <h2 class="section-title">🎟️ Booking Dashboard</h2>
-
-    <div class="booking">
-      <div class="booking-title">✈️ Flights</div>
-      <div class="booking-status">✅ Booked</div>
     </div>
 
-    <div class="booking">
-      <div class="booking-title">🏨 Hotels</div>
-      <div class="booking-status">✅ Osaka + Kyoto + Tokyo booked</div>
+
+    <!-- ================= BOOKINGS ================= -->
+
+    <div id="bookings" style="display:none">
+
+      <h2 class="section-title">🎟️ Booking Dashboard</h2>
+
+      <div class="booking">
+        <div class="booking-title">✈️ Flights</div>
+        <div class="booking-status">✅ Booked</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🏨 Hotels</div>
+        <div class="booking-status">✅ Osaka + Kyoto + Tokyo booked</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🇯🇵 Japan Visa</div>
+        <div class="booking-status">✅ Received</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🎢 USJ — Oct 30</div>
+        <div class="booking-status">🔴 Pending — €93 Studio Pass + SNW + Food + Kansai Pass</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🎢 USJ Express Pass</div>
+        <div class="booking-status">🟡 Optional — Mine Cart & JAWS if purchased</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🚄 Kyoto → Tokyo Shinkansen — Nov 5</div>
+        <div class="booking-status">🔴 Pending</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🌇 Shibuya Sky — Nov 6</div>
+        <div class="booking-status">🔴 Pending — target sunset</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🗻 Fuji / Hakone — Nov 9</div>
+        <div class="booking-status">🔴 Pending</div>
+      </div>
+
+      <div class="booking">
+        <div class="booking-title">🏯 Ghibli Museum — Nov 8</div>
+        <div class="booking-status">❌ Not possible / removed from itinerary</div>
+      </div>
+
     </div>
 
-    <div class="booking">
-      <div class="booking-title">🇯🇵 Japan Visa</div>
-      <div class="booking-status">✅ Received</div>
+
+    <!-- ================= INFO ================= -->
+
+    <div id="info" style="display:none">
+
+      <h2 class="section-title">ℹ️ Important Information</h2>
+
+      <div class="alert danger">
+        <strong>🎢 USJ — 🔴 STILL OPEN</strong><br>
+        USJ is Friday, October 30, 2026. The €93 package (park entry + guaranteed
+        Super Nintendo World entry at 13:00) still needs to be booked.
+      </div>
+
+      <div class="alert info">
+        <strong>🍄 Super Nintendo World</strong><br>
+        Your timed entry is the important part. USJ notes that an Area Timed Entry
+        Ticket or Standby Entry Ticket may be required depending on conditions.
+      </div>
+
+      <div class="alert">
+        <strong>🎃 Halloween Horror Nights</strong><br>
+        Sept 11 – Nov 8, 2026. Your Oct 30 visit falls inside the event period.
+      </div>
+
+      <div class="alert danger">
+        <strong>🏰 Ghibli Museum</strong><br>
+        Removed from this itinerary. Do not purchase a ticket for Nov 8.
+      </div>
+
+      <div class="alert">
+        <strong>🛍️ Tax-free shopping</strong><br>
+        Your Osaka shopping is before Nov 1. Tokyo shopping is after Nov 1,
+        when Japan's tax-free system changes to the new refund-style procedure.
+      </div>
+
+      <h3>🏨 Hotels</h3>
+
+      <p>
+        <strong>Osaka</strong><br>
+        Smile Hotel Shin-Osaka
+      </p>
+
+      <p>
+        <strong>Kyoto</strong><br>
+        Wander Kyoto Nanajo Hotel
+      </p>
+
+      <p>
+        <strong>Tokyo</strong><br>
+        Sotetsu Fresa Inn Tokyo Tamachi
+      </p>
+
+      <h3>📞 Hotel numbers</h3>
+
+      <p>
+        Osaka: +81 6 6309 7755<br>
+        Kyoto: +81 75 330 9330<br>
+        Tokyo: +81 3 5442 2031
+      </p>
+
     </div>
 
-    <div class="booking">
-      <div class="booking-title">🎢 USJ — Oct 30</div>
-      <div class="booking-status">🔴 Pending — €93 Studio Pass + SNW + Food + Kansai Pass</div>
+
+    <div class="footer">
+      Japan 2026 • Nithin & Sindhu 🇯🇵<br>
+      Last updated: September 2026
     </div>
-
-    <div class="booking">
-      <div class="booking-title">🎢 USJ Express Pass</div>
-      <div class="booking-status">🟡 Optional — Mine Cart & JAWS if purchased</div>
-    </div>
-
-    <div class="booking">
-      <div class="booking-title">🚄 Kyoto → Tokyo Shinkansen — Nov 5</div>
-      <div class="booking-status">🔴 Pending</div>
-    </div>
-
-    <div class="booking">
-      <div class="booking-title">🌇 Shibuya Sky — Nov 6</div>
-      <div class="booking-status">🔴 Pending — target sunset</div>
-    </div>
-
-    <div class="booking">
-      <div class="booking-title">🗻 Fuji / Hakone — Nov 9</div>
-      <div class="booking-status">🔴 Pending</div>
-    </div>
-
-    <div class="booking">
-      <div class="booking-title">🏯 Ghibli Museum — Nov 8</div>
-      <div class="booking-status">❌ Not possible / removed from itinerary</div>
-    </div>
-
-  </div>
-
-
-  <!-- ================= INFO ================= -->
-
-  <div id="info" style="display:none">
-
-    <h2 class="section-title">ℹ️ Important Information</h2>
-
-    <div class="alert danger">
-      <strong>🎢 USJ — 🔴 STILL OPEN</strong><br>
-      USJ is Friday, October 30, 2026. The €93 package (park entry + guaranteed
-      Super Nintendo World entry at 13:00) still needs to be booked.
-    </div>
-
-    <div class="alert info">
-      <strong>🍄 Super Nintendo World</strong><br>
-      Your timed entry is the important part. USJ notes that an Area Timed Entry
-      Ticket or Standby Entry Ticket may be required depending on conditions.
-    </div>
-
-    <div class="alert">
-      <strong>🎃 Halloween Horror Nights</strong><br>
-      Sept 11 – Nov 8, 2026. Your Oct 30 visit falls inside the event period.
-    </div>
-
-    <div class="alert danger">
-      <strong>🏰 Ghibli Museum</strong><br>
-      Removed from this itinerary. Do not purchase a ticket for Nov 8.
-    </div>
-
-    <div class="alert">
-      <strong>🛍️ Tax-free shopping</strong><br>
-      Your Osaka shopping is before Nov 1. Tokyo shopping is after Nov 1,
-      when Japan's tax-free system changes to the new refund-style procedure.
-    </div>
-
-    <h3>🏨 Hotels</h3>
-
-    <p>
-      <strong>Osaka</strong><br>
-      Smile Hotel Shin-Osaka
-    </p>
-
-    <p>
-      <strong>Kyoto</strong><br>
-      Wander Kyoto Nanajo Hotel
-    </p>
-
-    <p>
-      <strong>Tokyo</strong><br>
-      Sotetsu Fresa Inn Tokyo Tamachi
-    </p>
-
-    <h3>📞 Hotel numbers</h3>
-
-    <p>
-      Osaka: +81 6 6309 7755<br>
-      Kyoto: +81 75 330 9330<br>
-      Tokyo: +81 3 5442 2031
-    </p>
 
   </div>
 
 
-  <div class="footer">
-    Japan 2026 • Nithin & Sindhu 🇯🇵<br>
-    Last updated: September 2026
-  </div>
 
-</div>
-
-
-
-<div id="modalBackdrop" class="cp-modal-backdrop">
-  <div class="cp-modal">
-    <h2 id="modalTitle">Add checkpoint</h2>
-    <label for="cpTitle">Checkpoint</label>
-    <input id="cpTitle" type="text" placeholder="e.g. Find a Seiko watch">
-    <label for="cpDay">Day</label>
-    <select id="cpDay"></select>
-    <label for="cpCategory">Category</label>
-    <select id="cpCategory">
-      <option>General</option><option>Shopping</option><option>Food</option><option>Transport</option><option>Booking</option><option>Sightseeing</option><option>USJ</option>
-    </select>
-    <label for="cpNotes">Notes (optional)</label>
-    <textarea id="cpNotes" rows="3" placeholder="Optional details"></textarea>
-    <div class="cp-modal-actions">
-      <button class="cp-btn cp-secondary" onclick="closeModal()">Cancel</button>
-      <button class="cp-btn" onclick="saveCheckpoint()">Save checkpoint</button>
+  <div id="modalBackdrop" class="cp-modal-backdrop">
+    <div class="cp-modal">
+      <h2 id="modalTitle">Add checkpoint</h2>
+      <label for="cpTitle">Checkpoint</label>
+      <input id="cpTitle" type="text" placeholder="e.g. Find a Seiko watch">
+      <label for="cpDay">Day</label>
+      <select id="cpDay"></select>
+      <label for="cpCategory">Category</label>
+      <select id="cpCategory">
+        <option>General</option>
+        <option>Shopping</option>
+        <option>Food</option>
+        <option>Transport</option>
+        <option>Booking</option>
+        <option>Sightseeing</option>
+        <option>USJ</option>
+      </select>
+      <label for="cpNotes">Notes (optional)</label>
+      <textarea id="cpNotes" rows="3" placeholder="Optional details"></textarea>
+      <div class="cp-modal-actions">
+        <button class="cp-btn cp-secondary" onclick="closeModal()">Cancel</button>
+        <button class="cp-btn" onclick="saveCheckpoint()">Save checkpoint</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
+  <script>
 
-/* ===== Dynamic checklist feature (added) ===== */
-const CP_STORAGE_KEY = "japan2026_index_checklist_v1";
+    /* ===== Dynamic checklist feature (added) ===== */
+    const CP_STORAGE_KEY = "japan2026_index_checklist_v1";
 
-const cpDays = [
-  ["28 Oct","Arrival in Osaka"],["29 Oct","Den Den Town + Namba"],
-  ["30 Oct","Universal Studios Japan"],["31 Oct","Sumiyoshi + Shinsaibashi"],
-  ["1 Nov","Osaka → Kyoto"],["2 Nov","Kyoto Temples + Nara"],
-  ["3 Nov","Arashiyama + Fushimi Inari"],["4 Nov","Kyoto — Gion + Manga Museum"],
-  ["5 Nov","Kyoto → Tokyo"],["6 Nov","Meiji → Harajuku → Shibuya"],
-  ["7 Nov","Akihabara + Anime + Watches"],["8 Nov","Tokyo — Nakano + Shinjuku"],
-  ["9 Nov","Mt Fuji + Hakone"],["10 Nov","Tokyo → Narita → Frankfurt"]
-];
+    const cpDays = [
+      ["28 Oct", "Arrival in Osaka"], ["29 Oct", "Den Den Town + Namba"],
+      ["30 Oct", "Universal Studios Japan"], ["31 Oct", "Sumiyoshi + Shinsaibashi"],
+      ["1 Nov", "Osaka → Kyoto"], ["2 Nov", "Kyoto Temples + Nara"],
+      ["3 Nov", "Arashiyama + Fushimi Inari"], ["4 Nov", "Kyoto — Gion + Manga Museum"],
+      ["5 Nov", "Kyoto → Tokyo"], ["6 Nov", "Meiji → Harajuku → Shibuya"],
+      ["7 Nov", "Akihabara + Anime + Watches"], ["8 Nov", "Tokyo — Nakano + Shinjuku"],
+      ["9 Nov", "Mt Fuji + Hakone"], ["10 Nov", "Tokyo → Narita → Frankfurt"]
+    ];
 
-const cpStarter = [
-  ["USJ €93 ticket — Oct 30","30 Oct","USJ"],
-  ["Decide on USJ Express Pass","30 Oct","USJ"],
-  ["Download USJ official app","30 Oct","USJ"],
-  ["Add USJ tickets to phone","30 Oct","USJ"],
-  ["Book Kyoto → Tokyo Shinkansen — Nov 5","5 Nov","Transport"],
-  ["Book Shibuya Sky sunset — Nov 6","6 Nov","Booking"],
-  ["Book Mt Fuji / Hakone tour — Nov 9","9 Nov","Booking"],
-  ["Check Fuji tour includes Ropeway","9 Nov","Booking"],
-  ["Check Fuji tour pirate ship inclusion","9 Nov","Booking"],
-  ["Check weather before Fuji day","9 Nov","Booking"],
-  ["Prepare passports for Japan","28 Oct","General"],
-  ["Prepare flight confirmations","28 Oct","General"],
-  ["Prepare hotel confirmations","28 Oct","General"],
-  ["Set up IC card / Suica / ICOCA","28 Oct","Transport"],
-  ["Check international roaming / eSIM","28 Oct","General"],
-  ["Notify bank/cards about Japan travel if required","28 Oct","General"],
-  ["Prepare some Japanese yen","28 Oct","General"],
-  ["Download Google Maps offline areas","28 Oct","General"],
-  ["Download translation app","28 Oct","General"],
-  ["Make anime/toy shopping shortlist","29 Oct","Shopping"],
-  ["Make watch shopping shortlist","31 Oct","Shopping"],
-  ["Make Onitsuka Tiger shortlist","31 Oct","Shopping"],
-  ["Make winter jacket shortlist","Other","Shopping"],
-  ["Prepare luggage space for shopping","Other","Shopping"],
-  ["Keep passports available for tax-free shopping","7 Nov","Shopping"],
-  ["Check new Japan tax-refund procedure before Tokyo shopping","7 Nov","Shopping"],
-  ["Plan airport transfer to NRT","10 Nov","Transport"],
-  ["Final airport/customs check before NRT departure","10 Nov","General"]
-].map((x,i)=>({id:"starter_"+i,title:x[0],day:x[1],category:x[2],notes:"",done:false}));
+    const cpStarter = [
+      ["USJ €93 ticket — Oct 30", "30 Oct", "USJ"],
+      ["Decide on USJ Express Pass", "30 Oct", "USJ"],
+      ["Download USJ official app", "30 Oct", "USJ"],
+      ["Add USJ tickets to phone", "30 Oct", "USJ"],
+      ["Book Kyoto → Tokyo Shinkansen — Nov 5", "5 Nov", "Transport"],
+      ["Book Shibuya Sky sunset — Nov 6", "6 Nov", "Booking"],
+      ["Book Mt Fuji / Hakone tour — Nov 9", "9 Nov", "Booking"],
+      ["Check Fuji tour includes Ropeway", "9 Nov", "Booking"],
+      ["Check Fuji tour pirate ship inclusion", "9 Nov", "Booking"],
+      ["Check weather before Fuji day", "9 Nov", "Booking"],
+      ["Prepare passports for Japan", "28 Oct", "General"],
+      ["Prepare flight confirmations", "28 Oct", "General"],
+      ["Prepare hotel confirmations", "28 Oct", "General"],
+      ["Set up IC card / Suica / ICOCA", "28 Oct", "Transport"],
+      ["Check international roaming / eSIM", "28 Oct", "General"],
+      ["Notify bank/cards about Japan travel if required", "28 Oct", "General"],
+      ["Prepare some Japanese yen", "28 Oct", "General"],
+      ["Download Google Maps offline areas", "28 Oct", "General"],
+      ["Download translation app", "28 Oct", "General"],
+      ["Make anime/toy shopping shortlist", "29 Oct", "Shopping"],
+      ["Make watch shopping shortlist", "31 Oct", "Shopping"],
+      ["Make Onitsuka Tiger shortlist", "31 Oct", "Shopping"],
+      ["Make winter jacket shortlist", "Other", "Shopping"],
+      ["Prepare luggage space for shopping", "Other", "Shopping"],
+      ["Keep passports available for tax-free shopping", "7 Nov", "Shopping"],
+      ["Check new Japan tax-refund procedure before Tokyo shopping", "7 Nov", "Shopping"],
+      ["Plan airport transfer to NRT", "10 Nov", "Transport"],
+      ["Final airport/customs check before NRT departure", "10 Nov", "General"]
+    ].map((x, i) => ({ id: "starter_" + i, title: x[0], day: x[1], category: x[2], notes: "", done: false }));
 
-let cpItems = cpLoad();
-let cpEditingId = null;
-let cpShowCompleted = true;
+    let cpItems = cpLoad();
+    let cpEditingId = null;
+    let cpShowCompleted = true;
 
-function cpLoad(){
-  try {
-    const raw = localStorage.getItem(CP_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch(e){}
-  return cpStarter;
-}
-function cpSave(){ localStorage.setItem(CP_STORAGE_KEY, JSON.stringify(cpItems)); }
-function cpEsc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
+    function cpLoad() {
+      try {
+        const raw = localStorage.getItem(CP_STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) { }
+      return cpStarter;
+    }
+    function cpSave() { localStorage.setItem(CP_STORAGE_KEY, JSON.stringify(cpItems)); }
+    function cpEsc(s) { return String(s ?? "").replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m])); }
 
-function renderChecklist(){
-  const root = document.getElementById("checklistContainer");
-  const visible = cpItems.filter(x => cpShowCompleted || !x.done);
-  const groups = {};
-  visible.forEach(x => { const key = x.day || "Other"; (groups[key] ??= []).push(x); });
-  root.innerHTML = "";
-  const orderedDays = cpDays.map(x => x[0]);
-  Object.keys(groups).sort((a,b) => {
-    const ia = orderedDays.indexOf(a), ib = orderedDays.indexOf(b);
-    return (ia<0?999:ia) - (ib<0?999:ib);
-  }).forEach(day => {
-    const card = document.createElement("div"); card.className = "cp-card cp-check-group";
-    const title = document.createElement("h3"); title.className = "cp-group-header";
-    const doneInGroup = groups[day].filter(i => i.done).length;
-    title.innerHTML = `<span>${cpEsc(day)}</span><span class="cp-group-right"><span class="cp-group-count">${doneInGroup}/${groups[day].length}</span><span class="cp-chevron">⌄</span></span>`;
-    title.onclick = () => card.classList.toggle("collapsed");
-    card.appendChild(title);
-    groups[day].forEach(x => {
-      const row = document.createElement("div"); row.className = "cp-check" + (x.done ? " done" : "");
-      row.innerHTML = `
+    function renderChecklist() {
+      const root = document.getElementById("checklistContainer");
+      const visible = cpItems.filter(x => cpShowCompleted || !x.done);
+      const groups = {};
+      visible.forEach(x => { const key = x.day || "Other"; (groups[key] ??= []).push(x); });
+      root.innerHTML = "";
+      const orderedDays = cpDays.map(x => x[0]);
+      Object.keys(groups).sort((a, b) => {
+        const ia = orderedDays.indexOf(a), ib = orderedDays.indexOf(b);
+        return (ia < 0 ? 999 : ia) - (ib < 0 ? 999 : ib);
+      }).forEach(day => {
+        const card = document.createElement("div"); card.className = "cp-card cp-check-group";
+        const title = document.createElement("h3"); title.className = "cp-group-header";
+        const doneInGroup = groups[day].filter(i => i.done).length;
+        title.innerHTML = `<span>${cpEsc(day)}</span><span class="cp-group-right"><span class="cp-group-count">${doneInGroup}/${groups[day].length}</span><span class="cp-chevron">⌄</span></span>`;
+        title.onclick = () => card.classList.toggle("collapsed");
+        card.appendChild(title);
+        groups[day].forEach(x => {
+          const row = document.createElement("div"); row.className = "cp-check" + (x.done ? " done" : "");
+          row.innerHTML = `
         <input type="checkbox" ${x.done ? "checked" : ""} aria-label="Complete checkpoint">
         <div class="cp-check-main">
           <div class="cp-check-title">${cpEsc(x.title)}</div>
-          <div class="cp-check-meta"><span class="cp-tag">${cpEsc(x.category||"General")}</span>${x.notes?`<span class="cp-tag">${cpEsc(x.notes)}</span>`:""}</div>
+          <div class="cp-check-meta"><span class="cp-tag">${cpEsc(x.category || "General")}</span>${x.notes ? `<span class="cp-tag">${cpEsc(x.notes)}</span>` : ""}</div>
         </div>
         <div class="cp-actions">
           <button class="cp-iconbtn" title="Edit">✏️</button>
           <button class="cp-iconbtn" title="Delete">🗑️</button>
         </div>`;
-      row.querySelector("input").onchange = () => { x.done = !x.done; cpSave(); renderChecklist(); };
-      row.querySelectorAll(".cp-iconbtn")[0].onclick = () => openEditModal(x.id);
-      row.querySelectorAll(".cp-iconbtn")[1].onclick = () => deleteCheckpoint(x.id);
-      card.appendChild(row);
-    });
-    root.appendChild(card);
-  });
-  if (!visible.length) root.innerHTML = '<div class="cp-card cp-empty">No checkpoints to show.<br>Add one with <strong>＋ Add checkpoint</strong>.</div>';
-  updateProgress();
-}
+          row.querySelector("input").onchange = () => { x.done = !x.done; cpSave(); renderChecklist(); };
+          row.querySelectorAll(".cp-iconbtn")[0].onclick = () => openEditModal(x.id);
+          row.querySelectorAll(".cp-iconbtn")[1].onclick = () => deleteCheckpoint(x.id);
+          card.appendChild(row);
+        });
+        root.appendChild(card);
+      });
+      if (!visible.length) root.innerHTML = '<div class="cp-card cp-empty">No checkpoints to show.<br>Add one with <strong>＋ Add checkpoint</strong>.</div>';
+      updateProgress();
+    }
 
-function updateProgress(){
-  const total = cpItems.length, done = cpItems.filter(x => x.done).length;
-  const pct = total ? Math.round(done/total*100) : 0;
-  document.getElementById("checkStats").textContent = `${done} / ${total} completed`;
-  document.getElementById("checkPercent").textContent = `${pct}%`;
-  document.getElementById("progressBar").style.width = pct + "%";
-}
+    function updateProgress() {
+      const total = cpItems.length, done = cpItems.filter(x => x.done).length;
+      const pct = total ? Math.round(done / total * 100) : 0;
+      document.getElementById("checkStats").textContent = `${done} / ${total} completed`;
+      document.getElementById("checkPercent").textContent = `${pct}%`;
+      document.getElementById("progressBar").style.width = pct + "%";
+    }
 
-function populateDays(){
-  const select = document.getElementById("cpDay");
-  select.innerHTML = cpDays.map(x => `<option value="${cpEsc(x[0])}">${cpEsc(x[0])} · ${cpEsc(x[1])}</option>`).join("");
-  select.innerHTML += `<option value="Other">Other</option>`;
-}
+    function populateDays() {
+      const select = document.getElementById("cpDay");
+      select.innerHTML = cpDays.map(x => `<option value="${cpEsc(x[0])}">${cpEsc(x[0])} · ${cpEsc(x[1])}</option>`).join("");
+      select.innerHTML += `<option value="Other">Other</option>`;
+    }
 
-function openAddModal(){
-  cpEditingId = null;
-  document.getElementById("modalTitle").textContent = "Add checkpoint";
-  document.getElementById("cpTitle").value = "";
-  document.getElementById("cpNotes").value = "";
-  document.getElementById("cpCategory").value = "General";
-  document.getElementById("cpDay").value = "Other";
-  document.getElementById("modalBackdrop").classList.add("show");
-  setTimeout(() => document.getElementById("cpTitle").focus(), 50);
-}
-function openEditModal(id){
-  const x = cpItems.find(i => i.id === id); if (!x) return;
-  cpEditingId = id;
-  document.getElementById("modalTitle").textContent = "Edit checkpoint";
-  document.getElementById("cpTitle").value = x.title;
-  document.getElementById("cpDay").value = x.day || "Other";
-  document.getElementById("cpCategory").value = x.category || "General";
-  document.getElementById("cpNotes").value = x.notes || "";
-  document.getElementById("modalBackdrop").classList.add("show");
-}
-function closeModal(){ document.getElementById("modalBackdrop").classList.remove("show"); cpEditingId = null; }
-function saveCheckpoint(){
-  const title = document.getElementById("cpTitle").value.trim();
-  if (!title) { alert("Please enter a checkpoint."); return; }
-  const data = {
-    title,
-    day: document.getElementById("cpDay").value,
-    category: document.getElementById("cpCategory").value,
-    notes: document.getElementById("cpNotes").value.trim()
-  };
-  if (cpEditingId) {
-    const x = cpItems.find(i => i.id === cpEditingId); Object.assign(x, data);
-  } else {
-    cpItems.push({ id: "cp_" + Date.now() + "_" + Math.random().toString(36).slice(2,8), ...data, done: false });
-  }
-  cpSave(); closeModal(); renderChecklist();
-}
-function deleteCheckpoint(id){
-  const x = cpItems.find(i => i.id === id); if (!x) return;
-  if (confirm(`Delete "${x.title}"?`)) { cpItems = cpItems.filter(i => i.id !== id); cpSave(); renderChecklist(); }
-}
-function clearCompleted(){
-  const count = cpItems.filter(x => x.done).length;
-  if (!count) return;
-  if (confirm(`Delete ${count} completed checkpoint${count===1?"":"s"}?`)) { cpItems = cpItems.filter(x => !x.done); cpSave(); renderChecklist(); }
-}
-function toggleCompleted(event){
-  cpShowCompleted = !cpShowCompleted;
-  event.currentTarget.textContent = cpShowCompleted ? "Hide completed" : "Show completed";
-  renderChecklist();
-}
-function expandAllChecks(){
-  document.querySelectorAll("#checklistContainer .cp-check-group").forEach(c => c.classList.remove("collapsed"));
-}
-function collapseAllChecks(){
-  document.querySelectorAll("#checklistContainer .cp-check-group").forEach(c => c.classList.add("collapsed"));
-}
-document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+    function openAddModal() {
+      cpEditingId = null;
+      document.getElementById("modalTitle").textContent = "Add checkpoint";
+      document.getElementById("cpTitle").value = "";
+      document.getElementById("cpNotes").value = "";
+      document.getElementById("cpCategory").value = "General";
+      document.getElementById("cpDay").value = "Other";
+      document.getElementById("modalBackdrop").classList.add("show");
+      setTimeout(() => document.getElementById("cpTitle").focus(), 50);
+    }
+    function openEditModal(id) {
+      const x = cpItems.find(i => i.id === id); if (!x) return;
+      cpEditingId = id;
+      document.getElementById("modalTitle").textContent = "Edit checkpoint";
+      document.getElementById("cpTitle").value = x.title;
+      document.getElementById("cpDay").value = x.day || "Other";
+      document.getElementById("cpCategory").value = x.category || "General";
+      document.getElementById("cpNotes").value = x.notes || "";
+      document.getElementById("modalBackdrop").classList.add("show");
+    }
+    function closeModal() { document.getElementById("modalBackdrop").classList.remove("show"); cpEditingId = null; }
+    function saveCheckpoint() {
+      const title = document.getElementById("cpTitle").value.trim();
+      if (!title) { alert("Please enter a checkpoint."); return; }
+      const data = {
+        title,
+        day: document.getElementById("cpDay").value,
+        category: document.getElementById("cpCategory").value,
+        notes: document.getElementById("cpNotes").value.trim()
+      };
+      if (cpEditingId) {
+        const x = cpItems.find(i => i.id === cpEditingId); Object.assign(x, data);
+      } else {
+        cpItems.push({ id: "cp_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8), ...data, done: false });
+      }
+      cpSave(); closeModal(); renderChecklist();
+    }
+    function deleteCheckpoint(id) {
+      const x = cpItems.find(i => i.id === id); if (!x) return;
+      if (confirm(`Delete "${x.title}"?`)) { cpItems = cpItems.filter(i => i.id !== id); cpSave(); renderChecklist(); }
+    }
+    function clearCompleted() {
+      const count = cpItems.filter(x => x.done).length;
+      if (!count) return;
+      if (confirm(`Delete ${count} completed checkpoint${count === 1 ? "" : "s"}?`)) { cpItems = cpItems.filter(x => !x.done); cpSave(); renderChecklist(); }
+    }
+    function toggleCompleted(event) {
+      cpShowCompleted = !cpShowCompleted;
+      event.currentTarget.textContent = cpShowCompleted ? "Hide completed" : "Show completed";
+      renderChecklist();
+    }
+    function expandAllChecks() {
+      document.querySelectorAll("#checklistContainer .cp-check-group").forEach(c => c.classList.remove("collapsed"));
+    }
+    function collapseAllChecks() {
+      document.querySelectorAll("#checklistContainer .cp-check-group").forEach(c => c.classList.add("collapsed"));
+    }
+    document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
-function toggleDay(header) {
-  header.parentElement.classList.toggle("open");
-}
+    function toggleDay(header) {
+      header.parentElement.classList.toggle("open");
+    }
 
-function openAll() {
-  document.querySelectorAll(".day").forEach(day => {
-    day.classList.add("open");
-  });
-}
+    function openAll() {
+      document.querySelectorAll(".day").forEach(day => {
+        day.classList.add("open");
+      });
+    }
 
-function closeAll() {
-  document.querySelectorAll(".day").forEach(day => {
-    day.classList.remove("open");
-  });
-}
+    function closeAll() {
+      document.querySelectorAll(".day").forEach(day => {
+        day.classList.remove("open");
+      });
+    }
 
-function showTab(tab,button) {
+    function showTab(tab, button) {
 
-  ["itinerary","checklist","bookings","info"].forEach(id => {
-    document.getElementById(id).style.display =
-      id === tab ? "block" : "none";
-  });
+      ["itinerary", "checklist", "bookings", "info"].forEach(id => {
+        document.getElementById(id).style.display =
+          id === tab ? "block" : "none";
+      });
 
-  document.querySelectorAll(".tab").forEach(t => {
-    t.classList.remove("active");
-  });
+      document.querySelectorAll(".tab").forEach(t => {
+        t.classList.remove("active");
+      });
 
-  button.classList.add("active");
-}
+      button.classList.add("active");
+    }
 
-populateDays();
-renderChecklist();
+    populateDays();
+    renderChecklist();
 
-</script>
+  </script>
 
 </body>
+
 </html>
