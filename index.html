@@ -1,202 +1,1190 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
-<title>Japan 2026 Trip Planner</title>
+<title>Japan 2026 · Final Route-Optimized Planner</title>
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e5e7eb;--accent:#2563eb;--accent2:#eff6ff;--danger:#dc2626;--ok:#16a34a}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.45}
-header{background:#111827;color:#fff;padding:24px 16px 20px;position:sticky;top:0;z-index:10;box-shadow:0 2px 12px #0002}
-header h1{margin:0;font-size:24px}header p{margin:4px 0 0;color:#cbd5e1;font-size:14px}
-nav{display:flex;gap:8px;overflow:auto;padding:10px 12px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:81px;z-index:9}
-nav button{border:0;background:#f1f5f9;color:#334155;padding:10px 15px;border-radius:10px;font-weight:600;white-space:nowrap}
-nav button.active{background:var(--accent);color:#fff}
-main{max-width:1000px;margin:auto;padding:16px}
-.tab{display:none}.tab.active{display:block}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:0 1px 3px #0000000a}
-.day{overflow:hidden}.day summary{cursor:pointer;list-style:none;font-weight:700;font-size:17px}.day summary::-webkit-details-marker{display:none}
-.day summary:before{content:"＋";display:inline-block;width:24px;color:var(--accent)}.day[open] summary:before{content:"−"}
-.day .body{padding:12px 0 0 24px}.time{font-weight:700;color:var(--accent);margin-top:12px}.muted{color:var(--muted);font-size:14px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.pill{display:inline-block;background:var(--accent2);color:#1d4ed8;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
-.btn{border:0;border-radius:10px;padding:10px 13px;background:var(--accent);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#eef2f7;color:#334155}.btn.danger{background:#fee2e2;color:#991b1b}
-.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.progress{height:10px;background:#e5e7eb;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:var(--accent);width:0%;transition:.2s}
-.stats{display:flex;justify-content:space-between;margin:8px 0;font-size:14px;font-weight:600}
-.check-group{margin-bottom:18px}.check-group h3{margin:0 0 8px;font-size:16px}
-.check{display:flex;align-items:flex-start;gap:10px;padding:12px 8px;border-bottom:1px solid var(--line)}.check:last-child{border-bottom:0}
-.check input{width:20px;height:20px;margin-top:1px;accent-color:var(--accent)}.check-main{flex:1;min-width:0}.check-title{font-weight:600}.check.done .check-title{text-decoration:line-through;color:#94a3b8}
-.check-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}.tag{font-size:11px;background:#f1f5f9;color:#64748b;padding:2px 7px;border-radius:999px}
-.actions{display:flex;gap:5px}.iconbtn{border:0;background:#f8fafc;color:#475569;border-radius:8px;padding:6px 8px;cursor:pointer}
-.empty{text-align:center;padding:28px;color:var(--muted)}
-.modal-backdrop{display:none;position:fixed;inset:0;background:#0008;z-index:100;align-items:center;justify-content:center;padding:16px}.modal-backdrop.show{display:flex}
-.modal{background:#fff;border-radius:18px;width:min(520px,100%);padding:20px;max-height:90vh;overflow:auto}.modal h2{margin-top:0}
-label{display:block;font-weight:700;font-size:13px;margin:12px 0 6px}input[type=text],select,textarea{width:100%;padding:11px 12px;border:1px solid #d1d5db;border-radius:10px;font:inherit;background:#fff}
-.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
-.booking{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.booking strong{display:block}.booking a,.store a{color:var(--accent);text-decoration:none}
-.store{padding:12px 0;border-bottom:1px solid var(--line)}.store:last-child{border:0}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 10px}
-@media(max-width:600px){header{padding-top:18px}nav{top:69px}.day .body{padding-left:8px}.booking{display:block}.booking .btn{margin-top:8px}}
-
-.stop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 10px;margin:6px 0;background:#f8fafc;border:1px solid #eef2f7;border-radius:10px}
-.stop span{min-width:0}.mapbtn,.routebtn{display:inline-block;text-decoration:none;font-size:12px;font-weight:700;border-radius:8px;padding:6px 9px;white-space:nowrap}
-.mapbtn{background:#e0f2fe;color:#0369a1}.routebtn{background:#ede9fe;color:#6d28d9}
-.routebox{margin-top:12px;padding:10px 12px;border-left:4px solid #8b5cf6;background:#f5f3ff;border-radius:8px;font-size:13px;color:#4c1d95}
-.routebox a{color:#6d28d9;font-weight:700;text-decoration:none}
-.focusbox{margin-bottom:14px;padding:13px 14px;border-radius:12px;background:#ecfdf5;border:1px solid #bbf7d0;color:#166534;font-size:14px}
-.mini-note{font-size:12px;color:var(--muted);margin-top:5px}
-
+:root{--bg:#f4f6fa;--card:#fff;--text:#172033;--muted:#667085;--line:#e4e7ec;--blue:#2563eb;--blue2:#eff6ff;--green:#15803d;--green2:#ecfdf3;--amber:#a16207;--amber2:#fffbeb;--purple:#6d28d9;--purple2:#f5f3ff;--red:#b42318;}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.5}
+header{background:#111827;color:white;padding:22px 16px 18px;position:sticky;top:0;z-index:20;box-shadow:0 3px 14px #0003}
+.header-inner{max-width:1080px;margin:auto;display:flex;align-items:flex-end;justify-content:space-between;gap:14px}
+h1{margin:0;font-size:24px} header p{margin:4px 0 0;color:#cbd5e1;font-size:14px}
+.printbtn{border:1px solid #475569;background:#1f2937;color:#fff;padding:8px 11px;border-radius:9px;font-weight:700;cursor:pointer}
+nav{position:sticky;top:78px;z-index:18;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:8px;overflow:auto;padding:10px 12px}
+nav button{border:0;background:#f1f5f9;color:#334155;padding:10px 14px;border-radius:10px;font-weight:700;white-space:nowrap;cursor:pointer}
+nav button.active{background:var(--blue);color:#fff}
+main{max-width:1080px;margin:auto;padding:16px}
+.tab{display:none} .tab.active{display:block}
+.hero{background:linear-gradient(135deg,#eff6ff,#f5f3ff);border:1px solid #dbeafe;border-radius:18px;padding:18px;margin-bottom:14px}
+.hero h2{margin:0 0 7px;font-size:20px} .hero p{margin:5px 0;color:#475467}
+.badges{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px} .badge{font-size:12px;font-weight:800;padding:5px 9px;border-radius:999px;background:#fff;border:1px solid #d0d5dd}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.btn{border:0;border-radius:10px;padding:10px 13px;background:var(--blue);color:white;font-weight:800;cursor:pointer} .btn.secondary{background:#eef2f7;color:#334155} .btn.danger{background:#fee4e2;color:#912018}
+.day-card{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:13px;overflow:hidden;box-shadow:0 1px 3px #0000000a}
+.day-card summary{padding:16px;cursor:pointer;display:flex;justify-content:space-between;gap:14px;align-items:center;list-style:none}
+.day-card summary::-webkit-details-marker{display:none} .day-card summary:before{content:"＋";font-weight:900;color:var(--blue);margin-right:8px} .day-card[open] summary:before{content:"−"}
+.day-card summary>div{flex:1} .date{font-size:12px;color:var(--blue);font-weight:900;text-transform:uppercase;letter-spacing:.03em} .day-title{font-size:18px;font-weight:850;margin-top:2px}
+.pace{font-size:11px;background:#f2f4f7;color:#475467;border-radius:999px;padding:5px 8px;white-space:nowrap;font-weight:800}
+.day-body{padding:0 16px 16px 44px}
+.route-summary{background:var(--green2);color:#166534;border-left:4px solid #22c55e;padding:10px 12px;border-radius:8px;margin-bottom:12px;font-size:13px}
+.stop-card{display:grid;grid-template-columns:80px 1fr auto;gap:12px;align-items:start;padding:13px 0;border-bottom:1px solid #eef2f6}
+.stop-card:last-of-type{border-bottom:0} .stop-time{font-size:12px;font-weight:900;color:#475467;padding-top:2px} .stop-title{font-size:15px;font-weight:850} .stop-desc{font-size:13px;color:#475467;margin-top:3px} .key{font-size:12px;color:#667085;margin-top:5px}
+.mapbtn{text-decoration:none;background:#e0f2fe;color:#0369a1;font-weight:850;font-size:12px;padding:7px 9px;border-radius:8px;white-space:nowrap}
+.route-links{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px} .route-chip{font-size:12px;text-decoration:none;background:var(--purple2);color:var(--purple);font-weight:800;padding:7px 9px;border-radius:9px}
+.notes-box{background:var(--amber2);border:1px solid #fde68a;border-radius:12px;padding:11px 13px;margin-top:13px;color:#713f12;font-size:13px} .notes-box ul{margin:6px 0 0 18px;padding:0} .notes-box li{margin:4px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:13px} .card h2{margin:0 0 10px;font-size:18px} .muted{color:var(--muted);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:12px}
+.place-list{display:flex;flex-direction:column;gap:9px} .place{padding:11px;border:1px solid #eef2f6;border-radius:11px;background:#fbfcfe} .place strong{display:block;margin-bottom:3px} .place a{color:var(--blue);text-decoration:none;font-weight:700;font-size:12px}
+.linkrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px} .linkbtn{text-decoration:none;font-weight:800;font-size:12px;padding:7px 9px;border-radius:8px;background:#eff6ff;color:#1d4ed8}
+.booking{display:flex;justify-content:space-between;gap:12px;align-items:start} .status{font-size:11px;border-radius:999px;padding:5px 8px;font-weight:900;background:#ecfdf3;color:#166534;white-space:nowrap}
+.progress{height:10px;background:#e5e7eb;border-radius:99px;overflow:hidden} .progress>div{height:100%;background:var(--blue);width:0;transition:.2s} .stats{display:flex;justify-content:space-between;margin:6px 0 9px;font-size:13px;font-weight:800}
+.check-group h3{margin:0 0 7px;font-size:15px} .check{display:flex;gap:9px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid #eef2f6} .check:last-child{border:0} .check input{width:19px;height:19px;accent-color:var(--blue)} .check-main{flex:1;min-width:0} .check-title{font-weight:700;font-size:14px} .check.done .check-title{text-decoration:line-through;color:#98a2b3} .tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px} .tag{font-size:10px;padding:2px 6px;border-radius:999px;background:#f2f4f7;color:#667085} .iconbtn{border:0;background:#f2f4f7;border-radius:7px;padding:5px 7px;cursor:pointer}
+.modal-backdrop{display:none;position:fixed;inset:0;background:#0008;z-index:50;align-items:center;justify-content:center;padding:16px} .modal-backdrop.show{display:flex} .modal{background:#fff;width:min(520px,100%);border-radius:16px;padding:18px;max-height:90vh;overflow:auto} .modal h2{margin-top:0} label{display:block;font-size:12px;font-weight:850;margin:10px 0 5px} input[type=text],select,textarea{width:100%;font:inherit;border:1px solid #d0d5dd;border-radius:9px;padding:10px;background:#fff} textarea{min-height:90px} .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.personal-notes{min-height:180px} footer{text-align:center;color:#98a2b3;font-size:11px;padding:24px 8px}
+.alert{background:#fff1f3;border:1px solid #fecdd3;color:#9f1239;border-radius:12px;padding:11px 13px;margin:10px 0;font-size:13px}
+@media(max-width:650px){header{position:relative} nav{top:0} .header-inner{align-items:flex-start} .day-body{padding-left:12px} .stop-card{grid-template-columns:62px 1fr} .stop-card .mapbtn{grid-column:2;justify-self:start} .pace{display:none}}
+@media print{header,nav,.toolbar,.mapbtn,.route-links,.printbtn,.iconbtn,.btn{display:none!important} body{background:#fff} main{max-width:none} .tab{display:block!important} #checklist,#notes{display:none!important} .day-card{break-inside:avoid;box-shadow:none} .day-card:not([open]) .day-body{display:block}}
 </style>
 </head>
 <body>
 <header>
-  <h1>🇯🇵 Japan 2026</h1>
-  <p>Osaka • Kyoto • Tokyo · Tue 27 Oct – Tue 10 Nov 2026</p>
+  <div class="header-inner">
+    <div><h1>🇯🇵 Japan 2026 · Final Planner</h1><p>Tue 27 Oct – Tue 10 Nov · Osaka → Kyoto/Nara → Tokyo → Fuji/Hakone</p></div>
+    <button class="printbtn" onclick="window.print()">Print</button>
+  </div>
 </header>
-
 <nav>
-  <button class="tabBtn active" data-tab="itinerary">Itinerary</button>
-  <button class="tabBtn" data-tab="checklist">Checklist</button>
-  <button class="tabBtn" data-tab="bookings">Bookings</button>
-  <button class="tabBtn" data-tab="info">Info</button>
+  <button class="active" data-tab="itinerary">Itinerary</button>
+  <button data-tab="checklist">Checklist</button>
+  <button data-tab="bookings">Bookings</button>
+  <button data-tab="food">Food & Shopping</button>
+  <button data-tab="notes">Notes</button>
 </nav>
-
 <main>
 <section id="itinerary" class="tab active">
-  <div class="focusbox"><strong>Trip style:</strong> sightseeing first · minimal backtracking · shopping only where it naturally fits the route.</div>
-  <div class="toolbar"><button class="btn secondary" onclick="toggleDays(true)">Open All</button><button class="btn secondary" onclick="toggleDays(false)">Collapse All</button></div>
+  <div class="hero">
+    <h2>Sightseeing first, shopping where it naturally fits</h2>
+    <p>This version deliberately clusters nearby places, uses walking only inside compact areas, and uses transit for long jumps. Optional stops are marked so you can drop them without breaking the day.</p>
+    <div class="badges"><span class="badge">15 days incl. flights</span><span class="badge">Vegetarian-aware</span><span class="badge">Google Maps links</span><span class="badge">Route notes</span><span class="badge">Dynamic checklist</span></div>
+  </div>
+  <div class="toolbar"><button class="btn secondary" onclick="toggleDays(true)">Open all days</button><button class="btn secondary" onclick="toggleDays(false)">Collapse all</button></div>
+  
+    <details class="day-card" open>
+      <summary>
+        <div>
+          <div class="date">Tue · 27 Oct · Travel</div>
+          <div class="day-title">Departure from Frankfurt</div>
+        </div>
+        <span class="pace">Travel day</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Frankfurt → Shanghai transit → Osaka</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">13:35</div>
+      <div class="stop-content">
+        <div class="stop-title">✈️ Frankfurt Airport (FRA)</div>
+        <div class="stop-desc">International departure for Japan via Shanghai.</div>
+        <div class="key"><strong>Key point:</strong> Keep passport, transit documents, power bank and one change of clothes in cabin baggage.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Frankfurt+Airport" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        
+        <div class="notes-box"><strong>Notes</strong><ul><li>No sightseeing target today. The goal is to arrive in Osaka with energy for the next evening.</li></ul></div>
+      </div>
+    </details>
 
-  <details class="card day" open><summary>Tuesday · 27 Oct · Departure</summary><div class="body"><span class="pill">Travel day</span><div class="time">13:35</div>Frankfurt (FRA) departure → Shanghai transit.</div></details>
+    <details class="day-card" open>
+      <summary>
+        <div>
+          <div class="date">Wed · 28 Oct · Osaka</div>
+          <div class="day-title">Osaka arrival + first Japan night</div>
+        </div>
+        <span class="pace">Very light</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> KIX → Shin-Osaka hotel → Dotonbori only if energy remains</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">~18:00</div>
+      <div class="stop-content">
+        <div class="stop-title">✈️ Kansai International Airport (KIX)</div>
+        <div class="stop-desc">Arrival airport for Osaka.</div>
+        <div class="key"><strong>Key point:</strong> Immigration, luggage, cash/IC-card setup, then go directly to the hotel.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day" open><summary>Wednesday · 28 Oct · Osaka arrival + Dotonbori</summary><div class="body">
-    <span class="pill">Easy arrival evening</span><div class="time">~18:00</div>Arrive at Kansai International Airport and continue to Smile Hotel Shin-Osaka.
-    <div class="stop"><span>✈️ Kansai International Airport (KIX)</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kansai+International+Airport">Map</a></div>
-    <div class="stop"><span>🏨 Smile Hotel Shin-Osaka</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Smile+Hotel+Shin-Osaka">Map</a></div>
-    <div class="time">Evening · only if you still have energy</div>
-    <div class="stop"><span>🌃 Dotonbori + Glico sign + canal walk</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Dotonbori+Osaka">Map</a></div>
-    <div class="stop"><span>🏮 Hozenji Yokocho / Hozenji Temple</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Hozenji+Yokocho+Osaka">Map</a></div>
-    <div class="routebox">Keep this night relaxed. <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Smile+Hotel+Shin-Osaka&destination=Dotonbori+Osaka&travelmode=transit">Hotel → Dotonbori route</a></div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">Evening</div>
+      <div class="stop-content">
+        <div class="stop-title">🏨 Smile Hotel Shin-Osaka</div>
+        <div class="stop-desc">Your Osaka base near Shin-Osaka station.</div>
+        <div class="key"><strong>Key point:</strong> Drop luggage and do not force a long first night.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Smile+Hotel+Shin-Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Thursday · 29 Oct · Osaka Castle → old/new Osaka</summary><div class="body">
-    <span class="pill">Main Osaka sightseeing day</span><div class="time">Morning</div>
-    <div class="stop"><span>🏯 Osaka Castle + Osaka Castle Park</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Osaka+Castle">Map</a></div>
-    <div class="time">Lunch / early afternoon</div><div class="stop"><span>🍜 Kuromon Ichiba Market</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kuromon+Ichiba+Market+Osaka">Map</a></div>
-    <div class="stop"><span>🎮 Den Den Town / Nipponbashi — 60–90 min only</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Den+Den+Town+Nipponbashi+Osaka">Map</a></div>
-    <div class="mini-note">Minimal shopping: browse one or two anime/figure/electronics stores rather than making this a full shopping day.</div>
-    <div class="time">Late afternoon</div><div class="stop"><span>🏮 Shinsekai + Tsutenkaku area</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka">Map</a></div>
-    <div class="time">Sunset / evening</div><div class="stop"><span>🌇 Abeno Harukas / Harukas 300</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Abeno+Harukas+Osaka">Map</a></div>
-    <div class="routebox">Efficient flow: Osaka Castle → transit south → Kuromon/Namba → walk through Den Den Town → Shinsekai → Abeno Harukas. <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Osaka+Castle&destination=Kuromon+Ichiba+Market+Osaka&travelmode=transit">Castle → Kuromon</a></div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">Optional</div>
+      <div class="stop-content">
+        <div class="stop-title">🌃 Dotonbori</div>
+        <div class="stop-desc">Osaka&#x27;s neon canal district and the classic Glico-sign night view.</div>
+        <div class="key"><strong>Key point:</strong> Walk the canal, see the signs and atmosphere; this is not a shopping mission.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Dotonbori+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Friday · 30 Oct · Universal Studios Japan</summary><div class="body">
-    <span class="pill">USJ · Friday · Halloween</span><div class="stop"><span>🎢 Universal Studios Japan</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan">Map</a></div>
-    <div class="time">Priority</div>SUPER NINTENDO WORLD → Mario Kart: Koopa’s Challenge → Donkey Kong / Mine Cart Madness → Halloween Horror Nights.
-    <div class="time">Ticket</div>1-Day Studio Pass + SUPER NINTENDO WORLD entry package. SNW entry planned for 13:00.
-    <div class="time">Express</div>Minecart & JAWS Express Pass remains the best matching optional Express Pass for your Nintendo priorities.
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">Optional</div>
+      <div class="stop-content">
+        <div class="stop-title">🏮 Hozenji Yokocho + Hozenji</div>
+        <div class="stop-desc">A tiny stone-paved alley and temple area just off busy Namba.</div>
+        <div class="key"><strong>Key point:</strong> Good contrast with Dotonbori and a short walk away.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Hozenji+Yokocho+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Smile+Hotel+Shin-Osaka&destination=Dotonbori+Osaka&travelmode=transit" target="_blank" rel="noopener">🧭 Hotel → Dotonbori · Transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>If jet-lagged, skip Dotonbori. You will be back in this area later.</li><li>Saved vegetarian ideas: use your Osaka restaurant list when you feel hungry rather than planning a fixed meal.</li></ul></div>
+      </div>
+    </details>
 
-  <details class="card day"><summary>Saturday · 31 Oct · Shrines + central Osaka + light shopping</summary><div class="body">
-    <span class="pill">Culture + city atmosphere</span><div class="time">Morning</div>
-    <div class="stop"><span>⛩️ Sumiyoshi Taisha + Sorihashi Bridge</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sumiyoshi+Taisha+Osaka">Map</a></div>
-    <div class="time">Late morning / lunch</div><div class="stop"><span>🛕 Shitennoji Temple</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Shitennoji+Osaka">Map</a></div>
-    <div class="stop"><span>🌳 Tennoji area / park</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tennoji+Park+Osaka">Map</a></div>
-    <div class="time">Afternoon · short shopping block</div><div class="stop"><span>⌚ GINZA RASIN Shinsaibashi</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=GINZA+RASIN+Shinsaibashi+Osaka">Map</a></div>
-    <div class="stop"><span>⌚ WATCHNIAN Shinsaibashi</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=WATCHNIAN+Shinsaibashi+Osaka">Map</a></div>
-    <div class="time">Evening</div><div class="stop"><span>🎨 Amerikamura → Shinsaibashi → Dotonbori walk</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Amerikamura+Osaka">Map</a></div>
-    <div class="routebox">Sumiyoshi → train north → Shitennoji/Tennoji → transit to Shinsaibashi → walk to Dotonbori. <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Sumiyoshi+Taisha+Osaka&destination=Shitennoji+Osaka&travelmode=transit">Sumiyoshi → Shitennoji</a></div>
-  </div></details>
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Thu · 29 Oct · Osaka</div>
+          <div class="day-title">Osaka Castle → Kuromon → Shinsekai → Abeno</div>
+        </div>
+        <span class="pace">Full but linear</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> North/central Osaka → Namba → Shinsekai → Tennoji/Abeno</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">08:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🏯 Osaka Castle + Castle Park</div>
+        <div class="stop-desc">Osaka&#x27;s best-known historic landmark, surrounded by moat and large park grounds.</div>
+        <div class="key"><strong>Key point:</strong> Spend more time outside in the park and viewpoints; enter the castle museum if interested.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Osaka+Castle" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Sunday · 1 Nov · Osaka → Kyoto + Higashiyama / Gion</summary><div class="body">
-    <span class="pill">Classic Kyoto introduction</span><div class="time">Morning</div>Travel to Kyoto, leave bags/check in at Wander Kyoto Nanajo Hotel.
-    <div class="stop"><span>🏨 Wander Kyoto Nanajo Hotel</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Wander+Kyoto+Nanajo">Map</a></div>
-    <div class="stop"><span>🛕 Sanjusangen-do</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sanjusangen-do+Kyoto">Map</a></div>
-    <div class="stop"><span>🛕 Kiyomizu-dera</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera+Kyoto">Map</a></div>
-    <div class="stop"><span>🏘️ Sannenzaka + Ninenzaka</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sannenzaka+Kyoto">Map</a></div>
-    <div class="stop"><span>📷 Yasaka Pagoda / Hokan-ji area</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Yasaka+Pagoda+Kyoto">Map</a></div>
-    <div class="stop"><span>⛩️ Yasaka Shrine</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto">Map</a></div>
-    <div class="time">Evening</div><div class="stop"><span>🏮 Gion → Pontocho</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Gion+Kyoto">Map</a></div>
-    <div class="routebox">This day intentionally moves through eastern Kyoto in one direction. <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Sanjusangen-do+Kyoto&destination=Pontocho+Kyoto&waypoints=Kiyomizu-dera+Kyoto%7CSannenzaka+Kyoto%7CYasaka+Shrine+Kyoto&travelmode=walking">Open walking route</a></div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">11:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🍱 Kuromon Ichiba Market</div>
+        <div class="stop-desc">Traditional covered food market in the Namba area.</div>
+        <div class="key"><strong>Key point:</strong> For vegetarian food, look for fruit, sweets, rice crackers and clearly meat/fish-free snacks; ask before buying broth-based items.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kuromon+Ichiba+Market+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Monday · 2 Nov · Nara full day</summary><div class="body"><span class="pill">Dedicated Nara day</span><div class="time">Morning</div>Kyoto → Nara.
-    <div class="stop"><span>🦌 Nara Park</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Nara+Park">Map</a></div>
-    <div class="stop"><span>🛕 Tōdai-ji / Great Buddha</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Todai-ji+Nara">Map</a></div>
-    <div class="stop"><span>⛩️ Kasuga Taisha</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kasuga+Taisha+Nara">Map</a></div>
-    <div class="time">Afternoon</div><div class="stop"><span>🏘️ Naramachi old town</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Naramachi+Nara">Map</a></div>
-    <div class="routebox">Keep Nara as a full experience instead of squeezing it behind Kyoto sightseeing. Most core sights can be linked on foot with short local transport if tired.</div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">13:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🎮 Den Den Town / Nipponbashi</div>
+        <div class="stop-desc">Osaka&#x27;s compact anime, figures, gaming and electronics district.</div>
+        <div class="key"><strong>Key point:</strong> Limit to about 60–90 min. Browse only a few stores so shopping does not consume the day.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Den+Den+Town+Nipponbashi+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Tuesday · 3 Nov · Arashiyama + Kinkaku-ji</summary><div class="body"><span class="pill">West / northwest Kyoto</span><div class="time">06:30–07:00</div>
-    <div class="stop"><span>🎋 Arashiyama Bamboo Grove</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Forest+Kyoto">Map</a></div>
-    <div class="stop"><span>🛕 Tenryu-ji</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tenryu-ji+Kyoto">Map</a></div>
-    <div class="stop"><span>🌉 Togetsukyo Bridge</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Togetsukyo+Bridge+Kyoto">Map</a></div>
-    <div class="time">Afternoon</div><div class="stop"><span>✨ Kinkaku-ji / Golden Pavilion</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kinkaku-ji+Kyoto">Map</a></div>
-    <div class="routebox">Arashiyama sights stay together; then make one transit jump to Kinkaku-ji. <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Arashiyama+Bamboo+Forest+Kyoto&destination=Kinkaku-ji+Kyoto&travelmode=transit">Arashiyama → Kinkaku-ji</a></div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">15:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🏮 Shinsekai + Tsutenkaku area</div>
+        <div class="stop-desc">Retro Osaka streets built around the Tsutenkaku tower.</div>
+        <div class="key"><strong>Key point:</strong> Enjoy the old-school streets and signs; tower entry is optional.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Shinsekai+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Wednesday · 4 Nov · Fushimi Inari + central Kyoto</summary><div class="body"><span class="pill">South → central Kyoto</span><div class="time">Early morning</div>
-    <div class="stop"><span>⛩️ Fushimi Inari Taisha</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha+Kyoto">Map</a></div>
-    <div class="stop"><span>🍁 Tofuku-ji</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tofuku-ji+Kyoto">Map</a></div>
-    <div class="time">Lunch</div><div class="stop"><span>🍱 Nishiki Market</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto">Map</a></div>
-    <div class="time">Afternoon</div><div class="stop"><span>🏯 Nijo Castle</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Nijo+Castle+Kyoto">Map</a></div>
-    <div class="stop"><span>📚 Kyoto International Manga Museum — optional if energy/time remains</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kyoto+International+Manga+Museum">Map</a></div>
-    <div class="routebox">Fushimi Inari and Tofuku-ji are grouped in the south; after that move once into central Kyoto for Nishiki/Nijo/Manga Museum.</div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">17:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🌇 Abeno Harukas / Harukas 300</div>
+        <div class="stop-desc">Skyscraper observation experience over Osaka.</div>
+        <div class="key"><strong>Key point:</strong> Best used for sunset/night views because it naturally ends this south-Osaka route.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Abeno+Harukas+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Osaka+Castle&destination=Kuromon+Ichiba+Market+Osaka&travelmode=transit" target="_blank" rel="noopener">🧭 Osaka Castle → Kuromon · Transit</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Kuromon+Ichiba+Market+Osaka&destination=Shinsekai+Osaka&travelmode=walking&waypoints=Den+Den+Town+Nipponbashi+Osaka" target="_blank" rel="noopener">🧭 Kuromon → Shinsekai · Walk through Nipponbashi</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>Souvenir note: if you spot a mini Fushimi-Inari/torii souvenir in Osaka, buy it only if you like it. You will have a better thematic chance at Fushimi Inari itself on 4 Nov.</li></ul></div>
+      </div>
+    </details>
 
-  <details class="card day"><summary>Thursday · 5 Nov · Kyoto → Tokyo + Tokyo Tower area</summary><div class="body"><span class="pill">Easy first Tokyo afternoon</span><div class="time">Morning</div>Shinkansen to Tokyo. Leave luggage/check in at Sotetsu Fresa Inn Tokyo Tamachi.
-    <div class="stop"><span>🏨 Sotetsu Fresa Inn Tokyo Tamachi</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Tokyo+Tamachi">Map</a></div>
-    <div class="stop"><span>🛕 Zojo-ji</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Zojo-ji+Tokyo">Map</a></div>
-    <div class="stop"><span>🗼 Tokyo Tower</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tokyo+Tower">Map</a></div>
-    <div class="stop"><span>🏙️ Azabudai Hills</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Azabudai+Hills+Tokyo">Map</a></div>
-    <div class="stop"><span>🌃 Roppongi evening / dinner</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Roppongi+Tokyo">Map</a></div>
-    <div class="routebox">Compact south-central Tokyo cluster: Zojo-ji → Tokyo Tower → Azabudai Hills → Roppongi.</div>
-  </div></details>
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Fri · 30 Oct · Osaka</div>
+          <div class="day-title">Universal Studios Japan</div>
+        </div>
+        <span class="pace">Full theme-park day</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Hotel → USJ → hotel</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">Morning</div>
+      <div class="stop-content">
+        <div class="stop-title">🎢 Universal Studios Japan</div>
+        <div class="stop-desc">Your full-day theme-park day.</div>
+        <div class="key"><strong>Key point:</strong> Arrive before official opening if practical and use the USJ app for live waits/area rules.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Friday · 6 Nov · Meiji → Harajuku → Shibuya</summary><div class="body"><span class="pill">One continuous west-Tokyo corridor</span>
-    <div class="stop"><span>⛩️ Meiji Jingu</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Meiji+Jingu+Tokyo">Map</a></div>
-    <div class="stop"><span>🎌 Harajuku</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Harajuku+Tokyo">Map</a></div>
-    <div class="stop"><span>🌳 Omotesando</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo">Map</a></div>
-    <div class="stop"><span>🚦 Shibuya Crossing + Hachiko</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Crossing+Tokyo">Map</a></div>
-    <div class="time">Sunset</div><div class="stop"><span>🌇 Shibuya Sky</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky">Map</a></div>
-    <div class="routebox"><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Meiji+Jingu+Tokyo&destination=Shibuya+Sky&waypoints=Harajuku+Tokyo%7COmotesando+Tokyo&travelmode=walking">Open Meiji → Harajuku → Omotesando → Shibuya walking route</a></div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">Priority</div>
+      <div class="stop-content">
+        <div class="stop-title">🍄 SUPER NINTENDO WORLD</div>
+        <div class="stop-desc">Your #1 USJ area; timed entry planned in your ticket package.</div>
+        <div class="key"><strong>Key point:</strong> Prioritize Mario Kart and the Nintendo atmosphere; keep your timed entry QR ready.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Super+Nintendo+World+Universal+Studios+Japan" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Saturday · 7 Nov · Asakusa → Ueno → Akihabara</summary><div class="body"><span class="pill">Traditional Tokyo → modern Tokyo</span><div class="time">Morning</div>
-    <div class="stop"><span>🏮 Kaminarimon + Nakamise</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Kaminarimon+Tokyo">Map</a></div>
-    <div class="stop"><span>🛕 Senso-ji + Asakusa Shrine</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Senso-ji+Tokyo">Map</a></div>
-    <div class="stop"><span>🌊 Sumida River / Asakusa riverside</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sumida+Park+Tokyo">Map</a></div>
-    <div class="time">Early afternoon</div><div class="stop"><span>🌳 Ueno Park</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Ueno+Park+Tokyo">Map</a></div>
-    <div class="stop"><span>🍢 Ameyoko</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Ameyoko+Tokyo">Map</a></div>
-    <div class="time">Late afternoon / evening · 2–3h maximum</div><div class="stop"><span>🎮 Akihabara — anime/electronics browsing</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Akihabara+Tokyo">Map</a></div>
-    <div class="mini-note">Suggested browse: Yodobashi Akiba → Animate → AmiAmi → Mandarake. Stop when you have seen enough; no need to visit every store.</div><div class="time">Optional night</div>JDM / Daikoku experience only if you still want it and have enough energy.
-    <div class="routebox">Asakusa → short transit to Ueno → continue south to Akihabara. This avoids crossing Tokyo repeatedly.</div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">Priority</div>
+      <div class="stop-content">
+        <div class="stop-title">🏎️ Mario Kart: Koopa&#x27;s Challenge</div>
+        <div class="stop-desc">Indoor/covered major Nintendo ride.</div>
+        <div class="key"><strong>Key point:</strong> A strong priority even if the weather is wet.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Mario+Kart+Koopa%27s+Challenge+Universal+Studios+Japan" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Sunday · 8 Nov · teamLab Planets + central Tokyo</summary><div class="body"><span class="pill">Target teamLab slot: 09:00–09:30</span><div class="time">Morning</div>
-    <div class="stop"><span>🌌 teamLab Planets TOKYO · Toyosu</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=teamLab+Planets+TOKYO">Map</a></div>
-    <div class="time">Late morning / lunch</div><div class="stop"><span>🍣 Tsukiji Outer Market</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tsukiji+Outer+Market+Tokyo">Map</a></div>
-    <div class="time">Afternoon</div><div class="stop"><span>🏯 Imperial Palace / East Gardens area</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Imperial+Palace+Tokyo">Map</a></div>
-    <div class="stop"><span>🚉 Tokyo Station + Marunouchi</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Tokyo+Station">Map</a></div>
-    <div class="time">Evening</div><div class="stop"><span>✨ Ginza walk / dinner</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Ginza+Tokyo">Map</a></div>
-    <div class="routebox">Efficient east-to-central flow: Toyosu → Tsukiji → Imperial Palace/Tokyo Station → Ginza. Nakano is no longer a core stop.</div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">Priority</div>
+      <div class="stop-content">
+        <div class="stop-title">🦍 Mine Cart Madness</div>
+        <div class="stop-desc">Outdoor Donkey Kong coaster.</div>
+        <div class="key"><strong>Key point:</strong> Do it as early as your access/Express timing allows because strong rain/wind can affect outdoor rides.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Mine+Cart+Madness+Universal+Studios+Japan" target="_blank" rel="noopener">Map ↗</a>
+    </div>
 
-  <details class="card day"><summary>Monday · 9 Nov · Mt Fuji + Hakone — BOOKED</summary><div class="body"><span class="pill">Booked full-day tour</span>
-    <div class="stop"><span>🗻 Mt Fuji / Fuji area</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Mount+Fuji+Japan">Map</a></div>
-    <div class="stop"><span>♨️ Owakudani</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Owakudani+Hakone">Map</a></div>
-    <div class="stop"><span>🚢 Lake Ashi</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Lake+Ashi+Hakone">Map</a></div>
-    <div class="stop"><span>⛩️ Hakone Shrine</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Hakone+Shrine">Map</a></div>
-    <div class="stop"><span>💧 Oshino Hakkai / Fuji-area stop depending booked itinerary</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Oshino+Hakkai">Map</a></div>
-    <div class="routebox">Dedicated full-day excursion. Do not add Tokyo sightseeing to this day.</div>
-  </div></details>
+    <div class="stop-card">
+      <div class="stop-time">Night</div>
+      <div class="stop-content">
+        <div class="stop-title">👻 Halloween Horror Nights</div>
+        <div class="stop-desc">Seasonal Halloween entertainment and street atmosphere.</div>
+        <div class="key"><strong>Key point:</strong> Outdoor performances are more weather-sensitive; indoor attractions remain the safer rainy-day options.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Universal+Studios+Japan+Halloween+Horror+Nights" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        
+        <div class="notes-box"><strong>Notes</strong><ul><li>Rain plan: normal rain is not a reason to cancel. Take a poncho, waterproof shoe protection, small towel and a zip bag for electronics.</li><li>If severe wind/lightning is forecast, re-check ride operations and your Klook ticket-change conditions before changing anything.</li></ul></div>
+      </div>
+    </details>
 
-  <details class="card day"><summary>Tuesday · 10 Nov · Easy morning + departure</summary><div class="body"><span class="pill">Departure day</span><div class="time">Morning</div>Breakfast, pack and keep the morning light around Tamachi / hotel area. No dedicated shopping mission.
-    <div class="stop"><span>🏨 Sotetsu Fresa Inn Tokyo Tamachi</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Tokyo+Tamachi">Map</a></div>
-    <div class="time">Airport</div>Leave enough buffer for Narita and your international flight.<div class="stop"><span>✈️ Narita International Airport (NRT)</span><a class="mapbtn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Narita+International+Airport">Map</a></div>
-    <div class="time">16:55</div>Narita departure → Frankfurt.<div class="routebox"><a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&origin=Sotetsu+Fresa+Inn+Tokyo+Tamachi&destination=Narita+International+Airport&travelmode=transit">Hotel → Narita transit route</a></div>
-  </div></details>
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Sat · 31 Oct · Osaka</div>
+          <div class="day-title">Shrines + south-to-central Osaka</div>
+        </div>
+        <span class="pace">Cultural + light shopping</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Sumiyoshi → Shitennoji/Tennoji → Namba → Shinsaibashi</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">08:30</div>
+      <div class="stop-content">
+        <div class="stop-title">⛩️ Sumiyoshi Taisha</div>
+        <div class="stop-desc">One of Osaka&#x27;s most important Shinto shrines, known for its distinctive bridge and architecture.</div>
+        <div class="key"><strong>Key point:</strong> Go early for a quieter atmosphere and see Sorihashi Bridge.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Sumiyoshi+Taisha+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">10:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🛕 Shitennoji Temple</div>
+        <div class="stop-desc">Historic Buddhist temple complex in Tennoji.</div>
+        <div class="key"><strong>Key point:</strong> A good cultural counterpoint to modern Osaka before heading north.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Shitennoji+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">12:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🌳 Tennoji Park area</div>
+        <div class="stop-desc">Green urban area connecting the temple/Tennoji zone.</div>
+        <div class="key"><strong>Key point:</strong> Use as a relaxed lunch/rest stop rather than another ticketed attraction.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Tennoji+Park+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">14:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🦁 Namba Yasaka Shrine</div>
+        <div class="stop-desc">Small shrine famous for its huge lion-head stage.</div>
+        <div class="key"><strong>Key point:</strong> High visual payoff for a short stop and it sits naturally on the northbound route.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Namba+Yasaka+Shrine+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">15:00</div>
+      <div class="stop-content">
+        <div class="stop-title">⌚ Shinsaibashi watch browse — optional</div>
+        <div class="stop-desc">Concentrate any Osaka luxury-watch browsing into one short block.</div>
+        <div class="key"><strong>Key point:</strong> If interested, check GINZA RASIN and WATCHNIAN; skip if you are not seriously considering a purchase.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=GINZA+RASIN+Shinsaibashi+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Evening</div>
+      <div class="stop-content">
+        <div class="stop-title">🌆 Shinsaibashi → Dotonbori</div>
+        <div class="stop-desc">Walk the central Osaka streets and finish with dinner.</div>
+        <div class="key"><strong>Key point:</strong> Amerikamura is optional if you want a quick youth-culture street detour.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Shinsaibashi+Osaka" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Sumiyoshi+Taisha+Osaka&destination=Shitennoji+Osaka&travelmode=transit" target="_blank" rel="noopener">🧭 Sumiyoshi → Shitennoji · Transit</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Namba+Yasaka+Shrine+Osaka&destination=Shinsaibashi+Osaka&travelmode=walking" target="_blank" rel="noopener">🧭 Namba Yasaka → Shinsaibashi · Walk/short transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>Keep shopping secondary. The sightseeing value today is Sumiyoshi + Shitennoji + Namba Yasaka.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Sun · 1 Nov · Kyoto</div>
+          <div class="day-title">Kyoto arrival + manga portrait + Higashiyama</div>
+        </div>
+        <span class="pace">Full, but one-way eastward flow</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Hotel/luggage → Manga Museum → Rokujuan → Kiyomizu/Ninenzaka → Gion/Pontocho</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">Early</div>
+      <div class="stop-content">
+        <div class="stop-title">🚆 Osaka → Kyoto + luggage drop</div>
+        <div class="stop-desc">Travel to Wander Kyoto Nanajo and leave luggage.</div>
+        <div class="key"><strong>Key point:</strong> Leave Osaka early enough to reach the Manga Museum before its 10:00 opening.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Wander+Kyoto+Nanajo+Hotel" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">10:00</div>
+      <div class="stop-content">
+        <div class="stop-title">📚 Kyoto International Manga Museum</div>
+        <div class="stop-desc">A museum/library devoted to manga history and culture in a converted school building.</div>
+        <div class="key"><strong>Key point:</strong> Go straight to the Portrait Corner on entry. Manga/anime-style portraits are first-come-first-served; for two people on one card allow roughly 40 min.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kyoto+International+Manga+Museum" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">After portrait</div>
+      <div class="stop-content">
+        <div class="stop-title">🍵 Rokujuan</div>
+        <div class="stop-desc">Cafe/restaurant inside a preserved 100+ year-old cultural-property residence.</div>
+        <div class="key"><strong>Key point:</strong> Come for the historic house, garden atmosphere and tea/warabi-mochi experience. Confirm ingredients if you want a strictly vegetarian dessert.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Rokujuan+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">13:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🛕 Kiyomizu-dera</div>
+        <div class="stop-desc">Major hillside temple with a wooden terrace and broad Kyoto views.</div>
+        <div class="key"><strong>Key point:</strong> This begins the best walking section of Higashiyama; wear comfortable shoes.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kiyomizu-dera+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">15:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🏘️ Sannenzaka + Ninenzaka</div>
+        <div class="stop-desc">Historic sloped lanes lined with traditional buildings, small shops and cafés.</div>
+        <div class="key"><strong>Key point:</strong> Walk downhill rather than taking transport between the sights.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Ninenzaka+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">15:30</div>
+      <div class="stop-content">
+        <div class="stop-title">☕ Starbucks Kyoto Ninenzaka Yasaka Chaya</div>
+        <div class="stop-desc">Starbucks set inside a traditional Kyoto machiya-style building.</div>
+        <div class="key"><strong>Key point:</strong> Use it as a short experience/coffee break, not a destination requiring extra travel.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Starbucks+Coffee+Kyoto+Ninenzaka+Yasaka+Chaya" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">16:15</div>
+      <div class="stop-content">
+        <div class="stop-title">📷 Yasaka Pagoda / Hokan-ji streets</div>
+        <div class="stop-desc">Classic Kyoto pagoda view framed by Higashiyama streets.</div>
+        <div class="key"><strong>Key point:</strong> Best enjoyed while continuing downhill toward Yasaka/Gion.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Yasaka+Pagoda+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">17:00</div>
+      <div class="stop-content">
+        <div class="stop-title">⛩️ Yasaka Shrine → Gion</div>
+        <div class="stop-desc">Important shrine and Kyoto&#x27;s best-known traditional entertainment district.</div>
+        <div class="key"><strong>Key point:</strong> Walk through at dusk, then continue naturally toward Pontocho.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Yasaka+Shrine+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Dinner</div>
+      <div class="stop-content">
+        <div class="stop-title">🍜 Pontocho / Yasubee — optional veg noodles</div>
+        <div class="stop-desc">Atmospheric narrow dining lane beside the Kamo River.</div>
+        <div class="key"><strong>Key point:</strong> Yasubee can be a spontaneous noodle option; because it is not a vegetarian-only restaurant, confirm broth/sauce ingredients if needed.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Yasubee+Pontocho+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Optional</div>
+      <div class="stop-content">
+        <div class="stop-title">👜 BRAND OFF Kyoto Shijo Kawaramachi</div>
+        <div class="stop-desc">Second-hand luxury-brand store near Kawaramachi/Gion-Shijo.</div>
+        <div class="key"><strong>Key point:</strong> Only stop if you still have energy; it is open later than most sightseeing attractions and sits near your evening route.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=BRAND+OFF+Shijo+Kawaramachi+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Kyoto+International+Manga+Museum&destination=Rokujuan+Kyoto&travelmode=walking" target="_blank" rel="noopener">🧭 Manga Museum → Rokujuan · Walk</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Rokujuan+Kyoto&destination=Kiyomizu-dera+Kyoto&travelmode=transit" target="_blank" rel="noopener">🧭 Rokujuan → Kiyomizu · Transit</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Kiyomizu-dera+Kyoto&destination=Pontocho+Kyoto&travelmode=walking&waypoints=Ninenzaka+Kyoto%7CYasaka+Shrine+Kyoto" target="_blank" rel="noopener">🧭 Kiyomizu → Gion/Pontocho · Walk downhill</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>Manga portrait is the fixed priority: reservation is first-come at the museum, and the museum is closed on Wed 4 Nov.</li><li>Sanjusangen-do is optional only if you reach Kyoto very early; do not force it if it risks the portrait slot.</li><li>TADKA vegetarian/South-Indian food: keep as a spontaneous Kyoto fallback, not a fixed stop.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Mon · 2 Nov · Nara</div>
+          <div class="day-title">Nara full day</div>
+        </div>
+        <span class="pace">Dedicated day trip</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Kyoto → Nara Park → Tōdai-ji → Kasuga Taisha → Naramachi → Kyoto</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">Morning</div>
+      <div class="stop-content">
+        <div class="stop-title">🦌 Nara Park</div>
+        <div class="stop-desc">Large historic park famous for free-roaming deer.</div>
+        <div class="key"><strong>Key point:</strong> Buy official deer crackers only if you want to feed them and secure loose paper/bags.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Nara+Park" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Morning</div>
+      <div class="stop-content">
+        <div class="stop-title">🛕 Tōdai-ji</div>
+        <div class="stop-desc">Monumental Buddhist temple housing the Great Buddha.</div>
+        <div class="key"><strong>Key point:</strong> This is the architectural highlight of the Nara day; do not skip it just for the deer.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Todai-ji+Nara" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Midday</div>
+      <div class="stop-content">
+        <div class="stop-title">⛩️ Kasuga Taisha</div>
+        <div class="stop-desc">Shinto shrine known for stone and bronze lanterns in a wooded setting.</div>
+        <div class="key"><strong>Key point:</strong> Continue through the park rather than returning to the station between sights.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kasuga+Taisha+Nara" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Afternoon</div>
+      <div class="stop-content">
+        <div class="stop-title">🏘️ Naramachi</div>
+        <div class="stop-desc">Preserved traditional merchant district south of central Nara.</div>
+        <div class="key"><strong>Key point:</strong> Slow down here for cafés, streets and a different atmosphere from the park.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Naramachi+Nara" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        
+        <div class="notes-box"><strong>Notes</strong><ul><li>Keep this as a true Nara day; adding major Kyoto attractions would create unnecessary rushing.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Tue · 3 Nov · Kyoto</div>
+          <div class="day-title">Arashiyama + Golden Pavilion</div>
+        </div>
+        <span class="pace">Early start, lighter afternoon</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Arashiyama cluster → one transit jump → Kinkaku-ji</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">06:30–07:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🎋 Arashiyama Bamboo Grove</div>
+        <div class="stop-desc">Iconic bamboo path in western Kyoto.</div>
+        <div class="key"><strong>Key point:</strong> Go very early for a calmer walk and cleaner photos.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Arashiyama+Bamboo+Forest+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">08:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🛕 Tenryu-ji</div>
+        <div class="stop-desc">Major Zen temple next to the bamboo area, known for its garden.</div>
+        <div class="key"><strong>Key point:</strong> Visit when the temple opens rather than criss-crossing Arashiyama later.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Tenryu-ji+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">09:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🌉 Togetsukyo Bridge</div>
+        <div class="stop-desc">Arashiyama&#x27;s famous bridge over the Katsura River.</div>
+        <div class="key"><strong>Key point:</strong> Short scenic stop before leaving western Kyoto.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Togetsukyo+Bridge+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">12:00</div>
+      <div class="stop-content">
+        <div class="stop-title">✨ Kinkaku-ji / Golden Pavilion</div>
+        <div class="stop-desc">Kyoto&#x27;s famous gold-leaf-covered Zen temple reflected in a pond.</div>
+        <div class="key"><strong>Key point:</strong> Follow the one-way temple route and avoid adding distant sights afterward.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kinkaku-ji+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Togetsukyo+Bridge+Kyoto&destination=Kinkaku-ji+Kyoto&travelmode=transit" target="_blank" rel="noopener">🧭 Arashiyama → Kinkaku-ji · Transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>Keep the late afternoon flexible for rest, laundry, cafés or anything you missed on 1 Nov.</li><li>Rokujuan is already placed on 1 Nov, avoiding the Arashiyama → central → Kinkaku backtrack.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Wed · 4 Nov · Kyoto</div>
+          <div class="day-title">Fushimi Inari + Nanzenji tofu + Nishiki</div>
+        </div>
+        <span class="pace">South → east → central</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Fushimi/Tofukuji → Nanzenji/Yachiyo → Nishiki/Kawaramachi</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">06:30</div>
+      <div class="stop-content">
+        <div class="stop-title">⛩️ Fushimi Inari Taisha</div>
+        <div class="stop-desc">Thousands of vermilion torii gates climbing Mt Inari.</div>
+        <div class="key"><strong>Key point:</strong> Start early before the crowds. You do not need to hike all the way to the summit unless you want to.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Souvenir</div>
+      <div class="stop-content">
+        <div class="stop-title">⛩️ Mini torii / Fushimi Inari souvenir</div>
+        <div class="stop-desc">This is the most meaningful place to buy the mini Fushimi-Inari/torii souvenir you wanted.</div>
+        <div class="key"><strong>Key point:</strong> Buy here if you find the size/style you like rather than hunting around Osaka.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Fushimi+Inari+Taisha+souvenir+shop" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">08:45</div>
+      <div class="stop-content">
+        <div class="stop-title">🍁 Tofuku-ji — optional</div>
+        <div class="stop-desc">Large Zen temple near Fushimi, famous for its valley and autumn foliage.</div>
+        <div class="key"><strong>Key point:</strong> Do it only if energy is good; it is geographically efficient before heading north.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Tofuku-ji+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">10:45</div>
+      <div class="stop-content">
+        <div class="stop-title">🛕 Nanzenji</div>
+        <div class="stop-desc">Major Zen temple complex in the Higashiyama area.</div>
+        <div class="key"><strong>Key point:</strong> Pair it with Yachiyo because the restaurant is right beside this district.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Nanzenji+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">11:30–12:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🥢 Yachiyo garden restaurant</div>
+        <div class="stop-desc">Historic Kyoto restaurant by Nanzenji, known for yudofu and its landscaped garden.</div>
+        <div class="key"><strong>Key point:</strong> Reserve the 100% plant-based Shojin Yudofu set and request a garden-facing seat if available.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Nanzenji+Yachiyo+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">14:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🍘 Nishiki Market</div>
+        <div class="stop-desc">Compact covered market often called Kyoto&#x27;s kitchen.</div>
+        <div class="key"><strong>Key point:</strong> Try rice crackers and clearly vegetarian snacks. Avoid assuming dashi/sauces are vegetarian.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">14:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🌶️ Ochanoko Saisai Nishiki</div>
+        <div class="stop-desc">Kyoto seasoning shop inside the Nishiki area.</div>
+        <div class="key"><strong>Key point:</strong> Buy the Kyo-Rayu furikake / rice seasoning and browse shichimi blends.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Ochanoko+Saisai+Nishiki+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">15:15</div>
+      <div class="stop-content">
+        <div class="stop-title">👜 BRAND OFF Shijo Kawaramachi — if not done</div>
+        <div class="stop-desc">Second-hand luxury bags and accessories.</div>
+        <div class="key"><strong>Key point:</strong> It is only a short central-Kyoto add-on; skip if you already visited on 1 Nov.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=BRAND+OFF+Shijo+Kawaramachi+Kyoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Fushimi+Inari+Taisha+Kyoto&destination=Nanzenji+Kyoto&travelmode=transit" target="_blank" rel="noopener">🧭 Fushimi Inari → Nanzenji · Transit</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Nanzenji+Kyoto&destination=Nishiki+Market+Kyoto&travelmode=transit" target="_blank" rel="noopener">🧭 Nanzenji/Yachiyo → Nishiki · Transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>Kyoto International Manga Museum is closed today (Wednesday), which is why it is fixed on 1 Nov.</li><li>Your saved Kyoto map list: Kyoto · Sindhu is linked in the Food &amp; Shopping tab.</li><li>TADKA stays a spontaneous Indian vegetarian backup if you want familiar food.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Thu · 5 Nov · Tokyo</div>
+          <div class="day-title">Kyoto → Tokyo + Tokyo Tower district</div>
+        </div>
+        <span class="pace">Easy arrival afternoon</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Shinkansen → Tamachi hotel → Zojo-ji → Tokyo Tower → Azabudai → Roppongi</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">Morning</div>
+      <div class="stop-content">
+        <div class="stop-title">🚄 Kyoto → Tokyo Shinkansen</div>
+        <div class="stop-desc">Intercity transfer to Tokyo.</div>
+        <div class="key"><strong>Key point:</strong> Use luggage-friendly timing; do not book an early Tokyo attraction that creates pressure.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kyoto+Station" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Arrival</div>
+      <div class="stop-content">
+        <div class="stop-title">🏨 Sotetsu Fresa Inn Tokyo Tamachi</div>
+        <div class="stop-desc">Your Tokyo base.</div>
+        <div class="key"><strong>Key point:</strong> Drop luggage before sightseeing.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Tokyo+Tamachi" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">14:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🛕 Zojo-ji</div>
+        <div class="stop-desc">Historic Buddhist temple immediately beside Tokyo Tower.</div>
+        <div class="key"><strong>Key point:</strong> The old temple foreground with Tokyo Tower behind it is one of the best contrasts in the city.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Zojo-ji+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">15:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🗼 Tokyo Tower</div>
+        <div class="stop-desc">Iconic red-and-white communications tower.</div>
+        <div class="key"><strong>Key point:</strong> Because you also have Shibuya Sky, the exterior/standard observation experience is enough unless you specifically want the top deck.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Tokyo+Tower" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">16:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🏙️ Azabudai Hills</div>
+        <div class="stop-desc">Modern mixed-use district close to Tokyo Tower.</div>
+        <div class="key"><strong>Key point:</strong> Good architecture/city walk; do not confuse it with teamLab Planets in Toyosu.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Azabudai+Hills+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Evening</div>
+      <div class="stop-content">
+        <div class="stop-title">🌃 Roppongi</div>
+        <div class="stop-desc">Nightlife, restaurants and modern Tokyo streets.</div>
+        <div class="key"><strong>Key point:</strong> Dinner and return to Tamachi without adding another cross-city stop.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Roppongi+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        
+        <div class="notes-box"><strong>Notes</strong><ul><li>Keep this day light after the Shinkansen. The stops are all in one south-central Tokyo cluster.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Fri · 6 Nov · Tokyo</div>
+          <div class="day-title">Meiji + Harajuku + Nakano + Shibuya</div>
+        </div>
+        <span class="pace">Mixed sightseeing + selected shopping</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Meiji/Harajuku → Nakano → Shinjuku optional → Shibuya</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">08:30</div>
+      <div class="stop-content">
+        <div class="stop-title">⛩️ Meiji Jingu</div>
+        <div class="stop-desc">Wooded Shinto shrine beside Harajuku.</div>
+        <div class="key"><strong>Key point:</strong> Start here while it is quiet; the forest approach feels very different from the city outside.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Meiji+Jingu+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">10:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🎌 Takeshita Street</div>
+        <div class="stop-desc">Harajuku&#x27;s compact youth-fashion and snack street.</div>
+        <div class="key"><strong>Key point:</strong> Walk it once for the atmosphere; no need to shop every store.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Takeshita+Street+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">10:45</div>
+      <div class="stop-content">
+        <div class="stop-title">📱 cas:pace Harajuku</div>
+        <div class="stop-desc">Phone-case/accessory shop you wanted to check.</div>
+        <div class="key"><strong>Key point:</strong> This fits naturally in Harajuku—do it here rather than creating a separate trip.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=caspace+Harajuku+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">11:15</div>
+      <div class="stop-content">
+        <div class="stop-title">🌳 Omotesando</div>
+        <div class="stop-desc">Tree-lined avenue known for architecture, flagship stores and cafés.</div>
+        <div class="key"><strong>Key point:</strong> Use it as a short city walk before taking the train west.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Omotesando+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">12:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🎌 Nakano Broadway</div>
+        <div class="stop-desc">Multi-floor complex famous for Mandarake, vintage anime/collectibles and watch shops.</div>
+        <div class="key"><strong>Key point:</strong> Do this before Akihabara as requested. Focus on the parts that interest you rather than trying to cover every floor.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Nakano+Broadway+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Optional</div>
+      <div class="stop-content">
+        <div class="stop-title">🥟 Shinjuku Hikeshi Gyoza</div>
+        <div class="stop-desc">24-hour Shinjuku gyoza restaurant with vegetarian/vegan options.</div>
+        <div class="key"><strong>Key point:</strong> If hungry en route, ask for Vegetarian Vegetable Gyoza or the vegan maple-mustard version rather than the meat honey-mustard gyoza.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Hikeshi+Gyoza" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">16:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🚦 Shibuya Crossing + Hachiko</div>
+        <div class="stop-desc">Tokyo&#x27;s famous scramble crossing and meeting-point statue.</div>
+        <div class="key"><strong>Key point:</strong> Arrive before your Shibuya Sky slot so you are not rushing.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Crossing+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Sunset</div>
+      <div class="stop-content">
+        <div class="stop-title">🌇 Shibuya Sky</div>
+        <div class="stop-desc">Open-air rooftop observation experience over central Tokyo.</div>
+        <div class="key"><strong>Key point:</strong> Book around sunset; arrive early enough for entry/security queues.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Shibuya+Sky" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Dinner</div>
+      <div class="stop-content">
+        <div class="stop-title">🍣 Vegan Sushi Tokyo</div>
+        <div class="stop-desc">Dedicated vegan sushi restaurant in Shoto, around a 10-minute walk from Shibuya.</div>
+        <div class="key"><strong>Key point:</strong> Reserve dinner. This is one of the best places on your trip to enjoy Japanese-style food without hidden meat/fish ingredients.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Vegan+Sushi+Tokyo+Shoto" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Omotesando+Tokyo&destination=Nakano+Broadway+Tokyo&travelmode=transit" target="_blank" rel="noopener">🧭 Harajuku/Omotesando → Nakano · Transit</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Nakano+Broadway+Tokyo&destination=Shibuya+Sky&travelmode=transit" target="_blank" rel="noopener">🧭 Nakano → Shibuya · Transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>Koenji vintage/thrift: keep OPTIONAL. It is worthwhile, but forcing it into this day risks the Shibuya sunset slot. Use it only if you finish Nakano early or decide to skip part of Harajuku/Omotesando.</li><li>The Fire Vegan: keep your saved Instagram post as an optional food pin; exact current location/name should be reconfirmed before routing.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Sat · 7 Nov · Tokyo</div>
+          <div class="day-title">Kappabashi → Asakusa → Akihabara</div>
+        </div>
+        <span class="pace">Best souvenir + traditional Tokyo day</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Kappabashi shops → walk to Asakusa → transit to Akihabara</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">10:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🍵 Kappabashi Dougu Street</div>
+        <div class="stop-desc">Tokyo&#x27;s specialist kitchenware street between Ueno and Asakusa.</div>
+        <div class="key"><strong>Key point:</strong> Saturday is the right day because more shops are open than Sunday. Focus on Japanese-made ceramics and useful souvenirs.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kappabashi+Dougu+Street+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Shop</div>
+      <div class="stop-content">
+        <div class="stop-title">🥢 Mikura chopsticks</div>
+        <div class="stop-desc">Specialist chopstick store with in-store name engraving.</div>
+        <div class="key"><strong>Key point:</strong> Buy two pairs and ask for one name in English and one in Japanese if the chosen chopsticks support the characters you want.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kappabashi+Mikura+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Shop</div>
+      <div class="stop-content">
+        <div class="stop-title">🏺 Ceramics + matcha bowl</div>
+        <div class="stop-desc">Kappabashi has many restaurant-supply and pottery stores.</div>
+        <div class="key"><strong>Key point:</strong> Look for handmade/made-in-Japan pieces; compare weight and packing practicality before buying.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kappabashi+ceramics+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Shop</div>
+      <div class="stop-content">
+        <div class="stop-title">🍣 Miniature sushi / food replicas</div>
+        <div class="stop-desc">Kappabashi is famous for realistic restaurant display-food samples.</div>
+        <div class="key"><strong>Key point:</strong> Choose a small magnet/keyring/miniature rather than fragile full-size pieces.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Kappabashi+food+sample+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">12:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🏮 Kaminarimon → Nakamise → Senso-ji</div>
+        <div class="stop-desc">Traditional Asakusa route through the Thunder Gate and shopping street to Tokyo&#x27;s famous temple.</div>
+        <div class="key"><strong>Key point:</strong> Walk this entire section; the sights are naturally aligned.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Senso-ji+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Shop</div>
+      <div class="stop-content">
+        <div class="stop-title">🗻 Nihon Miyabi Asakusa · 1-11-1</div>
+        <div class="stop-desc">Souvenir shop noted for the Mt Fuji incense holder you saved.</div>
+        <div class="key"><strong>Key point:</strong> This is your dedicated Mt Fuji incense-holder stop.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Nihon+Miyabi+Asakusa+1-11-1" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Dessert</div>
+      <div class="stop-content">
+        <div class="stop-title">🍵 MATCHA CAFE &amp; STUDIO ASAKUSA</div>
+        <div class="stop-desc">Matcha-focused café in Asakusa.</div>
+        <div class="key"><strong>Key point:</strong> Use this for your matcha dessert/soufflé-style stop if the current menu has what you want.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=MATCHA+CAFE+%26+STUDIO+ASAKUSA" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Dessert</div>
+      <div class="stop-content">
+        <div class="stop-title">🍠 Imo Pippi</div>
+        <div class="stop-desc">Sweet-potato dessert shop in Asakusa.</div>
+        <div class="key"><strong>Key point:</strong> Good alternative if you want Japanese sweet potato instead of matcha.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Imo+Pippi+Asakusa" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Dessert</div>
+      <div class="stop-content">
+        <div class="stop-title">🥛 Hokkaido Milk Bar</div>
+        <div class="stop-desc">Hokkaido dairy/soft-serve café in Asakusa.</div>
+        <div class="key"><strong>Key point:</strong> Choose only one or two dessert stops total so Asakusa does not become a food queue marathon.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Hokkaido+Milk+Bar+Asakusa" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Optional</div>
+      <div class="stop-content">
+        <div class="stop-title">🥪 Age.3 Asakusa</div>
+        <div class="stop-desc">Fried-sandwich dessert shop with sweet flavours.</div>
+        <div class="key"><strong>Key point:</strong> Optional alternative to the other desserts—not an additional must-do.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Age.3+Asakusa" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">16:30</div>
+      <div class="stop-content">
+        <div class="stop-title">🎮 Akihabara</div>
+        <div class="stop-desc">Tokyo&#x27;s major anime, gaming and electronics district.</div>
+        <div class="key"><strong>Key point:</strong> Because you already visited Nakano, keep this to about 2–3 hours: Yodobashi/Animate/AmiAmi/Mandarake as desired.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Akihabara+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Dinner</div>
+      <div class="stop-content">
+        <div class="stop-title">🍜 T&#x27;s Tantan</div>
+        <div class="stop-desc">Fully vegan ramen concept with no meat, seafood, eggs or dairy.</div>
+        <div class="key"><strong>Key point:</strong> Use the Akihabara/Tokyo-station branch that best matches your route; this is a very safe vegetarian dinner.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=T%27s+Tantan+Akihabara" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Kappabashi+Dougu+Street+Tokyo&destination=Senso-ji+Tokyo&travelmode=walking" target="_blank" rel="noopener">🧭 Kappabashi → Asakusa · Walk</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Senso-ji+Tokyo&destination=Akihabara+Tokyo&travelmode=transit" target="_blank" rel="noopener">🧭 Asakusa → Akihabara · Transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>You had &#x27;Ginkoda/Ginkado&#x27; and &#x27;Asakusa Ashinya&#x27; in your saved dessert notes, but the exact dessert businesses are not sufficiently clear. Keep them as saved pins rather than routing the day around an uncertain name.</li><li>Kappabashi is not universally closed on Sunday, but many businesses have reduced/variable Sunday openings. Saturday remains the safer shopping day.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Sun · 8 Nov · Tokyo</div>
+          <div class="day-title">Oi flea market → teamLab Planets → Ginza</div>
+        </div>
+        <span class="pace">Experience day</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Oi Racecourse → Toyosu → Ginza</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">09:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🧥 Oi Racecourse / Tokyo City Flea Market</div>
+        <div class="stop-desc">Large weekend flea market for second-hand clothing, accessories, collectibles and household goods.</div>
+        <div class="key"><strong>Key point:</strong> Good for vintage jewellery, bags and clothes. Go early; leave before it consumes the whole day. CANCELLED if it rains.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Oi+Racecourse+Tokyo+City+Flea+Market" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">12:30–13:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🌌 teamLab Planets TOKYO</div>
+        <div class="stop-desc">Immersive digital-art museum in Toyosu where some installations involve walking through water.</div>
+        <div class="key"><strong>Key point:</strong> Book a timed slot after the flea market. Allow about 2 hours and wear clothes that are easy to manage around water/mirrored floors.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=teamLab+Planets+TOKYO" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">15:30</div>
+      <div class="stop-content">
+        <div class="stop-title">✨ Ginza</div>
+        <div class="stop-desc">Polished central-Tokyo district for architecture, department stores and an evening city walk.</div>
+        <div class="key"><strong>Key point:</strong> This is a natural westward move from Toyosu toward your Tamachi hotel.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Ginza+Tokyo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Snack</div>
+      <div class="stop-content">
+        <div class="stop-title">🍠 Ginza Tsuboyaki-imo</div>
+        <div class="stop-desc">Sweet-potato speciality stop in Ginza.</div>
+        <div class="key"><strong>Key point:</strong> Use it as a small dessert, not a separate meal.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Ginza+Tsuboyaki+Imo" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Optional</div>
+      <div class="stop-content">
+        <div class="stop-title">🥪 Age.3 Ginza</div>
+        <div class="stop-desc">Original Ginza branch of the fried-sandwich dessert brand.</div>
+        <div class="key"><strong>Key point:</strong> Choose this OR the sweet potato stop depending appetite.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Age.3+Ginza" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Optional</div>
+      <div class="stop-content">
+        <div class="stop-title">🚉 Tokyo Station / Marunouchi</div>
+        <div class="stop-desc">Historic station frontage and modern business district.</div>
+        <div class="key"><strong>Key point:</strong> Add only if energy remains after Ginza; it is not worth rushing teamLab for.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Tokyo+Station+Marunouchi" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Oi+Racecourse+Tokyo&destination=teamLab+Planets+TOKYO&travelmode=transit" target="_blank" rel="noopener">🧭 Oi → teamLab · Transit</a><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=teamLab+Planets+TOKYO&destination=Ginza+Tokyo&travelmode=transit" target="_blank" rel="noopener">🧭 teamLab → Ginza · Transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>The flea market is currently scheduled for both 7 and 8 Nov; 8 Nov is chosen because 7 Nov is better for Kappabashi/Asakusa/Akihabara.</li><li>If the flea market is cancelled for rain, move teamLab earlier and use the extra time for Tsukiji, Tokyo Station or Ginza.</li><li>Pokémon Café is not part of the fixed plan because your date is currently full; only use a cancellation slot if one appears without disrupting the route.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Mon · 9 Nov · Fuji / Hakone</div>
+          <div class="day-title">Mt Fuji + Hakone full-day tour — BOOKED</div>
+        </div>
+        <span class="pace">Booked day tour</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Tokyo meeting point → Hakone/Fuji loop → Tokyo</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">Full day</div>
+      <div class="stop-content">
+        <div class="stop-title">🗻 Mt Fuji / Fuji-area viewpoints</div>
+        <div class="stop-desc">Your booked Fuji/Hakone day tour.</div>
+        <div class="key"><strong>Key point:</strong> Fuji visibility is weather-dependent, so treat the day as a full Hakone + Fuji-area experience even if clouds appear.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Mount+Fuji+Japan" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Tour</div>
+      <div class="stop-content">
+        <div class="stop-title">⛩️ Hakone Shrine</div>
+        <div class="stop-desc">Lakeside Shinto shrine famous for its torii and forest setting.</div>
+        <div class="key"><strong>Key point:</strong> Follow the guide schedule; queues for the lakeside torii photo can be long.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Hakone+Shrine" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Tour</div>
+      <div class="stop-content">
+        <div class="stop-title">🚢 Lake Ashi / pirate ship</div>
+        <div class="stop-desc">Scenic lake section of the Hakone route.</div>
+        <div class="key"><strong>Key point:</strong> Your selected tour includes the cruise element; views depend on weather.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Lake+Ashi+Hakone" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Tour</div>
+      <div class="stop-content">
+        <div class="stop-title">🚠 Hakone Ropeway</div>
+        <div class="stop-desc">Aerial route across the volcanic Hakone landscape.</div>
+        <div class="key"><strong>Key point:</strong> One of the day&#x27;s signature transport experiences.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Hakone+Ropeway" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Tour</div>
+      <div class="stop-content">
+        <div class="stop-title">♨️ Owakudani</div>
+        <div class="stop-desc">Active volcanic valley known for sulphur vents and dramatic terrain.</div>
+        <div class="key"><strong>Key point:</strong> Outdoor access can change with weather/volcanic conditions; follow tour instructions.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Owakudani+Hakone" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">Tour</div>
+      <div class="stop-content">
+        <div class="stop-title">💧 Oshino Hakkai / Fuji-side stop</div>
+        <div class="stop-desc">Traditional spring-water village area on the Fuji side, depending on the booked tour&#x27;s final operating route.</div>
+        <div class="key"><strong>Key point:</strong> Use it for Fuji-area scenery rather than adding independent detours.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Oshino+Hakkai" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        
+        <div class="notes-box"><strong>Notes</strong><ul><li>Do not add Tokyo sightseeing today. This is already a long full-day trip.</li></ul></div>
+      </div>
+    </details>
+
+    <details class="day-card" >
+      <summary>
+        <div>
+          <div class="date">Tue · 10 Nov · Tokyo</div>
+          <div class="day-title">Easy morning + Narita departure</div>
+        </div>
+        <span class="pace">Very light</span>
+      </summary>
+      <div class="day-body">
+        <div class="route-summary"><strong>Route order:</strong> Tamachi → Narita Airport</div>
+        
+    <div class="stop-card">
+      <div class="stop-time">Morning</div>
+      <div class="stop-content">
+        <div class="stop-title">☕ Tamachi / hotel area</div>
+        <div class="stop-desc">Breakfast, packing and a short local walk.</div>
+        <div class="key"><strong>Key point:</strong> Avoid crossing Tokyo for one last attraction; protect the international-flight buffer.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Sotetsu+Fresa+Inn+Tokyo+Tamachi" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">~12:00</div>
+      <div class="stop-content">
+        <div class="stop-title">🚆 Leave for Narita</div>
+        <div class="stop-desc">Transfer to Narita with generous buffer.</div>
+        <div class="key"><strong>Key point:</strong> Check the best live rail option on the day; aim to be at the airport around three hours before departure.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Narita+International+Airport" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+
+    <div class="stop-card">
+      <div class="stop-time">16:55</div>
+      <div class="stop-content">
+        <div class="stop-title">✈️ Narita International Airport (NRT)</div>
+        <div class="stop-desc">Return flight departure.</div>
+        <div class="key"><strong>Key point:</strong> Keep passport, boarding pass and duty-free liquids organized before security.</div>
+      </div>
+      <a class="mapbtn" href="https://www.google.com/maps/search/?api=1&query=Narita+International+Airport" target="_blank" rel="noopener">Map ↗</a>
+    </div>
+        <div class="route-links"><a class="route-chip" href="https://www.google.com/maps/dir/?api=1&origin=Sotetsu+Fresa+Inn+Tokyo+Tamachi&destination=Narita+International+Airport&travelmode=transit" target="_blank" rel="noopener">🧭 Tamachi → NRT · Transit</a></div>
+        <div class="notes-box"><strong>Notes</strong><ul><li>T&#x27;s Tantan also has Narita/Tokyo Station options if you need a reliable vegan meal while travelling.</li></ul></div>
+      </div>
+    </details>
 </section>
 
 <section id="checklist" class="tab">
@@ -204,236 +1192,149 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:30px 10px}
     <div class="stats"><span id="checkStats">0 / 0 completed</span><span id="checkPercent">0%</span></div>
     <div class="progress"><div id="progressBar"></div></div>
   </div>
-  <div class="toolbar">
-    <button class="btn" onclick="openAddModal()">＋ Add checkpoint</button>
-    <button class="btn secondary" onclick="toggleCompleted(this)">Show completed</button>
-    <button class="btn danger" onclick="clearCompleted()">Clear completed</button>
-  </div>
+  <div class="toolbar"><button class="btn" onclick="openAddModal()">＋ Add checkpoint</button><button class="btn secondary" onclick="toggleCompleted(this)">Show completed</button><button class="btn danger" onclick="clearCompleted()">Clear completed</button></div>
   <div id="checklistContainer"></div>
 </section>
 
 <section id="bookings" class="tab">
-  <div class="card booking"><div><strong>Flights · Tue 27 Oct → Wed 28 Oct</strong><span class="muted">FRA 13:35 → Shanghai transit → KIX arrival ~18:00 on 28 Oct.</span></div><span class="pill">Confirmed plan</span></div>
-  <div class="card booking"><div><strong>Osaka Hotel</strong><span class="muted">Smile Hotel Shin-Osaka</span></div></div>
-  <div class="card booking"><div><strong>USJ · Fri 30 Oct</strong><span class="muted">Studio Pass + SUPER NINTENDO WORLD package. Minecart & JAWS Express remains optional.</span></div><span class="pill">Priority</span></div>
-  <div class="card booking"><div><strong>Kyoto Hotel</strong><span class="muted">Wander Kyoto Nanajo Hotel</span></div></div>
-  <div class="card booking"><div><strong>Tokyo Hotel</strong><span class="muted">Sotetsu Fresa Inn Tokyo Tamachi</span></div></div>
-  <div class="card booking"><div><strong>teamLab Planets · Sun 8 Nov</strong><span class="muted">Target entry: 09:00–09:30. Keep ~2 hours for the visit.</span></div><span class="pill">Plan / book</span></div>
-  <div class="card booking"><div><strong>Mt Fuji / Hakone · Mon 9 Nov</strong><span class="muted">Full-day Fuji/Hakone tour booked.</span></div><span class="pill">Booked</span></div>
+  <div class="grid">
+    <div class="card booking"><div><strong>Flights</strong><div class="muted">FRA 27 Oct 13:35 → Shanghai → KIX 28 Oct ~18:00 · NRT 10 Nov 16:55 → FRA</div></div><span class="status">Plan set</span></div>
+    <div class="card booking"><div><strong>Osaka hotel</strong><div class="muted">Smile Hotel Shin-Osaka</div></div><span class="status">Known</span></div>
+    <div class="card booking"><div><strong>USJ · Fri 30 Oct</strong><div class="muted">Nintendo priorities + Halloween Horror Nights. Keep rain plan in mind.</div></div><span class="status">Core</span></div>
+    <div class="card booking"><div><strong>Kyoto hotel</strong><div class="muted">Wander Kyoto Nanajo Hotel</div></div><span class="status">Known</span></div>
+    <div class="card booking"><div><strong>Manga portrait · Sun 1 Nov</strong><div class="muted">No advance portrait booking; arrive for 10:00 opening and register immediately.</div></div><span class="status">First-come</span></div>
+    <div class="card booking"><div><strong>Yachiyo · Wed 4 Nov</strong><div class="muted">Reserve plant-based Shojin Yudofu lunch; request garden-facing seat.</div></div><span class="status">Reserve</span></div>
+    <div class="card booking"><div><strong>Tokyo hotel</strong><div class="muted">Sotetsu Fresa Inn Tokyo Tamachi</div></div><span class="status">Known</span></div>
+    <div class="card booking"><div><strong>Shibuya Sky · Fri 6 Nov</strong><div class="muted">Target sunset entry.</div></div><span class="status">Book</span></div>
+    <div class="card booking"><div><strong>Vegan Sushi Tokyo · Fri 6 Nov</strong><div class="muted">Dinner after Shibuya Sky; reservation recommended.</div></div><span class="status">Reserve</span></div>
+    <div class="card booking"><div><strong>teamLab Planets · Sun 8 Nov</strong><div class="muted">Target 12:30–13:00 after Oi flea market.</div></div><span class="status">Book</span></div>
+    <div class="card booking"><div><strong>Mt Fuji / Hakone · Mon 9 Nov</strong><div class="muted">Full-day tour already booked.</div></div><span class="status">Booked</span></div>
+  </div>
+  <div class="alert"><strong>Pokémon Café:</strong> your preferred dates are currently full. Do not build the itinerary around it; only use an official cancellation slot if one appears and fits the day.</div>
 </section>
 
-<section id="info" class="tab">
-  <div class="card"><h2>Trip approach</h2>
-    <p><strong>Priority:</strong> sightseeing and experiences first. Shopping is intentionally limited to short blocks already on the route.</p>
-    <p><strong>Osaka:</strong> Den Den Town 60–90 min + short Shinsaibashi watch browse.</p>
-    <p><strong>Tokyo:</strong> Akihabara 2–3 hours is enough. Nakano Broadway is optional only if watch/collectibles buying becomes a priority.</p>
+<section id="food" class="tab">
+  <div class="grid">
+    <div class="card"><h2>Kyoto · food & small buys</h2><div class="place-list">
+      <div class="place"><strong>Yachiyo · 4 Nov lunch</strong><div class="muted">100% plant-based Shojin Yudofu set; request garden-facing seating.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Nanzenji+Yachiyo+Kyoto">Map</a><a class="linkbtn" target="_blank" href="https://kyoto-nanzenji-yachiyo.jp/en/about/">Official</a></div></div>
+      <div class="place"><strong>Rokujuan · 1 Nov</strong><div class="muted">100+ year-old preserved residence. Use it for architecture + tea/warabi-mochi; confirm ingredients if strict.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Rokujuan+Kyoto">Map</a><a class="linkbtn" target="_blank" href="https://rokujuan.com/">Official</a></div></div>
+      <div class="place"><strong>100-year-style Starbucks · Ninenzaka</strong><div class="muted">Traditional machiya setting, naturally on the Higashiyama walking route.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Starbucks+Coffee+Kyoto+Ninenzaka+Yasaka+Chaya">Map</a></div>
+      <div class="place"><strong>Nishiki Market</strong><div class="muted">Rice crackers and vegetarian snacks; ask about dashi/sauces.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Nishiki+Market+Kyoto">Map</a></div>
+      <div class="place"><strong>Ochanoko Saisai Nishiki</strong><div class="muted">Buy furikake/rice seasoning; Kyo-Rayu and shichimi are the main interest.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Ochanoko+Saisai+Nishiki+Kyoto">Map</a><a class="linkbtn" target="_blank" href="https://www.kyoto-nishiki.or.jp/en/stores/ochanokosaisai/">Info</a></div></div>
+      <div class="place"><strong>Yasubee · Pontocho</strong><div class="muted">Spontaneous veg noodle option; confirm fish/meat stock because the restaurant is not vegetarian-only.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Yasubee+Pontocho+Kyoto">Map</a></div>
+      <div class="place"><strong>TADKA</strong><div class="muted">South-Indian food fallback. Mention-only / spontaneous, as requested.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=TADKA+Kyoto+Indian+restaurant">Map</a><a class="linkbtn" target="_blank" href="https://tadka-kyoto.com/">Official</a></div></div>
+      <div class="place"><strong>BRAND OFF Shijo Kawaramachi</strong><div class="muted">Luxury second-hand bags; optional evening browse close to Gion/Kawaramachi.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=BRAND+OFF+Shijo+Kawaramachi+Kyoto">Map</a><a class="linkbtn" target="_blank" href="https://www.brandoff.co.jp/shop_list/shop.php?shop=050kyoto_shijyo">Official</a></div></div>
+      <div class="place"><strong>Your saved Kyoto list</strong><a class="linkbtn" target="_blank" href="https://maps.app.goo.gl/SwsHuZyZWn8Tn5fK6?g_st=iw">Kyoto · Sindhu ↗</a></div>
+    </div></div>
+
+    <div class="card"><h2>Osaka · notes</h2><div class="place-list">
+      <div class="place"><strong>Mini Fushimi Inari / torii souvenir</strong><div class="muted">Buy in Osaka only if you see a version you really like. The best thematic backup is Fushimi Inari itself on 4 Nov.</div></div>
+      <div class="place"><strong>Your saved Osaka restaurants</strong><div class="muted">Use this for spontaneous vegetarian meals instead of fixing every meal in advance.</div><a class="linkbtn" target="_blank" href="https://maps.app.goo.gl/V3Rkq3PvVbW1YxxX8?g_st=iw">Osaka restaurants · Sindhu ↗</a></div>
+    </div></div>
+
+    <div class="card"><h2>Tokyo · food</h2><div class="place-list">
+      <div class="place"><strong>Vegan Sushi Tokyo · 6 Nov dinner</strong><div class="muted">Fully vegan Japanese-style sushi in Shibuya/Shoto; reservation recommended.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Vegan+Sushi+Tokyo+Shoto">Map</a><a class="linkbtn" target="_blank" href="https://vcook.co.jp/vegansushitokyo/en">Official</a></div></div>
+      <div class="place"><strong>T's Tantan · 7 Nov</strong><div class="muted">Fully vegan ramen—no meat, seafood, eggs or dairy. Excellent safe option after Akihabara.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=T%27s+Tantan+Tokyo">Map</a><a class="linkbtn" target="_blank" href="https://www.jr-cross.co.jp/en/cr/tantan.html">Official</a></div></div>
+      <div class="place"><strong>Shinjuku Hikeshi Gyoza</strong><div class="muted">Optional. Choose vegetarian vegetable gyoza or vegan maple-mustard gyoza; the famous honey-mustard meat version is not your vegetarian choice.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Shinjuku+Hikeshi+Gyoza">Map</a></div>
+      <div class="place"><strong>The Fire Vegan · saved Instagram lead</strong><div class="muted">Keep optional until the exact current location/name is confirmed.</div><div class="linkrow"><a class="linkbtn" target="_blank" href="https://www.instagram.com/p/C44lwWFRBRx/?img_index=3&stkn=MWs3MWlsOHhtaDdoeA==">Post 1</a><a class="linkbtn" target="_blank" href="https://www.instagram.com/reel/DY6P_uQKZ1P/?stkn=MXg5azEwYmxsNGxlcw==">Post 2</a></div></div>
+    </div></div>
+
+    <div class="card"><h2>Tokyo · targeted shopping & desserts</h2><div class="place-list">
+      <div class="place"><strong>Kappabashi · 7 Nov 10:00</strong><div class="muted">Handmade ceramics, matcha bowls, engraved chopsticks and miniature food replicas. Saturday is intentionally chosen over Sunday.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Kappabashi+Dougu+Street+Tokyo">Map</a></div>
+      <div class="place"><strong>Mikura chopsticks</strong><div class="muted">Ask for one English-name engraving and one Japanese-name engraving if the selected pair supports it.</div><a class="linkbtn" target="_blank" href="https://kappabashi-mikura.com/en">Official</a></div>
+      <div class="place"><strong>Nakano Broadway · 6 Nov</strong><div class="muted">Anime/collectibles and watches. Scheduled before Akihabara as requested.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Nakano+Broadway+Tokyo">Map</a></div>
+      <div class="place"><strong>Koenji thrift/vintage</strong><div class="muted">Optional rather than core; use only if you willingly trade another stop for more vintage shopping.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Koenji+Tokyo+vintage+shops">Map</a></div>
+      <div class="place"><strong>Oi Racecourse flea market · 8 Nov</strong><div class="muted">Vintage jewellery, second-hand bags/clothes and general flea-market finds. 09:00–14:30; your plan uses only the first ~2 hours. Rain cancels.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Oi+Racecourse+Tokyo+City+Flea+Market">Map</a></div>
+      <div class="place"><strong>Nihon Miyabi · Asakusa</strong><div class="muted">1-11-1 Asakusa: Mt Fuji incense holder.</div><a class="linkbtn" target="_blank" href="https://www.google.com/maps/search/?api=1&query=Nihon+Miyabi+Asakusa+1-11-1">Map</a></div>
+      <div class="place"><strong>Asakusa dessert choices</strong><div class="muted">MATCHA CAFE & STUDIO · Imo Pippi · Hokkaido Milk Bar · Age.3. Pick 1–2, not all four.</div></div>
+      <div class="place"><strong>Ginza dessert choices · 8 Nov</strong><div class="muted">Ginza Tsuboyaki-imo or Age.3 Ginza depending appetite.</div></div>
+    </div></div>
   </div>
-  <div class="card"><h2>Important</h2>
-    <p><strong>Ghibli Museum:</strong> closed 2–18 Nov 2026 for maintenance, so it remains removed.</p>
-    <p><strong>Mt Fuji / Hakone:</strong> booked for Monday, 9 Nov. Keep the entire day free.</p>
-    <p><strong>teamLab Planets:</strong> planned for Sunday, 8 Nov around 09:00–09:30, followed by Tsukiji and central Tokyo.</p>
-    <p><strong>Checklist storage:</strong> checkpoints and completion status are saved in this browser using localStorage. Custom checkpoints are preserved when this itinerary version loads.</p>
+</section>
+
+<section id="notes" class="tab">
+  <div class="card"><h2>Important verified notes</h2>
+    <ul>
+      <li><strong>Manga Museum:</strong> open 10:00–17:00, portrait registration starts at 10:00 and fills first-come; the museum is closed on Wednesdays, including 4 Nov.</li>
+      <li><strong>Oi Racecourse flea market:</strong> currently scheduled for Sat 7 and Sun 8 Nov, 09:00–14:30; rain cancels. This plan uses Sun 8 Nov.</li>
+      <li><strong>Yachiyo:</strong> beside Nanzenji, garden-focused restaurant; reserve the plant-based Shojin Yudofu set and request garden-facing seating.</li>
+      <li><strong>BRAND OFF Shijo Kawaramachi:</strong> useful because it stays open later than temples and is close to your Gion/Kawaramachi route.</li>
+      <li><strong>Pokémon Café:</strong> reservation-only and currently full for your target dates; keep as cancellation-only.</li>
+      <li><strong>Vegetarian caution:</strong> in Japan, apparently vegetable-only dishes may still use fish dashi. Ask specifically about fish/bonito stock when the restaurant is not vegan/vegetarian.</li>
+    </ul>
   </div>
-  <div class="card"><h2>Minimal shopping stops</h2>
-    <div class="store"><strong>Osaka · Den Den Town</strong><div class="muted">Short anime/figures/electronics browse while already in Namba.</div></div>
-    <div class="store"><strong>Osaka · Shinsaibashi</strong><div class="muted">GINZA RASIN + WATCHNIAN only if you want to browse watches.</div></div>
-    <div class="store"><strong>Tokyo · Akihabara</strong><div class="muted">2–3 hours for anime/electronics; no need to cover every store.</div></div>
-    <div class="store"><strong>Tokyo · Nakano Broadway</strong><div class="muted">Optional, not part of the core itinerary.</div></div>
-  </div>
+  <div class="card"><h2>Your personal trip notes</h2><p class="muted">Saved automatically in this browser.</p><textarea id="personalNotes" class="personal-notes" placeholder="Add packing notes, things to buy, reservation numbers, food notes..."></textarea></div>
 </section>
 </main>
 
 <div id="modalBackdrop" class="modal-backdrop">
   <div class="modal">
     <h2 id="modalTitle">Add checkpoint</h2>
-    <label for="cpTitle">Checkpoint</label>
-    <input id="cpTitle" type="text" placeholder="e.g. Find a Seiko watch">
-    <label for="cpDay">Day</label>
-    <select id="cpDay"></select>
-    <label for="cpCategory">Category</label>
-    <select id="cpCategory">
-      <option>General</option><option>Shopping</option><option>Food</option><option>Transport</option><option>Booking</option><option>Sightseeing</option><option>USJ</option>
-    </select>
-    <label for="cpNotes">Notes (optional)</label>
-    <textarea id="cpNotes" rows="3" placeholder="Optional details"></textarea>
-    <div class="modal-actions">
-      <button class="btn secondary" onclick="closeModal()">Cancel</button>
-      <button class="btn" onclick="saveCheckpoint()">Save checkpoint</button>
-    </div>
+    <label>Checkpoint</label><input id="cpTitle" type="text">
+    <label>Day</label><select id="cpDay"></select>
+    <label>Category</label><select id="cpCategory"><option>General</option><option>Booking</option><option>Sightseeing</option><option>Food</option><option>Shopping</option><option>Transport</option><option>USJ</option><option>Weather</option></select>
+    <label>Notes</label><textarea id="cpNotes"></textarea>
+    <div class="modal-actions"><button class="btn secondary" onclick="closeModal()">Cancel</button><button class="btn" onclick="saveCheckpoint()">Save</button></div>
   </div>
 </div>
 
-<footer>Japan 2026 Trip Planner · Checklist is saved locally in this browser</footer>
+<footer>Japan 2026 final planner · Route order is designed to minimize unnecessary cross-city backtracking. Always check live transit and venue notices on the day.</footer>
 
 <script>
-const STORAGE_KEY = "japan2026_dynamic_checklist_v1";
+const STORAGE_KEY="japan2026_dynamic_checklist_v1";
+const NOTES_KEY="japan2026_personal_notes_v1";
+const days=[["27 Oct", "Tue", "Departure from Frankfurt"], ["28 Oct", "Wed", "Osaka arrival + first Japan night"], ["29 Oct", "Thu", "Osaka Castle → Kuromon → Shinsekai → Abeno"], ["30 Oct", "Fri", "Universal Studios Japan"], ["31 Oct", "Sat", "Shrines + south-to-central Osaka"], ["1 Nov", "Sun", "Kyoto arrival + manga portrait + Higashiyama"], ["2 Nov", "Mon", "Nara full day"], ["3 Nov", "Tue", "Arashiyama + Golden Pavilion"], ["4 Nov", "Wed", "Fushimi Inari + Nanzenji tofu + Nishiki"], ["5 Nov", "Thu", "Kyoto → Tokyo + Tokyo Tower district"], ["6 Nov", "Fri", "Meiji + Harajuku + Nakano + Shibuya"], ["7 Nov", "Sat", "Kappabashi → Asakusa → Akihabara"], ["8 Nov", "Sun", "Oi flea market → teamLab Planets → Ginza"], ["9 Nov", "Mon", "Mt Fuji + Hakone full-day tour — BOOKED"], ["10 Nov", "Tue", "Easy morning + Narita departure"]];
+const starter=[{"id": "final_0", "title": "Confirm USJ QR codes / tickets", "day": "30 Oct", "category": "Booking", "notes": "Keep offline screenshot", "done": false}, {"id": "final_1", "title": "Check Osaka weather + pack poncho for USJ", "day": "30 Oct", "category": "USJ", "notes": "Rain is manageable; watch wind/lightning", "done": false}, {"id": "final_2", "title": "Arrive early for Manga Museum portrait registration", "day": "1 Nov", "category": "Booking", "notes": "First-come from 10:00", "done": false}, {"id": "final_3", "title": "Reserve Yachiyo plant-based tofu lunch", "day": "4 Nov", "category": "Food", "notes": "Request garden-facing seat if available", "done": false}, {"id": "final_4", "title": "Buy Ochanoko Saisai furikake at Nishiki", "day": "4 Nov", "category": "Shopping", "notes": "Kyo-Rayu / seasoning", "done": false}, {"id": "final_5", "title": "Buy mini torii / Fushimi Inari souvenir", "day": "4 Nov", "category": "Shopping", "notes": "Prefer buying at Fushimi Inari", "done": false}, {"id": "final_6", "title": "Confirm Kyoto → Tokyo Shinkansen", "day": "5 Nov", "category": "Transport", "notes": "Choose comfortable luggage-friendly timing", "done": false}, {"id": "final_7", "title": "Book Shibuya Sky sunset slot", "day": "6 Nov", "category": "Booking", "notes": "Plan around sunset", "done": false}, {"id": "final_8", "title": "Reserve Vegan Sushi Tokyo dinner", "day": "6 Nov", "category": "Food", "notes": "Reservation recommended", "done": false}, {"id": "final_9", "title": "Buy engraved chopsticks at Mikura", "day": "7 Nov", "category": "Shopping", "notes": "One English + one Japanese name if supported", "done": false}, {"id": "final_10", "title": "Buy Mt Fuji incense holder at Nihon Miyabi", "day": "7 Nov", "category": "Shopping", "notes": "1-11-1 Asakusa", "done": false}, {"id": "final_11", "title": "Check Oi flea market rain status", "day": "8 Nov", "category": "Weather", "notes": "Market cancels in rain", "done": false}, {"id": "final_12", "title": "Book teamLab Planets around 12:30–13:00", "day": "8 Nov", "category": "Booking", "notes": "After flea market", "done": false}, {"id": "final_13", "title": "Mt Fuji / Hakone tour", "day": "9 Nov", "category": "Booking", "notes": "Booked", "done": true}, {"id": "final_14", "title": "Plan hotel → Narita airport transfer", "day": "10 Nov", "category": "Transport", "notes": "Leave generous buffer", "done": false}];
 
-const days = [
-  ["27 Oct","Tuesday","Departure"],["28 Oct","Wednesday","Osaka arrival + Dotonbori"],["29 Oct","Thursday","Osaka Castle → Shinsekai → Abeno"],
-  ["30 Oct","Friday","Universal Studios Japan"],["31 Oct","Saturday","Sumiyoshi + Shitennoji + central Osaka"],["1 Nov","Sunday","Kyoto Higashiyama + Gion"],
-  ["2 Nov","Monday","Nara full day"],["3 Nov","Tuesday","Arashiyama + Kinkaku-ji"],["4 Nov","Wednesday","Fushimi Inari + central Kyoto"],
-  ["5 Nov","Thursday","Kyoto → Tokyo + Tokyo Tower area"],["6 Nov","Friday","Meiji → Harajuku → Shibuya"],["7 Nov","Saturday","Asakusa → Ueno → Akihabara"],
-  ["8 Nov","Sunday","teamLab Planets + central Tokyo"],["9 Nov","Monday","Mt Fuji + Hakone"],["10 Nov","Tuesday","Easy morning + departure"]
-];
-
-const starter = [
-  {id:"starter_0",title:"Book/confirm USJ Studio Pass",day:"30 Oct",category:"USJ",notes:"",done:false},
-  {id:"starter_1",title:"Decide on Minecart & JAWS Express Pass",day:"30 Oct",category:"USJ",notes:"Optional",done:false},
-  {id:"starter_2",title:"Download USJ tickets / QR codes",day:"30 Oct",category:"Booking",notes:"",done:false},
-  {id:"starter_osaka_castle",title:"Visit Osaka Castle + park",day:"29 Oct",category:"Sightseeing",notes:"Morning",done:false},
-  {id:"starter_3",title:"Den Den Town — keep to 60–90 min",day:"29 Oct",category:"Shopping",notes:"Minimal shopping",done:false},
-  {id:"starter_abenoharukas",title:"Abeno Harukas around sunset/evening",day:"29 Oct",category:"Sightseeing",notes:"",done:false},
-  {id:"starter_4",title:"Browse second-hand watches only if interested",day:"31 Oct",category:"Shopping",notes:"GINZA RASIN / WATCHNIAN",done:false},
-  {id:"starter_kiyomizu",title:"Kiyomizu-dera + Sannenzaka/Ninenzaka",day:"1 Nov",category:"Sightseeing",notes:"",done:false},
-  {id:"starter_7",title:"Nara Park + Tōdai-ji",day:"2 Nov",category:"Sightseeing",notes:"Full Nara day",done:false},
-  {id:"starter_arashiyama",title:"Arashiyama early morning",day:"3 Nov",category:"Sightseeing",notes:"06:30–07:00",done:false},
-  {id:"starter_kinkaku",title:"Visit Kinkaku-ji / Golden Pavilion",day:"3 Nov",category:"Sightseeing",notes:"",done:false},
-  {id:"starter_8",title:"Visit Fushimi Inari early",day:"4 Nov",category:"Sightseeing",notes:"",done:false},
-  {id:"starter_6",title:"Visit Nishiki Market for lunch",day:"4 Nov",category:"Food",notes:"",done:false},
-  {id:"starter_9",title:"Kyoto Manga Museum — optional",day:"4 Nov",category:"Sightseeing",notes:"Only if time/energy remains",done:false},
-  {id:"starter_10",title:"Book / confirm Kyoto → Tokyo Shinkansen",day:"5 Nov",category:"Transport",notes:"",done:false},
-  {id:"starter_11",title:"Shibuya Sky around sunset",day:"6 Nov",category:"Sightseeing",notes:"",done:false},
-  {id:"starter_sensoji",title:"Visit Senso-ji / Asakusa",day:"7 Nov",category:"Sightseeing",notes:"Morning",done:false},
-  {id:"starter_12",title:"Akihabara browsing — max 2–3 hours",day:"7 Nov",category:"Shopping",notes:"",done:false},
-  {id:"starter_13",title:"Decide on Tokyo JDM experience",day:"7 Nov",category:"Booking",notes:"Optional evening",done:false},
-  {id:"starter_teamlab",title:"Book teamLab Planets 09:00–09:30 slot",day:"8 Nov",category:"Booking",notes:"Target Sunday morning",done:false},
-  {id:"starter_tsukiji",title:"Tsukiji Outer Market after teamLab",day:"8 Nov",category:"Food",notes:"",done:false},
-  {id:"starter_16",title:"Mt Fuji / Hakone full-day tour booked",day:"9 Nov",category:"Booking",notes:"Booked",done:true},
-  {id:"starter_17",title:"Plan hotel → Narita airport transfer",day:"10 Nov",category:"Transport",notes:"Leave a generous international-flight buffer",done:false}
-];
-
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function migrate(existing){
   if(!Array.isArray(existing)) return starter.map(x=>({...x}));
-  const custom=existing.filter(x=>!String(x.id||"").startsWith("starter_"));
-  const oldById=Object.fromEntries(existing.filter(x=>String(x.id||"").startsWith("starter_")).map(x=>[x.id,x]));
-  const merged=starter.map(s=>{const old=oldById[s.id];return {...s,done:s.id==="starter_16"?true:(old?!!old.done:!!s.done),notes:old&&old.notes&&!s.notes?old.notes:s.notes};});
-  return [...merged,...custom];
+  const custom=existing.filter(x=>!String(x.id||"").startsWith("starter_")&&!String(x.id||"").startsWith("final_"));
+  const old=[...existing].filter(x=>String(x.id||"").startsWith("final_"));
+  const oldByTitle=Object.fromEntries(old.map(x=>[x.title,x]));
+  return [...starter.map(s=>oldByTitle[s.title]?{...s,done:!!oldByTitle[s.title].done,notes:oldByTitle[s.title].notes||s.notes}:{...s}),...custom];
 }
-
-let items = load();
-let editingId = null;
-let showCompleted = true;
-
 function load(){
-  try {
-    const raw=localStorage.getItem(STORAGE_KEY);
-    if(raw){const migrated=migrate(JSON.parse(raw));localStorage.setItem(STORAGE_KEY,JSON.stringify(migrated));return migrated;}
-  } catch(e){}
+  try{const raw=localStorage.getItem(STORAGE_KEY); if(raw) return migrate(JSON.parse(raw));}catch(e){}
   return starter.map(x=>({...x}));
 }
-function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
-function esc(s){ return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); }
-
+let items=load(), showCompleted=false, editingId=null;
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(items));}
+function toggleDays(open){document.querySelectorAll(".day-card").forEach(d=>d.open=open);}
 function renderChecklist(){
   const root=document.getElementById("checklistContainer");
-  const visible=items.filter(x=>showCompleted || !x.done);
-  const groups={};
-  visible.forEach(x=>{const key=x.day||"Other";(groups[key]??=[]).push(x);});
+  const visible=items.filter(x=>showCompleted||!x.done), groups={};
+  visible.forEach(x=>(groups[x.day||"Other"]??=[]).push(x));
   root.innerHTML="";
-  const orderedDays=days.map(x=>x[0]);
-  Object.keys(groups).sort((a,b)=>{
-    const ia=orderedDays.indexOf(a), ib=orderedDays.indexOf(b);
-    return (ia<0?999:ia)-(ib<0?999:ib);
-  }).forEach(day=>{
+  const order=days.map(x=>x[0]);
+  Object.keys(groups).sort((a,b)=>(order.indexOf(a)<0?999:order.indexOf(a))-(order.indexOf(b)<0?999:order.indexOf(b))).forEach(day=>{
     const card=document.createElement("div"); card.className="card check-group";
-    const title=document.createElement("h3"); const di=days.find(d=>d[0]===day); title.textContent=di?`${di[1]} · ${di[0]} — ${di[2]}`:day; card.appendChild(title);
+    const di=days.find(d=>d[0]===day);
+    const h=document.createElement("h3"); h.textContent=di?`${di[1]} · ${di[0]} — ${di[2]}`:day; card.appendChild(h);
     groups[day].forEach(x=>{
       const row=document.createElement("div"); row.className="check"+(x.done?" done":"");
-      row.innerHTML=`
-        <input type="checkbox" ${x.done?"checked":""} aria-label="Complete checkpoint">
-        <div class="check-main">
-          <div class="check-title">${esc(x.title)}</div>
-          <div class="check-meta"><span class="tag">${esc(x.category||"General")}</span>${x.notes?`<span class="tag">${esc(x.notes)}</span>`:""}</div>
-        </div>
-        <div class="actions">
-          <button class="iconbtn" title="Edit">✏️</button>
-          <button class="iconbtn" title="Delete">🗑️</button>
-        </div>`;
+      row.innerHTML=`<input type="checkbox" ${x.done?"checked":""}><div class="check-main"><div class="check-title">${esc(x.title)}</div><div class="tags"><span class="tag">${esc(x.category||"General")}</span>${x.notes?`<span class="tag">${esc(x.notes)}</span>`:""}</div></div><button class="iconbtn" title="Edit">✏️</button><button class="iconbtn" title="Delete">🗑️</button>`;
       row.querySelector("input").onchange=()=>{x.done=!x.done;save();renderChecklist();};
       row.querySelectorAll(".iconbtn")[0].onclick=()=>openEditModal(x.id);
-      row.querySelectorAll(".iconbtn")[1].onclick=()=>deleteCheckpoint(x.id);
+      row.querySelectorAll(".iconbtn")[1].onclick=()=>{if(confirm("Delete this checkpoint?")){items=items.filter(i=>i.id!==x.id);save();renderChecklist();}};
       card.appendChild(row);
     });
     root.appendChild(card);
   });
-  if(!visible.length) root.innerHTML='<div class="card empty">No checkpoints to show.<br>Add one with <strong>＋ Add checkpoint</strong>.</div>';
-  updateProgress();
+  if(!visible.length) root.innerHTML='<div class="card muted">No checkpoints to show.</div>';
+  const total=items.length, done=items.filter(x=>x.done).length, pct=total?Math.round(done/total*100):0;
+  document.getElementById("checkStats").textContent=`${done} / ${total} completed`; document.getElementById("checkPercent").textContent=pct+"%"; document.getElementById("progressBar").style.width=pct+"%";
 }
-
-function updateProgress(){
-  const total=items.length, done=items.filter(x=>x.done).length;
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById("checkStats").textContent=`${done} / ${total} completed`;
-  document.getElementById("checkPercent").textContent=`${pct}%`;
-  document.getElementById("progressBar").style.width=pct+"%";
-}
-
-function populateDays(){
-  const select=document.getElementById("cpDay");
-  select.innerHTML=days.map(x=>`<option value="${esc(x[0])}">${esc(x[1])} · ${esc(x[0])} — ${esc(x[2])}</option>`).join("");
-  select.innerHTML+=`<option value="Other">Other</option>`;
-}
-
-function openAddModal(){
-  editingId=null;
-  document.getElementById("modalTitle").textContent="Add checkpoint";
-  document.getElementById("cpTitle").value="";
-  document.getElementById("cpNotes").value="";
-  document.getElementById("cpCategory").value="General";
-  document.getElementById("cpDay").value="Other";
-  document.getElementById("modalBackdrop").classList.add("show");
-  setTimeout(()=>document.getElementById("cpTitle").focus(),50);
-}
-function openEditModal(id){
-  const x=items.find(i=>i.id===id); if(!x)return;
-  editingId=id;
-  document.getElementById("modalTitle").textContent="Edit checkpoint";
-  document.getElementById("cpTitle").value=x.title;
-  document.getElementById("cpDay").value=x.day||"Other";
-  document.getElementById("cpCategory").value=x.category||"General";
-  document.getElementById("cpNotes").value=x.notes||"";
-  document.getElementById("modalBackdrop").classList.add("show");
-}
-function closeModal(){document.getElementById("modalBackdrop").classList.remove("show");editingId=null}
-function saveCheckpoint(){
-  const title=document.getElementById("cpTitle").value.trim();
-  if(!title){alert("Please enter a checkpoint.");return;}
-  const data={title,day:document.getElementById("cpDay").value,category:document.getElementById("cpCategory").value,notes:document.getElementById("cpNotes").value.trim()};
-  if(editingId){
-    const x=items.find(i=>i.id===editingId); Object.assign(x,data);
-  }else{
-    items.push({id:"cp_"+Date.now()+"_"+Math.random().toString(36).slice(2,8),...data,done:false});
-  }
-  save(); closeModal(); renderChecklist();
-}
-function deleteCheckpoint(id){
-  const x=items.find(i=>i.id===id); if(!x)return;
-  if(confirm(`Delete "${x.title}"?`)){items=items.filter(i=>i.id!==id);save();renderChecklist();}
-}
-function clearCompleted(){
-  const count=items.filter(x=>x.done).length;
-  if(!count)return;
-  if(confirm(`Delete ${count} completed checkpoint${count===1?"":"s"}?`)){items=items.filter(x=>!x.done);save();renderChecklist();}
-}
-function toggleCompleted(btn){
-  showCompleted=!showCompleted;
-  btn.textContent=showCompleted?"Hide completed":"Show completed";
-  renderChecklist();
-}
-function toggleDays(open){
-  document.querySelectorAll(".day").forEach(x=>x.open=open);
-}
-
-document.querySelectorAll(".tabBtn").forEach(btn=>btn.onclick=()=>{
-  document.querySelectorAll(".tabBtn").forEach(b=>b.classList.remove("active"));
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  btn.classList.add("active"); document.getElementById(btn.dataset.tab).classList.add("active");
-  window.scrollTo({top:0,behavior:"smooth"});
-});
-document.getElementById("modalBackdrop").addEventListener("click",e=>{if(e.target.id==="modalBackdrop")closeModal();});
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal();});
-populateDays();
-renderChecklist();
+function populateDays(){document.getElementById("cpDay").innerHTML=days.map(x=>`<option value="${esc(x[0])}">${esc(x[1])} · ${esc(x[0])} — ${esc(x[2])}</option>`).join("")+'<option value="Other">Other</option>';}
+function openAddModal(){editingId=null;document.getElementById("modalTitle").textContent="Add checkpoint";cpTitle.value="";cpDay.value="Other";cpCategory.value="General";cpNotes.value="";modalBackdrop.classList.add("show");}
+function openEditModal(id){const x=items.find(i=>i.id===id);if(!x)return;editingId=id;document.getElementById("modalTitle").textContent="Edit checkpoint";cpTitle.value=x.title;cpDay.value=x.day||"Other";cpCategory.value=x.category||"General";cpNotes.value=x.notes||"";modalBackdrop.classList.add("show");}
+function closeModal(){modalBackdrop.classList.remove("show");editingId=null;}
+function saveCheckpoint(){const title=cpTitle.value.trim();if(!title)return alert("Add a checkpoint title."); if(editingId){const x=items.find(i=>i.id===editingId);x.title=title;x.day=cpDay.value;x.category=cpCategory.value;x.notes=cpNotes.value.trim();}else{items.push({id:"custom_"+Date.now(),title,day:cpDay.value,category:cpCategory.value,notes:cpNotes.value.trim(),done:false});}save();closeModal();renderChecklist();}
+function toggleCompleted(btn){showCompleted=!showCompleted;btn.textContent=showCompleted?"Hide completed":"Show completed";renderChecklist();}
+function clearCompleted(){if(confirm("Remove all completed checkpoints?")){items=items.filter(x=>!x.done);save();renderChecklist();}}
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.tab).classList.add("active");});
+populateDays();renderChecklist();
+const personalNotes=document.getElementById("personalNotes"); personalNotes.value=localStorage.getItem(NOTES_KEY)||""; personalNotes.addEventListener("input",()=>localStorage.setItem(NOTES_KEY,personalNotes.value));
+modalBackdrop.addEventListener("click",e=>{if(e.target===modalBackdrop)closeModal();});
 </script>
-</body>
-</html>
+</body></html>
