@@ -568,13 +568,15 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 <div id="voiceStatus" class="tip"><b>Audio:</b> Uses your device/browser Japanese voice (ja-JP). Tap Listen for normal speed or Slow for clearer pronunciation.</div>
 <div class="card">
   <h2>📱 If Japanese audio works on iPhone 14 but not iPhone 18</h2>
-  <p class="muted">The phrase text is the same on both phones, so this is usually a browser / voice / audio-output issue on the newer iPhone rather than a problem with the Japanese phrases.</p>
+  <p class="muted">This version uses a direct synchronous speech call on iPhone. It removes the delayed playback used in the previous version, because newer Safari/WebKit can reject speech that is no longer tied directly to your tap.</p>
   <div class="toolbar">
-    <button class="btn" onclick="testJapaneseAudio(this)">🔊 Test Japanese audio</button>
+    <button class="btn" onclick="testJapaneseAudio(this)">🔊 Direct iPhone audio test</button>
+    <button class="btn secondary" onclick="hardResetSpeech()">↻ Reset speech</button>
     <button class="btn secondary" onclick="stopJapanese()">⏹ Stop</button>
+    <button class="btn secondary" onclick="audioDiagnostics()">ℹ️ Diagnostics</button>
   </div>
   <ol>
-    <li><b>Open this HTML in Safari.</b> If you are viewing it inside Files, ChatGPT, Gmail, or another in-app preview, use Share/Open in Safari. Embedded previews can restrict browser speech features.</li>
+    <li><b>Open this HTML as a real webpage in Safari.</b> A ChatGPT/Gmail/Files preview may render the HTML but still restrict speech. If the tabs/buttons work but speech stays silent, the viewer can still be the cause.</li>
     <li><b>Tap the audio button yourself once.</b> iPhone browsers may require speech to begin from a direct user tap.</li>
     <li><b>While the test is speaking, raise media volume.</b> Also check that sound is not being routed to AirPods, a car, speaker, or another Bluetooth device.</li>
     <li>Go to <b>Settings → Accessibility → Read & Speak → Voices</b>. Make sure a <b>Japanese</b> voice is available/downloaded. Also enable <b>Detect Languages</b> if shown.</li>
@@ -1284,37 +1286,50 @@ function stopJapanese(){
 
 function speakJapanese(text, rate=0.88, btn=null){
   if(!("speechSynthesis" in window)){
-    alert("Text-to-speech is not supported in this browser. Open this file in Safari and try again.");
+    alert("Text-to-speech is not supported in this browser/viewer. Open the HTML in Safari.");
     return;
   }
 
-  stopJapanese();
+  const synth = window.speechSynthesis;
+  const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-  // Refresh voices at tap time: Safari/iOS may load them only after interaction.
-  const voices = speechSynthesis.getVoices();
-  japaneseVoice =
-    voices.find(v => /^ja-JP$/i.test(v.lang)) ||
-    voices.find(v => /^ja/i.test(v.lang)) ||
-    japaneseVoice ||
-    null;
+  // IMPORTANT FOR iPHONE:
+  // speak() is called synchronously from the button tap.
+  // Do not put this behind setTimeout/Promise/await; iOS can lose the
+  // user-gesture permission and silently refuse audio.
+  if(synth.speaking || synth.pending){
+    synth.cancel();
+  }
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "ja-JP";
   utterance.rate = rate;
   utterance.pitch = 1;
   utterance.volume = 1;
-  if(japaneseVoice) utterance.voice = japaneseVoice;
+
+  // On iOS, letting the system select the voice from lang=ja-JP is more
+  // reliable than forcing a voice object returned by getVoices().
+  if(!isiOS){
+    const voices = synth.getVoices();
+    japaneseVoice =
+      voices.find(v => /^ja-JP$/i.test(v.lang)) ||
+      voices.find(v => /^ja/i.test(v.lang)) ||
+      japaneseVoice ||
+      null;
+    if(japaneseVoice) utterance.voice = japaneseVoice;
+  }
 
   if(btn){
     speakingButton = btn;
     btn.classList.add("speaking");
-    btn.dataset.originalText = btn.textContent;
+    btn.dataset.originalText = btn.dataset.originalText || btn.textContent;
     btn.textContent = "Speaking…";
   }
 
   utterance.onstart = () => {
     const status = document.getElementById("voiceStatus");
-    if(status) status.innerHTML = `<b>Audio:</b> Speaking Japanese${japaneseVoice ? ` with <b>${esc(japaneseVoice.name)}</b>` : ""}.`;
+    if(status) status.innerHTML =
+      `<b>Audio:</b> Speaking Japanese${isiOS ? " using the iPhone system voice" : (japaneseVoice ? ` with <b>${esc(japaneseVoice.name)}</b>` : "")}.`;
   };
 
   const cleanup = () => {
@@ -1324,27 +1339,46 @@ function speakJapanese(text, rate=0.88, btn=null){
     }
     if(speakingButton === btn) speakingButton = null;
   };
+
   utterance.onend = cleanup;
   utterance.onerror = (e) => {
     cleanup();
     const status = document.getElementById("voiceStatus");
-    if(status) status.innerHTML = `<b>Audio problem:</b> ${esc(e.error || "speech failed")}. Try the iPhone troubleshooting steps below.`;
+    if(status) status.innerHTML =
+      `<b>Audio problem:</b> ${esc(e.error || "speech failed")}. If this is iPhone, open the file in Safari and tap the test button again.`;
   };
 
-  // iOS/Safari can stay paused after cancel(); explicitly resume and give it
-  // a tiny delay before speaking.
-  try{ speechSynthesis.resume(); }catch(e){}
-  setTimeout(() => {
-    try{
-      speechSynthesis.resume();
-      speechSynthesis.speak(utterance);
-    }catch(e){
-      cleanup();
-      alert("Speech could not start. Open this file in Safari and check the Japanese voice settings.");
-    }
-  }, 80);
+  try{
+    // Must stay inside this direct tap handler on iOS.
+    synth.speak(utterance);
+  }catch(e){
+    cleanup();
+    alert("Speech could not start. Open this file directly in Safari and try again.");
+  }
 }
 
+
+
+function hardResetSpeech(){
+  if(!("speechSynthesis" in window)){
+    alert("Speech synthesis is unavailable in this browser/viewer.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  japaneseVoice = null;
+  const status = document.getElementById("voiceStatus");
+  if(status) status.innerHTML = "<b>Audio:</b> Speech queue reset. Now tap Direct iPhone audio test.";
+}
+
+function audioDiagnostics(){
+  const status = document.getElementById("voiceStatus");
+  const supported = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  const proto = location.protocol;
+  const ua = navigator.userAgent;
+  const msg = `<b>Diagnostics:</b> Web Speech ${supported ? "available" : "NOT available"} · page protocol <b>${esc(proto)}</b> · iPhone/iPad ${/iPhone|iPad|iPod/i.test(ua) ? "yes" : "no"}.`;
+  if(status) status.innerHTML = msg;
+  return supported;
+}
 
 function testJapaneseAudio(btn){
   speakJapanese("こんにちは。ありがとうございます。", 0.82, btn);
