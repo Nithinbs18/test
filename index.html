@@ -565,7 +565,25 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 
 <section id="japanese" class="tab">
 <div class="hero"><h2>🇯🇵 Basic Japanese for your trip</h2><p>Tap “Copy Japanese” when you want to show a phrase to restaurant staff, station staff or a shop assistant.</p></div>
-<div id="voiceStatus" class="tip"><b>Audio:</b> Uses your device/browser Japanese voice (ja-JP). Tap Listen for normal speed or Slow for clearer pronunciation.</div><div class="tip"><b>Restaurant tip:</b> “vegetarian” alone may not exclude fish stock in Japan. For stricter vegetarian meals, also ask about <b>魚のだし (fish dashi)</b> or <b>かつおだし (bonito dashi)</b>.</div>
+<div id="voiceStatus" class="tip"><b>Audio:</b> Uses your device/browser Japanese voice (ja-JP). Tap Listen for normal speed or Slow for clearer pronunciation.</div>
+<div class="card">
+  <h2>📱 If Japanese audio works on iPhone 14 but not iPhone 18</h2>
+  <p class="muted">The phrase text is the same on both phones, so this is usually a browser / voice / audio-output issue on the newer iPhone rather than a problem with the Japanese phrases.</p>
+  <div class="toolbar">
+    <button class="btn" onclick="testJapaneseAudio(this)">🔊 Test Japanese audio</button>
+    <button class="btn secondary" onclick="stopJapanese()">⏹ Stop</button>
+  </div>
+  <ol>
+    <li><b>Open this HTML in Safari.</b> If you are viewing it inside Files, ChatGPT, Gmail, or another in-app preview, use Share/Open in Safari. Embedded previews can restrict browser speech features.</li>
+    <li><b>Tap the audio button yourself once.</b> iPhone browsers may require speech to begin from a direct user tap.</li>
+    <li><b>While the test is speaking, raise media volume.</b> Also check that sound is not being routed to AirPods, a car, speaker, or another Bluetooth device.</li>
+    <li>Go to <b>Settings → Accessibility → Read & Speak → Voices</b>. Make sure a <b>Japanese</b> voice is available/downloaded. Also enable <b>Detect Languages</b> if shown.</li>
+    <li>Close Safari completely, reopen the HTML, then try <b>🔊 Listen</b> again.</li>
+    <li>As an iPhone system check, select some Japanese text and use <b>Speak</b>, or use Safari's page menu → <b>Listen to Page</b> on a supported webpage. If system speech is also silent, the issue is at iPhone/iOS level rather than this planner.</li>
+  </ol>
+  <div class="tip"><b>Fast diagnosis:</b> if the Test button says “Speaking…” but you hear nothing, check volume/Bluetooth/Japanese voice. If it immediately says speech is unsupported, open the file in Safari rather than an embedded preview.</div>
+</div>
+<div class="tip"><b>Restaurant tip:</b> “vegetarian” alone may not exclude fish stock in Japan. For stricter vegetarian meals, also ask about <b>魚のだし (fish dashi)</b> or <b>かつおだし (bonito dashi)</b>.</div>
 <div class="toolbar"><button class="btn secondary" onclick="stopJapanese()">⏹ Stop audio</button></div>
 <input id="phraseSearch" class="phrase-search" placeholder="Search: vegetarian, toilet, card, train, chicken..." oninput="filterPhrases()">
 <section class="phrase-section"><h2>Essentials</h2><div class="phrase-grid"><div class="phrase" data-search="こんにちは konnichiwa hello">
@@ -1152,6 +1170,27 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 <div class="ticket"><strong>Oi flea market · 8 Nov</strong><div class="muted">Vintage jewellery, bags and clothes; rain cancels.</div></div>
 <div class="ticket"><strong>Nihon Miyabi · Asakusa</strong><div class="muted">Mt Fuji incense holder · 1-11-1 Asakusa.</div></div>
 </div>
+
+<div class="card"><h2>💇 Hair straightener to buy in Japan</h2>
+<div class="ticket">
+  <strong>SALONIA Straight Hair Iron 35 mm · Black · SL004S35</strong>
+  <div class="muted">Best-value pick for thick, curly, below-shoulder-length hair when you want something useful in Japan and later in Germany.</div>
+</div>
+<ul>
+  <li><b>Plate width:</b> 35 mm × 92 mm — faster for thick/long hair than narrow travel irons.</li>
+  <li><b>Temperature:</b> 120–230°C. Start around <b>180–190°C</b> for your hair and increase only if needed.</li>
+  <li><b>Voltage:</b> <b>AC 100–240V, 50/60Hz</b> — works in both Japan and Germany.</li>
+  <li><b>Germany:</b> use only a small Japan/US Type-A → EU plug adapter. <b>No voltage transformer needed.</b></li>
+  <li><b>Power / weight:</b> about 60 W / 385 g.</li>
+  <li><b>Plate:</b> titanium-coated black version; includes heat-resistant pouch and auto power-off.</li>
+  <li><b>Current Japan price guide:</b> about <b>¥3,820</b> at Yodobashi (price can change).</li>
+</ul>
+<div class="tip"><b>Why this one:</b> you already own premium styling tools in Germany. This gives you a capable wide-plate straightener for Japan without spending ReFa-level money, and it remains useful as a travel/backup iron at home.</div>
+<div class="linkrow">
+  <a class="linkbtn" target="_blank" rel="noopener" href="https://www.yodobashi.com/product/100000001004094447/">Yodobashi product ↗</a>
+  <a class="linkbtn" target="_blank" rel="noopener" href="https://salonia.jp/wp-content/uploads/2020/11/straight.pdf">SALONIA manual ↗</a>
+</div>
+</div>
 </div>
 </section>
 
@@ -1245,33 +1284,70 @@ function stopJapanese(){
 
 function speakJapanese(text, rate=0.88, btn=null){
   if(!("speechSynthesis" in window)){
-    alert("Text-to-speech is not supported in this browser.");
+    alert("Text-to-speech is not supported in this browser. Open this file in Safari and try again.");
     return;
   }
 
-  // Stop any phrase already playing so audio never overlaps.
   stopJapanese();
+
+  // Refresh voices at tap time: Safari/iOS may load them only after interaction.
+  const voices = speechSynthesis.getVoices();
+  japaneseVoice =
+    voices.find(v => /^ja-JP$/i.test(v.lang)) ||
+    voices.find(v => /^ja/i.test(v.lang)) ||
+    japaneseVoice ||
+    null;
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "ja-JP";
   utterance.rate = rate;
   utterance.pitch = 1;
   utterance.volume = 1;
-
-  const voice = japaneseVoice || loadJapaneseVoice();
-  if(voice) utterance.voice = voice;
+  if(japaneseVoice) utterance.voice = japaneseVoice;
 
   if(btn){
     speakingButton = btn;
     btn.classList.add("speaking");
+    btn.dataset.originalText = btn.textContent;
+    btn.textContent = "Speaking…";
   }
 
-  utterance.onend = utterance.onerror = () => {
-    if(btn) btn.classList.remove("speaking");
-    if(speakingButton === btn) speakingButton = null;
+  utterance.onstart = () => {
+    const status = document.getElementById("voiceStatus");
+    if(status) status.innerHTML = `<b>Audio:</b> Speaking Japanese${japaneseVoice ? ` with <b>${esc(japaneseVoice.name)}</b>` : ""}.`;
   };
 
-  speechSynthesis.speak(utterance);
+  const cleanup = () => {
+    if(btn){
+      btn.classList.remove("speaking");
+      if(btn.dataset.originalText) btn.textContent = btn.dataset.originalText;
+    }
+    if(speakingButton === btn) speakingButton = null;
+  };
+  utterance.onend = cleanup;
+  utterance.onerror = (e) => {
+    cleanup();
+    const status = document.getElementById("voiceStatus");
+    if(status) status.innerHTML = `<b>Audio problem:</b> ${esc(e.error || "speech failed")}. Try the iPhone troubleshooting steps below.`;
+  };
+
+  // iOS/Safari can stay paused after cancel(); explicitly resume and give it
+  // a tiny delay before speaking.
+  try{ speechSynthesis.resume(); }catch(e){}
+  setTimeout(() => {
+    try{
+      speechSynthesis.resume();
+      speechSynthesis.speak(utterance);
+    }catch(e){
+      cleanup();
+      alert("Speech could not start. Open this file in Safari and check the Japanese voice settings.");
+    }
+  }, 80);
+}
+
+
+function testJapaneseAudio(btn){
+  speakJapanese("こんにちは。ありがとうございます。", 0.82, btn);
 }
 
 function copyPhrase(btn,text){navigator.clipboard?.writeText(text).then(()=>{const o=btn.textContent;btn.textContent="Copied ✓";setTimeout(()=>btn.textContent=o,1200)}).catch(()=>prompt("Copy this:",text))}
