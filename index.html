@@ -43,6 +43,11 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 .weather-source{font-size:11px;color:#667085}
 .weather-reload{border:0;border-radius:7px;padding:5px 8px;background:#dbeafe;color:#1d4ed8;font-weight:750;cursor:pointer}
 @media(max-width:520px){.weather-brief{gap:4px}.weather-pill{font-size:11px;padding:4px 7px}.weather-detail{margin-top:9px}}
+
+/* iPhone-friendly offline / online speech controls */
+.phrase .meaning{padding-bottom:78px}
+.phrase-actions .online-audio{display:block;flex-basis:100%;border-radius:7px;background:#eef2ff;color:#3730a3;text-align:center;text-decoration:none;padding:6px 8px;font-size:11px;font-weight:800}
+.phrase-actions .online-audio:focus-visible{outline:2px solid #4f46e5;outline-offset:2px}
 </style>
 </head>
 <body>
@@ -582,25 +587,19 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 
 <section id="japanese" class="tab">
 <div class="hero"><h2>🇯🇵 Basic Japanese for your trip</h2><p>Tap “Copy Japanese” when you want to show a phrase to restaurant staff, station staff or a shop assistant.</p></div>
-<div id="voiceStatus" class="tip"><b>Audio:</b> Uses your device/browser Japanese voice (ja-JP). Tap Listen for normal speed or Slow for clearer pronunciation.</div>
+<div id="voiceStatus" class="tip" role="status" aria-live="polite"><b>Japanese audio:</b> Tap Listen on a phrase. If your iPhone stays silent, use the reliable “Hear online” link next to that phrase.</div>
 <div class="card">
-  <h2>📱 If Japanese audio works on iPhone 14 but not iPhone 18</h2>
-  <p class="muted">This version uses a direct synchronous speech call on iPhone. It removes the delayed playback used in the previous version, because newer Safari/WebKit can reject speech that is no longer tied directly to your tap.</p>
+  <h2>🔊 Japanese pronunciation on iPhone</h2>
+  <p class="muted">Try the audio test below. The built-in Listen/Slow buttons use the phone's Japanese speech voice. Each phrase also has an online pronunciation fallback that works without the browser's speech engine.</p>
   <div class="toolbar">
-    <button class="btn" onclick="testJapaneseAudio(this)">🔊 Direct iPhone audio test</button>
-    <button class="btn secondary" onclick="hardResetSpeech()">↻ Reset speech</button>
-    <button class="btn secondary" onclick="stopJapanese()">⏹ Stop</button>
-    <button class="btn secondary" onclick="audioDiagnostics()">ℹ️ Diagnostics</button>
+    <button class="btn" type="button" onclick="testJapaneseAudio(this)">🔊 Test Japanese</button>
+    <button class="btn secondary" type="button" onclick="testEnglishAudio(this)">Test English</button>
+    <button class="btn secondary" type="button" onclick="hardResetSpeech()">↻ Reset audio</button>
+    <button class="btn secondary" type="button" onclick="stopJapanese()">⏹ Stop</button>
+    <button class="btn secondary" type="button" onclick="audioDiagnostics()">ℹ️ Check support</button>
   </div>
-  <ol>
-    <li><b>Open this HTML as a real webpage in Safari.</b> A ChatGPT/Gmail/Files preview may render the HTML but still restrict speech. If the tabs/buttons work but speech stays silent, the viewer can still be the cause.</li>
-    <li><b>Tap the audio button yourself once.</b> iPhone browsers may require speech to begin from a direct user tap.</li>
-    <li><b>While the test is speaking, raise media volume.</b> Also check that sound is not being routed to AirPods, a car, speaker, or another Bluetooth device.</li>
-    <li>Go to <b>Settings → Accessibility → Read & Speak → Voices</b>. Make sure a <b>Japanese</b> voice is available/downloaded. Also enable <b>Detect Languages</b> if shown.</li>
-    <li>Close Safari completely, reopen the HTML, then try <b>🔊 Listen</b> again.</li>
-    <li>As an iPhone system check, select some Japanese text and use <b>Speak</b>, or use Safari's page menu → <b>Listen to Page</b> on a supported webpage. If system speech is also silent, the issue is at iPhone/iOS level rather than this planner.</li>
-  </ol>
-  <div class="tip"><b>Fast diagnosis:</b> if the Test button says “Speaking…” but you hear nothing, check volume/Bluetooth/Japanese voice. If it immediately says speech is unsupported, open the file in Safari rather than an embedded preview.</div>
+  <p class="muted">If there's no sound, open the actual webpage directly in <b>Safari</b>, not the GitHub code viewer or an in-app file preview. Check iPhone media volume and Bluetooth output, and install a Japanese voice in <b>Settings → Accessibility → Read &amp; Speak (or Spoken Content) → Voices → Japanese</b>.</p>
+  <p class="muted"><b>Backup:</b> Tap “🌐 Hear online” beside a phrase. It opens that Japanese phrase in Google Translate, where you can tap the speaker. This works even when built-in Web Speech is blocked.</p>
 </div>
 <div class="tip"><b>Restaurant tip:</b> “vegetarian” alone may not exclude fish stock in Japan. For stricter vegetarian meals, also ask about <b>魚のだし (fish dashi)</b> or <b>かつおだし (bonito dashi)</b>.</div>
 <div class="toolbar"><button class="btn secondary" onclick="stopJapanese()">⏹ Stop audio</button></div>
@@ -1274,132 +1273,164 @@ function clearCompleted(){if(confirm("Remove all completed checkpoints?")){items
 
 let japaneseVoice = null;
 let speakingButton = null;
+let activeJapaneseUtterance = null;
+let speechStartTimeout = null;
+let speakingStarted = false;
+let latestJapaneseText = "こんにちは";
+
+function audioStatus(message, warning=false){
+  const el = document.getElementById("voiceStatus");
+  if(!el) return;
+  el.textContent = "🔊 " + message;
+  el.style.background = warning ? "#fff7ed" : "#eff6ff";
+  el.style.borderColor = warning ? "#fdba74" : "#bfdbfe";
+}
+
+function bestSpeechVoice(lang){
+  if(!("speechSynthesis" in window)) return null;
+  let voices=[];
+  try { voices=window.speechSynthesis.getVoices() || []; } catch(e) { return null; }
+  return voices.find(v=>v.lang.toLowerCase()===lang.toLowerCase()) ||
+         voices.find(v=>v.lang.toLowerCase().startsWith(lang.slice(0,2).toLowerCase())) || null;
+}
 
 function loadJapaneseVoice(){
-  if(!("speechSynthesis" in window)) return null;
-  const voices = speechSynthesis.getVoices();
-  japaneseVoice =
-    voices.find(v => /^ja-JP$/i.test(v.lang)) ||
-    voices.find(v => /^ja/i.test(v.lang)) ||
-    null;
-  const status = document.getElementById("voiceStatus");
-  if(status){
-    if(japaneseVoice){
-      status.innerHTML = `<b>Audio:</b> Japanese voice ready — <b>${esc(japaneseVoice.name)}</b>. Use 🔊 Listen or 🐢 Slow.`;
-    }else{
-      status.innerHTML = `<b>Audio:</b> Japanese speech is supported, but no dedicated Japanese voice is currently installed. Your browser may use its default voice.`;
-    }
+  japaneseVoice=bestSpeechVoice("ja-JP");
+  // Do not overwrite a current speech/error message when voiceschange fires later.
+  if(!activeJapaneseUtterance){
+    if(japaneseVoice) audioStatus("Japanese voice ready: "+japaneseVoice.name+". Tap Listen to hear a phrase.");
+    else audioStatus("No Japanese voice detected yet. Try Listen; if it stays silent, use Hear online or install a Japanese iPhone voice.",true);
   }
   return japaneseVoice;
 }
 
-function stopJapanese(){
-  if("speechSynthesis" in window) speechSynthesis.cancel();
+function clearSpeechButton(){
   if(speakingButton){
     speakingButton.classList.remove("speaking");
-    speakingButton = null;
+    if(speakingButton.dataset.originalText) speakingButton.textContent=speakingButton.dataset.originalText;
   }
+  speakingButton=null;
+}
+function stopJapanese(){
+  if(speechStartTimeout){clearTimeout(speechStartTimeout);speechStartTimeout=null;}
+  activeJapaneseUtterance=null;
+  speakingStarted=false;
+  clearSpeechButton();
+  if("speechSynthesis" in window){
+    try {window.speechSynthesis.cancel();} catch(e){}
+  }
+  audioStatus("Audio stopped. Tap Listen to play another phrase.");
 }
 
-function speakJapanese(text, rate=0.88, btn=null){
-  if(!("speechSynthesis" in window)){
-    alert("Text-to-speech is not supported in this browser/viewer. Open the HTML in Safari.");
+function speakJapanese(text,rate=0.88,btn=null,lang="ja-JP"){
+  latestJapaneseText=text;
+  if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)){
+    audioStatus("Your browser does not provide speech playback. Tap 🌐 Hear online beside the phrase.",true);
     return;
   }
-
-  const synth = window.speechSynthesis;
-  const isiOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-  // IMPORTANT FOR iPHONE:
-  // speak() is called synchronously from the button tap.
-  // Do not put this behind setTimeout/Promise/await; iOS can lose the
-  // user-gesture permission and silently refuse audio.
-  if(synth.speaking || synth.pending){
-    synth.cancel();
+  const synth=window.speechSynthesis;
+  if(speechStartTimeout){clearTimeout(speechStartTimeout);speechStartTimeout=null;}
+  // Keep the utterance alive on iOS until start/end/error. All speech calls
+  // are made synchronously inside the real button tap (required by Safari).
+  if(activeJapaneseUtterance || synth.speaking || synth.pending){
+    try{synth.cancel();}catch(e){}
   }
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "ja-JP";
-  utterance.rate = rate;
-  utterance.pitch = 1;
-  utterance.volume = 1;
-
-  // On iOS, letting the system select the voice from lang=ja-JP is more
-  // reliable than forcing a voice object returned by getVoices().
-  if(!isiOS){
-    const voices = synth.getVoices();
-    japaneseVoice =
-      voices.find(v => /^ja-JP$/i.test(v.lang)) ||
-      voices.find(v => /^ja/i.test(v.lang)) ||
-      japaneseVoice ||
-      null;
-    if(japaneseVoice) utterance.voice = japaneseVoice;
-  }
-
+  clearSpeechButton();
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang=lang;
+  utterance.rate=Math.max(0.7,Math.min(1,rate));
+  utterance.pitch=1;
+  utterance.volume=1;
+  const foundVoice=bestSpeechVoice(lang);
+  if(foundVoice) utterance.voice=foundVoice; // explicit Japanese voice if installed
+  activeJapaneseUtterance=utterance;
+  speakingStarted=false;
   if(btn){
-    speakingButton = btn;
+    speakingButton=btn;
+    btn.dataset.originalText=btn.dataset.originalText||btn.textContent;
     btn.classList.add("speaking");
-    btn.dataset.originalText = btn.dataset.originalText || btn.textContent;
-    btn.textContent = "Speaking…";
+    btn.textContent="Starting…";
   }
-
-  utterance.onstart = () => {
-    const status = document.getElementById("voiceStatus");
-    if(status) status.innerHTML =
-      `<b>Audio:</b> Speaking Japanese${isiOS ? " using the iPhone system voice" : (japaneseVoice ? ` with <b>${esc(japaneseVoice.name)}</b>` : "")}.`;
+  audioStatus("Starting "+(lang==="ja-JP"?"Japanese":"English")+" audio…");
+  utterance.onstart=()=>{
+    if(activeJapaneseUtterance!==utterance)return;
+    speakingStarted=true;
+    if(speechStartTimeout){clearTimeout(speechStartTimeout);speechStartTimeout=null;}
+    if(btn)btn.textContent="Speaking…";
+    audioStatus("Speech started"+(foundVoice?" with "+foundVoice.name:"")+". If you hear no sound, check volume/Bluetooth or use Hear online.");
   };
-
-  const cleanup = () => {
-    if(btn){
-      btn.classList.remove("speaking");
-      if(btn.dataset.originalText) btn.textContent = btn.dataset.originalText;
-    }
-    if(speakingButton === btn) speakingButton = null;
+  utterance.onend=()=>{
+    if(activeJapaneseUtterance!==utterance)return;
+    if(speechStartTimeout){clearTimeout(speechStartTimeout);speechStartTimeout=null;}
+    activeJapaneseUtterance=null;
+    clearSpeechButton();
+    audioStatus("Playback finished. If you heard nothing, use 🌐 Hear online next to the phrase.",!speakingStarted);
   };
-
-  utterance.onend = cleanup;
-  utterance.onerror = (e) => {
-    cleanup();
-    const status = document.getElementById("voiceStatus");
-    if(status) status.innerHTML =
-      `<b>Audio problem:</b> ${esc(e.error || "speech failed")}. If this is iPhone, open the file in Safari and tap the test button again.`;
+  utterance.onerror=e=>{
+    if(activeJapaneseUtterance!==utterance)return;
+    if(speechStartTimeout){clearTimeout(speechStartTimeout);speechStartTimeout=null;}
+    activeJapaneseUtterance=null;
+    clearSpeechButton();
+    audioStatus("Speech failed ("+(e.error||"unknown error")+"). Use 🌐 Hear online next to the phrase.",true);
   };
-
   try{
-    // Must stay inside this direct tap handler on iOS.
+    if(synth.paused) synth.resume();
     synth.speak(utterance);
+    speechStartTimeout=setTimeout(()=>{
+      if(activeJapaneseUtterance===utterance && !speakingStarted){
+        clearSpeechButton();
+        audioStatus("Safari hasn't started the voice. Open this site directly in Safari, install the Japanese voice, or use 🌐 Hear online.",true);
+      }
+    },4000);
   }catch(e){
-    cleanup();
-    alert("Speech could not start. Open this file directly in Safari and try again.");
+    activeJapaneseUtterance=null;
+    clearSpeechButton();
+    audioStatus("Speech could not start here. Use 🌐 Hear online instead.",true);
   }
 }
-
-
 
 function hardResetSpeech(){
-  if(!("speechSynthesis" in window)){
-    alert("Speech synthesis is unavailable in this browser/viewer.");
-    return;
-  }
-  window.speechSynthesis.cancel();
-  japaneseVoice = null;
-  const status = document.getElementById("voiceStatus");
-  if(status) status.innerHTML = "<b>Audio:</b> Speech queue reset. Now tap Direct iPhone audio test.";
+  stopJapanese();
+  japaneseVoice=bestSpeechVoice("ja-JP");
+  audioStatus(japaneseVoice?"Speech reset. Japanese voice: "+japaneseVoice.name:"Speech reset. No Japanese voice detected. Install one in iPhone Settings or use Hear online.",!japaneseVoice);
 }
 
 function audioDiagnostics(){
-  const status = document.getElementById("voiceStatus");
-  const supported = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
-  const proto = location.protocol;
-  const ua = navigator.userAgent;
-  const msg = `<b>Diagnostics:</b> Web Speech ${supported ? "available" : "NOT available"} · page protocol <b>${esc(proto)}</b> · iPhone/iPad ${/iPhone|iPad|iPod/i.test(ua) ? "yes" : "no"}.`;
-  if(status) status.innerHTML = msg;
+  const supported=("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+  const voices= supported ? window.speechSynthesis.getVoices() : [];
+  const japanese=(voices||[]).filter(v=>/^ja/i.test(v.lang));
+  const locationType=location.protocol==="file:"?"Local file":location.hostname==="github.com"?"GitHub code page":location.protocol+"//"+location.hostname;
+  audioStatus("Speech: "+(supported?"available":"unavailable")+
+    " · Japanese voices: "+japanese.length+
+    " · Source: "+locationType+
+    " · Browser: "+(/iPhone|iPad|iPod/i.test(navigator.userAgent)?"iPhone/iPad":"Other")+
+    ". No audio? Use Hear online; it doesn't depend on Web Speech.",!supported||!japanese.length);
   return supported;
 }
 
 function testJapaneseAudio(btn){
-  speakJapanese("こんにちは。ありがとうございます。", 0.82, btn);
+  speakJapanese("こんにちは。ありがとうございます。",0.88,btn);
 }
+function testEnglishAudio(btn){
+  speakJapanese("Hello. This is an audio test.",0.95,btn,"en-US");
+}
+function addOnlinePronunciationLinks(){
+  document.querySelectorAll("#japanese .phrase").forEach(card=>{
+    const jp=card.querySelector(".jp")?.textContent?.trim();
+    const actions=card.querySelector(".phrase-actions");
+    if(!jp||!actions||actions.querySelector(".online-audio"))return;
+    const link=document.createElement("a");
+    link.className="online-audio";
+    link.href="https://translate.google.com/?sl=ja&tl=en&text="+encodeURIComponent(jp)+"&op=translate";
+    link.target="_blank";
+    link.rel="noopener noreferrer";
+    link.textContent="🌐 Hear online ↗";
+    link.title="Open Japanese pronunciation in Google Translate and tap the speaker";
+    actions.append(link);
+  });
+}
+addOnlinePronunciationLinks();
+
 
 function copyPhrase(btn,text){navigator.clipboard?.writeText(text).then(()=>{const o=btn.textContent;btn.textContent="Copied ✓";setTimeout(()=>btn.textContent=o,1200)}).catch(()=>prompt("Copy this:",text))}
 function filterPhrases(){const q=phraseSearch.value.trim().toLowerCase();document.querySelectorAll(".phrase").forEach(p=>p.style.display=!q||p.dataset.search.includes(q)?"block":"none")}
