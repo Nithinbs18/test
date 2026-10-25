@@ -25,6 +25,24 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 .personal-notes{min-height:200px}footer{text-align:center;color:#98a2b3;font-size:11px;padding:25px}
 @media(max-width:680px){.stop{grid-template-columns:64px 1fr}.stop .mapbtn{grid-column:2;justify-self:start}.pace{display:none}}
 @media print{nav,.toolbar,.mapbtn,.routechip,.copybtn,.iconbtn,.btn{display:none!important}body{background:#fff}.tab{display:block!important}#checklist,#japanese,#notes{display:none!important}.day{break-inside:avoid}}
+
+/* Compact, responsive live weather attached to each itinerary day */
+.weather-brief{margin-top:7px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;color:#344054;font-size:12px}
+.weather-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;background:#f0f9ff;border:1px solid #d0e9fa;border-radius:999px;font-weight:750}
+.weather-pill.rainy{background:#eef2ff;border-color:#c7d2fe}
+.weather-pill.unavailable{background:#f8fafc;border-color:#e2e8f0;color:#667085;font-weight:600}
+.weather-detail{margin:12px 0;border:1px solid #dbeafe;background:#f8fbff;border-radius:12px;overflow:hidden}
+.weather-detail summary{padding:10px 12px;font-size:13px;font-weight:800;display:flex;justify-content:space-between;gap:10px;cursor:pointer}
+.weather-detail summary::after{content:'⌄';color:#64748b}
+.weather-detail[open] summary::after{content:'⌃'}
+.weather-info{padding:0 12px 12px;font-size:12px;color:#475467}
+.weather-info p{margin:6px 0}
+.hourly-weather{display:flex;overflow-x:auto;gap:8px;padding:9px 0;scroll-snap-type:x proximity}
+.hourly-weather .hour{flex:0 0 83px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:9px 6px;text-align:center;scroll-snap-align:start}
+.hour .big{font-size:21px;display:block;margin:4px 0}
+.weather-source{font-size:11px;color:#667085}
+.weather-reload{border:0;border-radius:7px;padding:5px 8px;background:#dbeafe;color:#1d4ed8;font-weight:750;cursor:pointer}
+@media(max-width:520px){.weather-brief{gap:4px}.weather-pill{font-size:11px;padding:4px 7px}.weather-detail{margin-top:9px}}
 </style>
 </head>
 <body>
@@ -1386,6 +1404,111 @@ function testJapaneseAudio(btn){
 function copyPhrase(btn,text){navigator.clipboard?.writeText(text).then(()=>{const o=btn.textContent;btn.textContent="Copied ✓";setTimeout(()=>btn.textContent=o,1200)}).catch(()=>prompt("Copy this:",text))}
 function filterPhrases(){const q=phraseSearch.value.trim().toLowerCase();document.querySelectorAll(".phrase").forEach(p=>p.style.display=!q||p.dataset.search.includes(q)?"block":"none")}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));document.getElementById(b.dataset.tab).classList.add("active")})
+
+/* Weather: Open-Meteo public non-commercial forecast, no credentials required.
+   Data appears only on actual forecast dates; future dates show honest placeholders.
+   Requests are grouped by city and fetched only on page load / user refresh. */
+const WEATHER_PLACES={
+  Frankfurt:{lat:50.1109,lon:8.6821,tz:"Europe/Berlin"},
+  Shanghai:{lat:31.2304,lon:121.4737,tz:"Asia/Shanghai"},
+  Osaka:{lat:34.6937,lon:135.5023,tz:"Asia/Tokyo"},
+  Kyoto:{lat:35.0116,lon:135.7681,tz:"Asia/Tokyo"},
+  Nara:{lat:34.6851,lon:135.8048,tz:"Asia/Tokyo"},
+  Tokyo:{lat:35.6762,lon:139.6503,tz:"Asia/Tokyo"}
+};
+const WEATHER_MON={"October":"10","November":"11"};
+const WEATHER_ICONS=code=>{
+  if(code===0)return "☀️";
+  if(code===1||code===2)return "🌤️";
+  if(code===3)return "☁️";
+  if(code===45||code===48)return "🌫️";
+  if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code))return "🌧️";
+  if([71,73,75,77,85,86].includes(code))return "🌨️";
+  if([95,96,99].includes(code))return "⛈️";
+  return "🌡️";
+};
+const weatherDays=[];
+document.querySelectorAll("#itinerary details.day").forEach(day=>{
+ const dateText=day.querySelector(".date")?.textContent||"";
+ const match=dateText.match(/(\d{1,2})\s+(October|November)/);
+ if(!match)return;
+ const date="2026-"+WEATHER_MON[match[2]]+"-"+match[1].padStart(2,"0");
+ const city=/Frankfurt/.test(dateText)?"Frankfurt":/Shanghai/.test(dateText)?"Shanghai":/Nara/.test(dateText)?"Nara":/Kyoto/.test(dateText)?"Kyoto":/Tokyo/.test(dateText)?"Tokyo":/Osaka/.test(dateText)?"Osaka":null;
+ if(!city)return;
+ const title=day.querySelector(".dtitle");
+ if(!title)return;
+ const brief=document.createElement("div");
+ brief.className="weather-brief";
+ brief.innerHTML='<span class="weather-pill unavailable">☁️ '+city+' · Weather loading…</span>';
+ title.insertAdjacentElement("afterend",brief);
+ const body=day.querySelector(".dbody");
+ const detail=document.createElement("details");
+ detail.className="weather-detail";
+ detail.innerHTML='<summary>🌦️ Weather details <span style="font-weight:500;color:#667085">Forecast &amp; hourly outlook</span></summary><div class="weather-info"><p>Checking the forecast…</p></div>';
+ body.insertAdjacentElement("afterbegin",detail);
+ weatherDays.push({date,city,brief,detail});
+});
+function weatherUnavailable(entry,msg){
+ entry.brief.innerHTML='<span class="weather-pill unavailable">☁️ '+entry.city+' · '+msg+'</span>';
+ entry.detail.querySelector(".weather-info").textContent=msg+". Forecasts normally extend up to 16 days ahead.";
+}
+function weatherRender(entry,data){
+ const daily=data.daily, i=daily?.time?.indexOf(entry.date)??-1;
+ if(i<0){weatherUnavailable(entry,"Forecast not available yet");return;}
+ const lo=daily.temperature_2m_min[i],hi=daily.temperature_2m_max[i],p=daily.precipitation_probability_max[i],code=daily.weather_code[i];
+ const icon=WEATHER_ICONS(code),rain=Number.isFinite(p)?Math.round(p):null;
+ const rainText=rain===null?"Rain chance unavailable":rain+"% rain";
+ const high=Number.isFinite(hi)?Math.round(hi)+"°":"—",low=Number.isFinite(lo)?Math.round(lo)+"°":"—";
+ entry.brief.replaceChildren();
+ const pill=document.createElement("span");
+ pill.className="weather-pill"+(rain!==null&&rain>=50?" rainy":"");
+ pill.textContent=icon+" "+entry.city+" · "+high+" / "+low+" · ☔ "+(rain===null?"—":rain+"%");
+ entry.brief.append(pill);
+ const hourly=data.hourly||{},samples=[];
+ (hourly.time||[]).forEach((t,index)=>{
+   if(t.slice(0,10)===entry.date && +t.slice(11,13)>=7 && +t.slice(11,13)<=22 && +t.slice(11,13)%2===0){
+     samples.push({t:t.slice(11,16),temp:hourly.temperature_2m?.[index],rain:hourly.precipitation_probability?.[index],code:hourly.weather_code?.[index]});
+   }
+ });
+ const info=entry.detail.querySelector(".weather-info");
+ info.replaceChildren();
+ const desc=document.createElement("p");
+ desc.textContent=entry.city+" · "+icon+" High "+high+"C · Low "+low+"C · "+rainText+".";
+ info.append(desc);
+ if(rain!==null&&rain>=60){
+   const warning=document.createElement("p"); warning.textContent="☂️ Rain likely — consider a poncho and check outdoor ride operations."; info.append(warning);
+ }
+ if(samples.length){
+   const strip=document.createElement("div");strip.className="hourly-weather";
+   samples.forEach(s=>{
+     const tile=document.createElement("div");tile.className="hour";
+     tile.innerHTML='<b>'+s.t+'</b><span class="big">'+WEATHER_ICONS(s.code)+'</span><b>'+(Number.isFinite(s.temp)?Math.round(s.temp)+'°':'—')+'</b><div>☔ '+(Number.isFinite(s.rain)?Math.round(s.rain)+'%':'—')+'</div>';
+     strip.append(tile);
+   });
+   info.append(strip);
+ }
+ const source=document.createElement("div");source.className="weather-source";source.textContent="Forecast: Open-Meteo · Auto-updated when you open this page · Times are local to "+entry.city+" · Forecasts can change.";info.append(source);
+}
+let weatherBusy=false;
+async function updateTripWeather(){
+ if(weatherBusy)return;
+ weatherBusy=true;
+ const targets=[...new Set(weatherDays.map(x=>x.city))];
+ const cityData={};
+ await Promise.all(targets.map(async city=>{
+  const x=WEATHER_PLACES[city];
+  try{
+   const params=new URLSearchParams({latitude:x.lat,longitude:x.lon,timezone:x.tz,forecast_days:"16",daily:"weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",hourly:"temperature_2m,precipitation_probability,weather_code"});
+   const resp=await fetch("https://api.open-meteo.com/v1/forecast?"+params.toString());
+   if(!resp.ok)throw Error("Weather unavailable");
+   cityData[city]=await resp.json();
+  }catch(e){cityData[city]=null;}
+ }));
+ weatherDays.forEach(entry=>cityData[entry.city]?weatherRender(entry,cityData[entry.city]):weatherUnavailable(entry,"Couldn't load weather"));
+ weatherBusy=false;
+}
+updateTripWeather();
+
 populateDays();renderChecklist();
 if("speechSynthesis" in window){
   loadJapaneseVoice();
