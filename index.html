@@ -48,6 +48,22 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 .phrase .meaning{padding-bottom:78px}
 .phrase-actions .online-audio{display:block;flex-basis:100%;border-radius:7px;background:#eef2ff;color:#3730a3;text-align:center;text-decoration:none;padding:6px 8px;font-size:11px;font-weight:800}
 .phrase-actions .online-audio:focus-visible{outline:2px solid #4f46e5;outline-offset:2px}
+
+/* Visit checkboxes on every itinerary stop */
+#itinerary .stop{grid-template-columns:34px 82px minmax(0,1fr) auto}
+.stop-done-label{display:flex;align-items:flex-start;justify-content:center;min-width:32px;min-height:38px;padding-top:2px;cursor:pointer}
+.stop-done-checkbox{width:22px;height:22px;accent-color:var(--green);cursor:pointer}
+.stop-done-checkbox:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}
+.stop.is-done .stitle{text-decoration:line-through;color:#98a2b3}
+.stop.is-done .stime{color:#98a2b3}
+.summary-badges{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-shrink:0}
+.day-progress{display:inline-block;border-radius:999px;padding:5px 9px;background:#eff6ff;color:#1d4ed8;font-size:11px;font-weight:850;white-space:nowrap}
+.day-progress.complete{background:#dcfce7;color:#166534}
+.itinerary-completion-summary{align-self:center;color:#475467;font-weight:700;font-size:12px}
+#completedDaysToggle:disabled{opacity:.48;cursor:not-allowed}
+#itinerary .day[hidden]{display:none!important}
+@media(max-width:680px){#itinerary .stop{grid-template-columns:32px 64px minmax(0,1fr)}#itinerary .stop .mapbtn{grid-column:3;justify-self:start}.summary-badges .pace{display:none}.day-progress{font-size:10px;padding:4px 7px}}
+@media print{.stop-done-label,.day-progress,#completedDaysToggle,.itinerary-completion-summary{display:none!important}#itinerary .day[hidden]{display:block!important}}
 </style>
 </head>
 <body>
@@ -65,7 +81,7 @@ main{max-width:1120px;margin:auto;padding:16px}.tab{display:none}.tab.active{dis
 <div class="hero"><h2>Confirmed transport + route-optimized sightseeing</h2>
 <p>Built around the actual Journaway flight and Shinkansen times. Sightseeing comes first; shopping and food stops are inserted only when they fit the route.</p>
 <div class="badges"><span class="badge">Katsuo-ji added</span><span class="badge">Confirmed trains</span><span class="badge">Confirmed hotels</span><span class="badge">Vegetarian-aware</span><span class="badge">Google Maps routes</span></div></div>
-<div class="toolbar"><button class="btn secondary" onclick="toggleDays(true)">Open all days</button><button class="btn secondary" onclick="toggleDays(false)">Collapse all</button></div>
+<div class="toolbar"><button class="btn secondary" onclick="toggleDays(true)">Open all days</button><button class="btn secondary" onclick="toggleDays(false)">Collapse all</button><button id="completedDaysToggle" class="btn secondary" type="button" aria-pressed="false" onclick="toggleItineraryCompletedDays()">Show completed days (0)</button><span id="itineraryCompletionSummary" class="itinerary-completion-summary" role="status" aria-live="polite">0 places visited</span></div>
 <details class="day" open>
       <summary><div><div class="date">Tuesday · 27 October · Travel</div><div class="dtitle">Frankfurt → Shanghai</div></div><span class="pace">Travel day</span></summary>
       <div class="dbody"><div class="routebox"><b>Route:</b> Frankfurt Airport → Shanghai Pudong</div><div class="stop">
@@ -1265,6 +1281,101 @@ let items=load(),showCompleted=false,editingId=null;
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
 function load(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const saved=JSON.parse(r);if(Array.isArray(saved)){const old=saved.find(x=>x.id==="f10"&&x.title==="Book Shibuya Sky ~15:40");if(old){old.title="Shibuya Sky tickets confirmed · 18:20";old.notes="2 adults · 18:20–18:39 · Klook MJT462943";old.done=true;localStorage.setItem(STORAGE_KEY,JSON.stringify(saved));}return saved;}}}catch(e){}return starter.map(x=>({...x}));}
 function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(items));}
+
+/* Visited places: stored only in this browser and separate from the planning checklist.
+   Each day is automatically hidden once every listed place has been checked. */
+const ITINERARY_CHECKS_KEY="japan2026_itinerary_visited_places_v1";
+let itineraryShowCompletedDays=false;
+let itineraryCheckedPlaces={};
+try{
+ const saved=JSON.parse(localStorage.getItem(ITINERARY_CHECKS_KEY)||"{}");
+ if(saved && typeof saved==="object" && !Array.isArray(saved)) itineraryCheckedPlaces=saved;
+}catch(e){}
+function saveItineraryChecks(){
+ try{localStorage.setItem(ITINERARY_CHECKS_KEY,JSON.stringify(itineraryCheckedPlaces));}
+ catch(e){console.warn("Could not save visited places on this device",e);}
+}
+function itineraryDateKey(day){
+ const date=day.querySelector(".date")?.textContent||"";
+ const match=date.match(/(\d{1,2})\s+(October|November)/i);
+ return match ? match[1]+"-"+match[2].toLowerCase() : date.trim();
+}
+function initializeItineraryChecks(){
+ document.querySelectorAll("#itinerary details.day").forEach(day=>{
+  const dayKey=itineraryDateKey(day), duplicateKeys=new Map();
+  day.querySelectorAll(".stop").forEach(stop=>{
+   const time=stop.querySelector(".stime")?.textContent.trim()||"";
+   const place=stop.querySelector(".stitle")?.textContent.trim()||"Untitled stop";
+   const baseKey=dayKey+"|"+time+"|"+place;
+   const occurrence=duplicateKeys.get(baseKey)||0;
+   duplicateKeys.set(baseKey,occurrence+1);
+   const key=baseKey+(occurrence?"|"+occurrence:"");
+   const label=document.createElement("label");
+   label.className="stop-done-label";
+   const checkbox=document.createElement("input");
+   checkbox.type="checkbox";
+   checkbox.className="stop-done-checkbox";
+   checkbox.checked=Boolean(itineraryCheckedPlaces[key]);
+   checkbox.setAttribute("aria-label","Visited: "+place);
+   label.appendChild(checkbox);
+   stop.insertBefore(label,stop.firstChild);
+   const refreshStop=()=>{
+    stop.classList.toggle("is-done",checkbox.checked);
+    label.title=checkbox.checked?"Mark as not visited: "+place:"Mark as visited: "+place;
+   };
+   checkbox.addEventListener("change",()=>{
+    if(checkbox.checked) itineraryCheckedPlaces[key]=true;
+    else delete itineraryCheckedPlaces[key];
+    refreshStop();
+    saveItineraryChecks();
+    renderItineraryProgress();
+   });
+   refreshStop();
+  });
+  const progress=document.createElement("span");
+  progress.className="day-progress";
+  const summary=day.querySelector("summary");
+  const pace=summary?.querySelector(".pace");
+  if(pace){
+   const badges=document.createElement("span");
+   badges.className="summary-badges";
+   pace.before(badges);
+   badges.append(progress,pace);
+  }else summary?.append(progress);
+  day._visitProgress=progress;
+ });
+ renderItineraryProgress();
+}
+function renderItineraryProgress(){
+ const allDays=[...document.querySelectorAll("#itinerary details.day")];
+ let completedDays=0,visitedPlaces=0,totalPlaces=0;
+ allDays.forEach(day=>{
+  const checks=[...day.querySelectorAll(".stop-done-checkbox")];
+  const visited=checks.filter(input=>input.checked).length;
+  const complete=checks.length>0 && visited===checks.length;
+  if(complete) completedDays++;
+  visitedPlaces+=visited;
+  totalPlaces+=checks.length;
+  day.hidden=complete && !itineraryShowCompletedDays;
+  if(day._visitProgress){
+   day._visitProgress.textContent=complete?"✓ "+visited+"/"+checks.length:visited+"/"+checks.length+" visited";
+   day._visitProgress.classList.toggle("complete",complete);
+  }
+ });
+ const toggle=document.getElementById("completedDaysToggle");
+ if(toggle){
+  toggle.textContent=itineraryShowCompletedDays?"Hide completed days":"Show completed days ("+completedDays+")";
+  toggle.setAttribute("aria-pressed",String(itineraryShowCompletedDays));
+  toggle.disabled=completedDays===0;
+ }
+ const status=document.getElementById("itineraryCompletionSummary");
+ if(status)status.textContent=visitedPlaces+"/"+totalPlaces+" places visited · "+completedDays+"/"+allDays.length+" days completed"+(!itineraryShowCompletedDays&&completedDays?" (hidden)":"");
+}
+function toggleItineraryCompletedDays(){
+ itineraryShowCompletedDays=!itineraryShowCompletedDays;
+ renderItineraryProgress();
+}
+
 function toggleDays(open){document.querySelectorAll(".day").forEach(x=>x.open=open)}
 function renderChecklist(){
  const root=document.getElementById("checklistContainer"), visible=items.filter(x=>showCompleted||!x.done), groups={};
@@ -1560,6 +1671,7 @@ async function updateTripWeather(){
 }
 updateTripWeather();
 
+initializeItineraryChecks();
 populateDays();renderChecklist();
 if("speechSynthesis" in window){
   loadJapaneseVoice();
